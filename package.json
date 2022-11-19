@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve --open --config webpack.development.js",
+    "distribution": "webpack --config webpack.distribution.js",
     "format": "prettier --config .prettierrc 'src/**/*.{ts,js,html,css}' --write"
   },
   "repository": {
@@ -22,13 +23,8 @@
     "phaser": "^3.55.2"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.43.0",
-    "@typescript-eslint/parser": "^5.43.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
-    "eslint": "^8.27.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1",
     "ts-loader": "^9.4.1",
     "typescript": "^4.9.3",
