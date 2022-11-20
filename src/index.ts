@@ -1,5 +1,7 @@
 import 'phaser';
 import { EnvironmentScene } from './scenes';
+import { LoadingScene } from './scenes';
+import { UIScene } from './scenes/ui';
 
 let configObject: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -17,7 +19,7 @@ let configObject: Phaser.Types.Core.GameConfig = {
     },
   },
   backgroundColor: '#FFFFFF',
-  scene: EnvironmentScene,
+  scene: [LoadingScene, UIScene, EnvironmentScene],
 };
 
 new Phaser.Game(configObject);
