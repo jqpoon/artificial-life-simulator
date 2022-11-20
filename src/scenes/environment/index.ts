@@ -1,13 +1,13 @@
-import 'phaser';
+import { Scene } from 'phaser';
 
-class PlayGame extends Phaser.Scene {
+export class EnvironmentScene extends Scene {
   image: Phaser.GameObjects.Image;
   player: Phaser.Physics.Arcade.Sprite;
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   obstacles: Phaser.Physics.Arcade.StaticGroup;
 
   constructor() {
-    super('PlayGame');
+    super('environment-scene');
   }
 
   preload(): void {
@@ -40,43 +40,21 @@ class PlayGame extends Phaser.Scene {
 
   update(): void {
     let playerVelocity = 300;
-    if (this.cursors.left.isDown && this.player.x >= 0) {
+    this.player.setVelocityX(0);
+    this.player.setVelocityY(0);
+
+    if (this.cursors.left.isDown) {
       this.player.setVelocityX(-playerVelocity); //go left
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(playerVelocity); //go right
-    } else {
-      this.player.setVelocityX(0); //don't move left or right
     }
 
-    if (this.cursors.up.isDown && this.player.y >= 0) {
+    if (this.cursors.up.isDown) {
       this.player.setVelocityY(-playerVelocity); //move up
     } else if (this.cursors.down.isDown) {
       this.player.setVelocityY(playerVelocity); //move down
-    } else {
-      this.player.setVelocityY(0); //don't move up or down
     }
 
-    this.cameras.main.centerOn(this.player.x, this.player.y);
+    // this.cameras.main.centerOn(this.player.x, this.player.y);
   }
 }
-
-let configObject: Phaser.Types.Core.GameConfig = {
-  type: Phaser.AUTO,
-  scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
-    parent: 'canvas',
-    width: 1600,
-    height: 900,
-  },
-  physics: {
-    default: 'arcade',
-    arcade: {
-      debug: false,
-    },
-  },
-  backgroundColor: '#FFFFFF',
-  scene: PlayGame,
-};
-
-new Phaser.Game(configObject);

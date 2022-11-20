@@ -7,7 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   entry: {
     // this is our entry point, the main JavaScript file
-    app: './src/main.ts',
+    app: './src/index.ts',
   },
   output: {
     // this is our output file, the one which bundles all libraries
