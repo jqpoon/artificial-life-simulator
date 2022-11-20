@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
+import { EVENTS_NAME } from '../../consts';
 
 export class EnvironmentScene extends Scene {
-  image: Phaser.GameObjects.Image;
   player: Phaser.Physics.Arcade.Sprite;
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   obstacles: Phaser.Physics.Arcade.StaticGroup;
@@ -32,7 +32,14 @@ export class EnvironmentScene extends Scene {
     this.obstacles.add(border4);
 
     this.player = this.physics.add.sprite(300, 300, 'blob');
-    this.player.setScale(0.2);
+    this.player.setScale(0.3);
+    this.player.setDepth(1);
+
+    let food = this.add.circle(500, 500, 20, 0x64f18e, 0.5);
+    this.physics.add.existing(food);
+    this.physics.add.overlap(this.player, food, (obj1, obj2) => {
+      this.game.events.emit(EVENTS_NAME.addScore);
+    })
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, this.obstacles);
