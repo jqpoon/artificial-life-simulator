@@ -39,13 +39,14 @@ export class EnvironmentScene extends Scene {
     this.physics.add.existing(food);
     this.physics.add.overlap(this.player, food, (obj1, obj2) => {
       this.game.events.emit(EVENTS_NAME.addScore);
+      obj2.destroy();
     })
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, this.obstacles);
   }
 
-  update(): void {
+  update(time: number, delta: number): void {
     let playerVelocity = 300;
     this.player.setVelocityX(0);
     this.player.setVelocityY(0);
@@ -62,6 +63,14 @@ export class EnvironmentScene extends Scene {
       this.player.setVelocityY(playerVelocity); //move down
     }
 
-    // this.cameras.main.centerOn(this.player.x, this.player.y);
+    if (time % 25 == 0) {
+      let food = this.add.circle(500, 500, 20, 0x64f18e, 0.5);
+      this.physics.add.existing(food);
+      this.physics.add.overlap(this.player, food, (obj1, obj2) => {
+        this.game.events.emit(EVENTS_NAME.addScore);
+        obj2.destroy();
+      })
+    }
+
   }
 }
