@@ -4,6 +4,7 @@ class PlayGame extends Phaser.Scene {
   image: Phaser.GameObjects.Image;
   player: Phaser.Physics.Arcade.Sprite;
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+  obstacles: Phaser.Physics.Arcade.StaticGroup;
 
   constructor() {
     super('PlayGame');
@@ -15,20 +16,20 @@ class PlayGame extends Phaser.Scene {
   }
 
   create(): void {
-    this.image = this.add.image(600, 600, 'wall');
+    this.obstacles = this.physics.add.staticGroup(); //create group for obstacles
+    this.obstacles.create(400, 550, 'wall');
 
     let border = this.add.rectangle(400, 300, 800, 600, 0xffffff, 0);
     border.setStrokeStyle(2, 0x000000);
 
     this.player = this.physics.add.sprite(300, 300, 'blob');
-    this.player.setScale(0.4);
+    this.player.setScale(0.2);
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.physics.add.collider(this.player, this.obstacles);
   }
 
   update(): void {
-    this.image.rotation += 0.01;
-
     if (this.cursors.left.isDown && this.player.x >= 0) {
       this.player.setVelocityX(-200); //go left
     } else if (this.cursors.right.isDown) {
@@ -54,9 +55,9 @@ let configObject: Phaser.Types.Core.GameConfig = {
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    parent: 'thegame',
-    width: 800,
-    height: 600,
+    parent: 'canvas',
+    width: 1600,
+    height: 900,
   },
   physics: {
     default: 'arcade',
