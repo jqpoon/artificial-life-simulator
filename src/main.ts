@@ -12,15 +12,24 @@ class PlayGame extends Phaser.Scene {
 
   preload(): void {
     this.load.image('blob', 'assets/blob.png');
-    this.load.image('wall', 'assets/wall.png');
   }
 
   create(): void {
-    this.obstacles = this.physics.add.staticGroup(); //create group for obstacles
-    this.obstacles.create(400, 550, 'wall');
+    this.obstacles = this.physics.add.staticGroup(); // create group for obstacles
 
-    let border = this.add.rectangle(400, 300, 800, 600, 0xffffff, 0);
-    border.setStrokeStyle(2, 0x000000);
+    // Surely there must be a better way to do this...
+    let border = this.add.rectangle(400, 0, 800, 1, 0xffffff, 0);
+    let border2 = this.add.rectangle(0, 300, 1, 600, 0xffffff, 0);
+    let border3 = this.add.rectangle(400, 600, 800, 1, 0xffffff, 0);
+    let border4 = this.add.rectangle(800, 300, 1, 600, 0xffffff, 0);
+    border.setStrokeStyle(1, 0x000000);
+    border2.setStrokeStyle(1, 0x000000);
+    border3.setStrokeStyle(1, 0x000000);
+    border4.setStrokeStyle(1, 0x000000);
+    this.obstacles.add(border);
+    this.obstacles.add(border2);
+    this.obstacles.add(border3);
+    this.obstacles.add(border4);
 
     this.player = this.physics.add.sprite(300, 300, 'blob');
     this.player.setScale(0.2);
@@ -30,18 +39,19 @@ class PlayGame extends Phaser.Scene {
   }
 
   update(): void {
+    let playerVelocity = 300;
     if (this.cursors.left.isDown && this.player.x >= 0) {
-      this.player.setVelocityX(-200); //go left
+      this.player.setVelocityX(-playerVelocity); //go left
     } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(200); //go right
+      this.player.setVelocityX(playerVelocity); //go right
     } else {
       this.player.setVelocityX(0); //don't move left or right
     }
 
     if (this.cursors.up.isDown && this.player.y >= 0) {
-      this.player.setVelocityY(-200); //move up
+      this.player.setVelocityY(-playerVelocity); //move up
     } else if (this.cursors.down.isDown) {
-      this.player.setVelocityY(200); //move down
+      this.player.setVelocityY(playerVelocity); //move down
     } else {
       this.player.setVelocityY(0); //don't move up or down
     }
@@ -51,7 +61,7 @@ class PlayGame extends Phaser.Scene {
 }
 
 let configObject: Phaser.Types.Core.GameConfig = {
-  type: Phaser.CANVAS,
+  type: Phaser.AUTO,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
