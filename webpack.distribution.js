@@ -17,6 +17,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
 
+  cache: {
+    type: 'filesystem',
+  },
   // we are in production mode
   mode: 'production',
   devtool: false,
