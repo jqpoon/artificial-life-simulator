@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve --open --config webpack.development.js",
-    "distribution": "webpack --config webpack.distribution.js",
+    "build": "webpack --config webpack.distribution.js",
     "format": "prettier --config .prettierrc 'src/**/*.{ts,js,html,css}' --write"
   },
   "repository": {

@@ -5,9 +5,11 @@ export class EnvironmentScene extends Scene {
   player: Phaser.Physics.Arcade.Sprite;
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   obstacles: Phaser.Physics.Arcade.StaticGroup;
+  timer: number;
 
   constructor() {
     super('environment-scene');
+    this.timer = 0;
   }
 
   preload(): void {
@@ -40,7 +42,7 @@ export class EnvironmentScene extends Scene {
     this.physics.add.overlap(this.player, food, (obj1, obj2) => {
       this.game.events.emit(EVENTS_NAME.addScore);
       obj2.destroy();
-    })
+    });
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, this.obstacles);
@@ -52,25 +54,34 @@ export class EnvironmentScene extends Scene {
     this.player.setVelocityY(0);
 
     if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-playerVelocity); //go left
+      this.player.setVelocityX(-playerVelocity);
     } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(playerVelocity); //go right
+      this.player.setVelocityX(playerVelocity);
     }
 
     if (this.cursors.up.isDown) {
-      this.player.setVelocityY(-playerVelocity); //move up
+      this.player.setVelocityY(-playerVelocity);
     } else if (this.cursors.down.isDown) {
-      this.player.setVelocityY(playerVelocity); //move down
+      this.player.setVelocityY(playerVelocity);
     }
 
-    if (time % 25 == 0) {
-      let food = this.add.circle(500, 500, 20, 0x64f18e, 0.5);
+    // Add food randomly across the map at a set interval
+    this.timer += delta;
+    while (this.timer > 1500) {
+      this.timer -= 1500;
+
+      let food = this.add.circle(
+        Math.random() * 800,
+        Math.random() * 600,
+        20,
+        0x64f18e,
+        0.5
+      );
       this.physics.add.existing(food);
       this.physics.add.overlap(this.player, food, (obj1, obj2) => {
         this.game.events.emit(EVENTS_NAME.addScore);
         obj2.destroy();
-      })
+      });
     }
-
   }
 }
