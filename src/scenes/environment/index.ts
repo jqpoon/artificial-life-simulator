@@ -1,9 +1,9 @@
 import { Scene } from 'phaser';
 import { EVENTS_NAME } from '../../consts';
+import { Blob } from '../../classes/entities/blob';
 
 export class EnvironmentScene extends Scene {
   player: Phaser.Physics.Arcade.Sprite;
-  cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   obstacles: Phaser.Physics.Arcade.StaticGroup;
   timer: number;
 
@@ -33,9 +33,7 @@ export class EnvironmentScene extends Scene {
     this.obstacles.add(border3);
     this.obstacles.add(border4);
 
-    this.player = this.physics.add.sprite(300, 300, 'blob');
-    this.player.setScale(0.3);
-    this.player.setDepth(1);
+    this.player = new Blob(this, 300, 300, 'blob');
 
     let food = this.add.circle(500, 500, 20, 0x64f18e, 0.5);
     this.physics.add.existing(food);
@@ -44,26 +42,12 @@ export class EnvironmentScene extends Scene {
       obj2.destroy();
     });
 
-    this.cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, this.obstacles);
   }
 
   update(time: number, delta: number): void {
-    let playerVelocity = 300;
-    this.player.setVelocityX(0);
-    this.player.setVelocityY(0);
 
-    if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-playerVelocity);
-    } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(playerVelocity);
-    }
-
-    if (this.cursors.up.isDown) {
-      this.player.setVelocityY(-playerVelocity);
-    } else if (this.cursors.down.isDown) {
-      this.player.setVelocityY(playerVelocity);
-    }
+    this.player.update();
 
     // Add food randomly across the map at a set interval
     this.timer += delta;
