@@ -14,6 +14,7 @@ export class Food extends Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
 
     this.setScale(0.1);
+    this.setCircle(90);
   }
 
   public addPredator(group: Phaser.Physics.Arcade.Sprite) {

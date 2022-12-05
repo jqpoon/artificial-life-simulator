@@ -18,6 +18,7 @@ export class Blob extends Physics.Arcade.Sprite {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.setScale(0.3);
     this.setDepth(1);
+    this.setCircle(x * 0.3);
   }
 
   protected getBody(): Physics.Arcade.Body {
