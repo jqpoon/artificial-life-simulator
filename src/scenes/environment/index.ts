@@ -9,6 +9,11 @@ export class EnvironmentScene extends Scene {
   foodGroup: Phaser.Physics.Arcade.StaticGroup;
   timer: number;
 
+  static readonly worldX = 200;
+  static readonly worldY = 0;
+  static readonly worldWidth = 800;
+  static readonly worldHeight = 800;
+
   constructor() {
     super('environment-scene');
     this.timer = 0;
@@ -16,29 +21,33 @@ export class EnvironmentScene extends Scene {
 
   preload(): void {
     this.load.image('blob', 'assets/blob.png');
-    this.load.image('food', 'assets/food.png')
+    this.load.image('food', 'assets/food.png');
   }
 
   create(): void {
-    this.obstacles = this.physics.add.staticGroup(); // create group for obstacles
+    this.obstacles = this.physics.add.staticGroup();
     this.foodGroup = this.physics.add.staticGroup();
 
-    // Surely there must be a better way to do this...
-    let border = this.add.rectangle(400, 0, 800, 1, 0xffffff, 0);
-    let border2 = this.add.rectangle(0, 300, 1, 600, 0xffffff, 0);
-    let border3 = this.add.rectangle(400, 600, 800, 1, 0xffffff, 0);
-    let border4 = this.add.rectangle(800, 300, 1, 600, 0xffffff, 0);
+    let world = this.physics.world;
+    world.setBounds(
+      EnvironmentScene.worldX,
+      EnvironmentScene.worldY,
+      EnvironmentScene.worldWidth,
+      EnvironmentScene.worldHeight
+    );
+
+    let border = this.add.rectangle(
+      EnvironmentScene.worldWidth / 2 + EnvironmentScene.worldX, // x position (center)
+      EnvironmentScene.worldHeight / 2, // y position (center)
+      EnvironmentScene.worldWidth,
+      EnvironmentScene.worldHeight,
+      0xffffff,
+      0
+    );
     border.setStrokeStyle(1, 0x000000);
-    border2.setStrokeStyle(1, 0x000000);
-    border3.setStrokeStyle(1, 0x000000);
-    border4.setStrokeStyle(1, 0x000000);
     this.obstacles.add(border);
-    this.obstacles.add(border2);
-    this.obstacles.add(border3);
-    this.obstacles.add(border4);
 
     this.player = new Blob(this, 300, 300, 'blob');
-
     var food = new Food(this, 500, 500, 'food');
     food.addPredator(this.player);
 
@@ -52,7 +61,12 @@ export class EnvironmentScene extends Scene {
     this.timer += delta;
     while (this.timer > 1500) {
       this.timer -= 1500;
-      var food = new Food(this, Math.random() * 800, Math.random() * 600, 'food');
+      var food = new Food(
+        this,
+        Math.random() * EnvironmentScene.worldWidth + EnvironmentScene.worldX,
+        Math.random() * EnvironmentScene.worldHeight + EnvironmentScene.worldY,
+        'food'
+      );
       food.addPredator(this.player);
     }
   }

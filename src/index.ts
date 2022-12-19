@@ -9,8 +9,8 @@ let configObject: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
     parent: 'canvas',
-    width: 1600,
-    height: 900,
+    width: 1920,
+    height: 1080,
   },
   physics: {
     default: 'arcade',
