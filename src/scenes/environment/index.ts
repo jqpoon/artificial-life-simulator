@@ -16,6 +16,7 @@ export class EnvironmentScene extends Scene {
 
   preload(): void {
     this.load.image('blob', 'assets/blob.png');
+    this.load.image('food', 'assets/food.png')
   }
 
   create(): void {
@@ -38,7 +39,7 @@ export class EnvironmentScene extends Scene {
 
     this.player = new Blob(this, 300, 300, 'blob');
 
-    var food = new Food(this, 500, 500, 'blob');
+    var food = new Food(this, 500, 500, 'food');
     food.addPredator(this.player);
 
     this.physics.add.collider(this.player, this.obstacles);
@@ -51,7 +52,7 @@ export class EnvironmentScene extends Scene {
     this.timer += delta;
     while (this.timer > 1500) {
       this.timer -= 1500;
-      var food = new Food(this, Math.random() * 800, Math.random() * 600, 'blob');
+      var food = new Food(this, Math.random() * 800, Math.random() * 600, 'food');
       food.addPredator(this.player);
     }
   }
