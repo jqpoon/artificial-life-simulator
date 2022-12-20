@@ -1,16 +1,16 @@
 import { Scene } from 'phaser';
-import { EVENTS_NAME } from '../../consts';
 import { Blob } from '../../classes/entities/blob';
 import { Food } from '../../classes/entities/food';
 
 export class EnvironmentScene extends Scene {
   player: Phaser.Physics.Arcade.Sprite;
-  obstacles: Phaser.Physics.Arcade.StaticGroup;
-  foodGroup: Phaser.Physics.Arcade.StaticGroup;
+  wrapGroup: Phaser.GameObjects.Group;
+  border: Phaser.Geom.Rectangle;
   timer: number;
 
+  static readonly foodSpawnDelayInFrames = 1500;
   static readonly worldX = 200;
-  static readonly worldY = 0;
+  static readonly worldY = 50;
   static readonly worldWidth = 800;
   static readonly worldHeight = 800;
 
@@ -25,42 +25,39 @@ export class EnvironmentScene extends Scene {
   }
 
   create(): void {
-    this.obstacles = this.physics.add.staticGroup();
-    this.foodGroup = this.physics.add.staticGroup();
-
-    let world = this.physics.world;
-    world.setBounds(
-      EnvironmentScene.worldX,
-      EnvironmentScene.worldY,
-      EnvironmentScene.worldWidth,
-      EnvironmentScene.worldHeight
-    );
-
-    let border = this.add.rectangle(
+    let visualBorder = this.add.rectangle(
       EnvironmentScene.worldWidth / 2 + EnvironmentScene.worldX, // x position (center)
-      EnvironmentScene.worldHeight / 2, // y position (center)
+      EnvironmentScene.worldHeight / 2 + EnvironmentScene.worldY, // y position (center)
       EnvironmentScene.worldWidth,
       EnvironmentScene.worldHeight,
       0xffffff,
       0
     );
-    border.setStrokeStyle(1, 0x000000);
-    this.obstacles.add(border);
+    visualBorder.setStrokeStyle(1, 0x000000);
+
+    this.border = new Phaser.Geom.Rectangle(
+      EnvironmentScene.worldX,
+      EnvironmentScene.worldY,
+      EnvironmentScene.worldWidth,
+      EnvironmentScene.worldHeight,
+    )
 
     this.player = new Blob(this, 300, 300, 'blob');
     var food = new Food(this, 500, 500, 'food');
     food.addPredator(this.player);
 
-    this.physics.add.collider(this.player, this.obstacles);
+    this.wrapGroup = this.add.group(this.player);
+    this.wrapGroup.add(this.player);
   }
 
   update(time: number, delta: number): void {
     this.player.update();
+    Phaser.Actions.WrapInRectangle(this.wrapGroup.getChildren(), this.border);
 
     // Add food randomly across the map at a set interval
     this.timer += delta;
-    while (this.timer > 1500) {
-      this.timer -= 1500;
+    while (this.timer > EnvironmentScene.foodSpawnDelayInFrames) {
+      this.timer -= EnvironmentScene.foodSpawnDelayInFrames;
       var food = new Food(
         this,
         Math.random() * EnvironmentScene.worldWidth + EnvironmentScene.worldX,
