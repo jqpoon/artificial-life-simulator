@@ -10,25 +10,24 @@ export class ControllableOrganism extends Organism {
     texture: string,
     frame?: string | number
   ) {
-    super(scene, x, y, texture, frame);
+    super(scene, x, y, texture, 300, frame);
     this.cursors = this.scene.input.keyboard.createCursorKeys();
   }
 
   public update(time: number, delta: number): void {
-    let playerVelocity = 300;
     this.setVelocityX(0);
     this.setVelocityY(0);
 
     if (this.cursors.left.isDown) {
-      this.setVelocityX(-playerVelocity);
+      this.setVelocityX(-this.velocity);
     } else if (this.cursors.right.isDown) {
-      this.setVelocityX(playerVelocity);
+      this.setVelocityX(this.velocity);
     }
 
     if (this.cursors.up.isDown) {
-      this.setVelocityY(-playerVelocity);
+      this.setVelocityY(-this.velocity);
     } else if (this.cursors.down.isDown) {
-      this.setVelocityY(playerVelocity);
+      this.setVelocityY(this.velocity);
     }
   }
 }

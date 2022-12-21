@@ -1,13 +1,14 @@
 import { Physics } from 'phaser';
 
 export abstract class Organism extends Physics.Arcade.Sprite {
-  cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+  protected readonly velocity: number;
 
   constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
     texture: string,
+    velocity: number,
     frame?: string | number
   ) {
     super(scene, x, y, texture, frame);
@@ -18,6 +19,7 @@ export abstract class Organism extends Physics.Arcade.Sprite {
     this.setScale(0.5);
     this.setCircle(50);
     this.setDepth(1);
+    this.velocity = velocity;
   }
 
   protected getBody(): Physics.Arcade.Body {

@@ -8,11 +8,11 @@ export class EnvironmentScene extends Scene {
   border: Phaser.Geom.Rectangle;
   timer: number;
 
-  static readonly foodSpawnDelayInFrames = 1500;
-  static readonly worldX = 200;
-  static readonly worldY = 50;
-  static readonly worldWidth = 800;
-  static readonly worldHeight = 800;
+  private static readonly foodSpawnDelayInFrames: number = 1500;
+  private static readonly worldX: number = 200;
+  private static readonly worldY: number = 50;
+  private static readonly worldWidth: number = 800;
+  private static readonly worldHeight: number = 800;
 
   constructor() {
     super('environment-scene');
