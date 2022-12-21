@@ -24,5 +24,5 @@ export abstract class Organism extends Physics.Arcade.Sprite {
     return this.body as Physics.Arcade.Body;
   }
 
-  public abstract update(): void;
+  public abstract update(time: number, delta: number): void;
 }

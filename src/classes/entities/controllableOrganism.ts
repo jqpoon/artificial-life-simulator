@@ -14,7 +14,7 @@ export class ControllableOrganism extends Organism {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
   }
 
-  public update() {
+  public update(time: number, delta: number): void {
     let playerVelocity = 300;
     this.setVelocityX(0);
     this.setVelocityY(0);

@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
-import { ControllableOrganism } from '../../classes/entities/controllableOrganism';
 import { Food } from '../../classes/entities/food';
+import { RandomOrganism } from '../../classes/entities/randomOrganism';
 
 export class EnvironmentScene extends Scene {
   player: Phaser.Physics.Arcade.Sprite;
@@ -43,7 +43,7 @@ export class EnvironmentScene extends Scene {
       EnvironmentScene.worldHeight - 50,
     )
 
-    this.player = new ControllableOrganism(this, 300, 300, 'blob');
+    this.player = new RandomOrganism(this, 300, 300, 'blob');
     var food = new Food(this, 500, 500, 'food');
     food.addPredator(this.player);
 
@@ -52,7 +52,7 @@ export class EnvironmentScene extends Scene {
   }
 
   update(time: number, delta: number): void {
-    this.player.update();
+    this.player.update(time, delta);
     Phaser.Actions.WrapInRectangle(this.wrapGroup.getChildren(), this.border);
 
     // Add food randomly across the map at a set interval
