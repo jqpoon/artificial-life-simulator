@@ -1,6 +1,6 @@
-import { Physics } from 'phaser';
+import { Organism } from './organism';
 
-export class Blob extends Physics.Arcade.Sprite {
+export class ControllableOrganism extends Organism {
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
 
   constructor(
@@ -11,18 +11,7 @@ export class Blob extends Physics.Arcade.Sprite {
     frame?: string | number
   ) {
     super(scene, x, y, texture, frame);
-    scene.add.existing(this);
-    scene.physics.add.existing(this);
-    this.getBody().setCollideWorldBounds(true);
-
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-    this.setScale(0.5);
-    this.setCircle(50);
-    this.setDepth(1);
-  }
-
-  protected getBody(): Physics.Arcade.Body {
-    return this.body as Physics.Arcade.Body;
   }
 
   public update() {

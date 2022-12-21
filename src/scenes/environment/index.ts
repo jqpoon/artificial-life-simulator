@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { Blob } from '../../classes/entities/blob';
+import { ControllableOrganism } from '../../classes/entities/controllableOrganism';
 import { Food } from '../../classes/entities/food';
 
 export class EnvironmentScene extends Scene {
@@ -35,14 +35,15 @@ export class EnvironmentScene extends Scene {
     );
     visualBorder.setStrokeStyle(1, 0x000000);
 
+    // Soft border to wrap entities from one side of canvas to other
     this.border = new Phaser.Geom.Rectangle(
-      EnvironmentScene.worldX,
-      EnvironmentScene.worldY,
-      EnvironmentScene.worldWidth,
-      EnvironmentScene.worldHeight,
+      EnvironmentScene.worldX + 25,
+      EnvironmentScene.worldY + 25,
+      EnvironmentScene.worldWidth - 50,
+      EnvironmentScene.worldHeight - 50,
     )
 
-    this.player = new Blob(this, 300, 300, 'blob');
+    this.player = new ControllableOrganism(this, 300, 300, 'blob');
     var food = new Food(this, 500, 500, 'food');
     food.addPredator(this.player);
 
