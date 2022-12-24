@@ -1,7 +1,6 @@
 import { Scene } from 'phaser';
-import { ControllableOrganism } from '../../classes/entities/controllableOrganism';
-import { Food } from '../../classes/entities/food';
-import { RandomOrganism } from '../../classes/entities/randomOrganism';
+import { ControllableOrganism } from '../classes/entities/controllableOrganism';
+import { Food } from '../classes/entities/food';
 
 export class EnvironmentScene extends Scene {
   player: Phaser.Physics.Arcade.Sprite;
@@ -41,7 +40,7 @@ export class EnvironmentScene extends Scene {
     );
     visualBorder.setStrokeStyle(1, 0x000000);
 
-    this.player = new RandomOrganism(this, 'blob');
+    this.player = new ControllableOrganism(this, 'blob');
   }
 
   update(time: number, delta: number): void {

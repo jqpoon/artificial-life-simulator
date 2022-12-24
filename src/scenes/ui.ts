@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
-import { Score, ScoreOperations } from '../../classes/score';
-import { EVENTS_NAME } from '../../consts';
+import { Score, ScoreOperations } from '../classes/score';
+import { EVENTS_NAME } from '../consts';
 
 export class UIScene extends Scene {
   private score!: Score;

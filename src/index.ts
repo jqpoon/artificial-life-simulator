@@ -1,6 +1,6 @@
 import 'phaser';
-import { EnvironmentScene } from './scenes';
-import { LoadingScene } from './scenes';
+import { EnvironmentScene } from './scenes/environment';
+import { LoadingScene } from './scenes/loading';
 import { UIScene } from './scenes/ui';
 
 let configObject: Phaser.Types.Core.GameConfig = {
