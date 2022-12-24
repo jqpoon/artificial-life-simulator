@@ -1,16 +1,26 @@
 import { Organism } from './organism';
 
 export class ControllableOrganism extends Organism {
+  private static readonly SIZE = 0.5;
+  private static readonly VELOCITY = 300;
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
 
   constructor(
     scene: Phaser.Scene,
-    x: number,
-    y: number,
     texture: string,
+    x?: number,
+    y?: number,
     frame?: string | number
   ) {
-    super(scene, x, y, texture, 300, frame);
+    super(
+      scene,
+      texture,
+      ControllableOrganism.VELOCITY,
+      ControllableOrganism.SIZE,
+      x,
+      y,
+      frame
+    );
     this.cursors = this.scene.input.keyboard.createCursorKeys();
   }
 

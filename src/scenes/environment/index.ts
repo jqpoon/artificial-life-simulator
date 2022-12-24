@@ -1,11 +1,11 @@
 import { Scene } from 'phaser';
+import { ControllableOrganism } from '../../classes/entities/controllableOrganism';
 import { Food } from '../../classes/entities/food';
 import { RandomOrganism } from '../../classes/entities/randomOrganism';
 
 export class EnvironmentScene extends Scene {
   player: Phaser.Physics.Arcade.Sprite;
   wrapGroup: Phaser.GameObjects.Group;
-  border: Phaser.Geom.Rectangle;
   timer: number;
 
   private static readonly foodSpawnDelayInFrames: number = 1500;
@@ -25,6 +25,14 @@ export class EnvironmentScene extends Scene {
   }
 
   create(): void {
+    let world = this.physics.world;
+    world.setBounds(
+      EnvironmentScene.worldX,
+      EnvironmentScene.worldY,
+      EnvironmentScene.worldWidth,
+      EnvironmentScene.worldHeight
+    );
+
     let visualBorder = this.add.rectangle(
       EnvironmentScene.worldWidth / 2 + EnvironmentScene.worldX, // x position (center)
       EnvironmentScene.worldHeight / 2 + EnvironmentScene.worldY, // y position (center)
@@ -35,15 +43,7 @@ export class EnvironmentScene extends Scene {
     );
     visualBorder.setStrokeStyle(1, 0x000000);
 
-    // Soft border to wrap entities from one side of canvas to other
-    this.border = new Phaser.Geom.Rectangle(
-      EnvironmentScene.worldX + 25,
-      EnvironmentScene.worldY + 25,
-      EnvironmentScene.worldWidth - 50,
-      EnvironmentScene.worldHeight - 50,
-    )
-
-    this.player = new RandomOrganism(this, 300, 300, 'blob');
+    this.player = new ControllableOrganism(this, 'blob');
     var food = new Food(this, 500, 500, 'food');
     food.addPredator(this.player);
 
@@ -53,7 +53,7 @@ export class EnvironmentScene extends Scene {
 
   update(time: number, delta: number): void {
     this.player.update(time, delta);
-    Phaser.Actions.WrapInRectangle(this.wrapGroup.getChildren(), this.border);
+    this.physics.world.wrap(this.wrapGroup, -25);
 
     // Add food randomly across the map at a set interval
     this.timer += delta;

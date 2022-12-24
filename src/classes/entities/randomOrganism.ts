@@ -1,17 +1,27 @@
 import { Organism } from './organism';
 
 export class RandomOrganism extends Organism {
+  private static readonly SIZE = 0.5;
+  private static readonly VELOCITY = 300;
   private readonly CHANGE_DIRECTION_DELAY: number = 1000;
   timer: number;
 
   constructor(
     scene: Phaser.Scene,
-    x: number,
-    y: number,
     texture: string,
+    x?: number,
+    y?: number,
     frame?: string | number
   ) {
-    super(scene, x, y, texture, 100, frame);
+    super(
+      scene,
+      texture,
+      RandomOrganism.VELOCITY,
+      RandomOrganism.SIZE,
+      x,
+      y,
+      frame
+    );
     this.timer = 0;
   }
 
