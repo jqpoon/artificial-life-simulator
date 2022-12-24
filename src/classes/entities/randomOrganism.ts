@@ -2,7 +2,7 @@ import { Organism } from './organism';
 
 export class RandomOrganism extends Organism {
   private static readonly SIZE = 0.5;
-  private static readonly VELOCITY = 300;
+  private static readonly VELOCITY = 100;
   private readonly CHANGE_DIRECTION_DELAY: number = 1000;
   timer: number;
 

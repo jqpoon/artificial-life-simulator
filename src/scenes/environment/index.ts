@@ -5,7 +5,6 @@ import { RandomOrganism } from '../../classes/entities/randomOrganism';
 
 export class EnvironmentScene extends Scene {
   player: Phaser.Physics.Arcade.Sprite;
-  wrapGroup: Phaser.GameObjects.Group;
   timer: number;
 
   private static readonly foodSpawnDelayInFrames: number = 1500;
@@ -25,8 +24,7 @@ export class EnvironmentScene extends Scene {
   }
 
   create(): void {
-    let world = this.physics.world;
-    world.setBounds(
+    this.physics.world.setBounds(
       EnvironmentScene.worldX,
       EnvironmentScene.worldY,
       EnvironmentScene.worldWidth,
@@ -43,17 +41,12 @@ export class EnvironmentScene extends Scene {
     );
     visualBorder.setStrokeStyle(1, 0x000000);
 
-    this.player = new ControllableOrganism(this, 'blob');
-    var food = new Food(this, 500, 500, 'food');
-    food.addPredator(this.player);
-
-    this.wrapGroup = this.add.group(this.player);
-    this.wrapGroup.add(this.player);
+    this.player = new RandomOrganism(this, 'blob');
   }
 
   update(time: number, delta: number): void {
     this.player.update(time, delta);
-    this.physics.world.wrap(this.wrapGroup, -25);
+    this.physics.world.wrap(this.player, -25);
 
     // Add food randomly across the map at a set interval
     this.timer += delta;
