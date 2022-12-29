@@ -26,6 +26,7 @@ export class RandomOrganism extends Organism {
   }
 
   public update(time: number, delta: number): void {
+    this.updateAge(delta);
     this.timer += delta;
     while (this.timer > this.CHANGE_DIRECTION_DELAY) {
       this.timer -= this.CHANGE_DIRECTION_DELAY;

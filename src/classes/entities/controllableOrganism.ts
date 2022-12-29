@@ -25,6 +25,7 @@ export class ControllableOrganism extends Organism {
   }
 
   public update(time: number, delta: number): void {
+    this.updateAge(delta);
     this.setVelocityX(0);
     this.setVelocityY(0);
 
