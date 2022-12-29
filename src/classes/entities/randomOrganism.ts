@@ -3,7 +3,7 @@ import { Organism } from './organism';
 export class RandomOrganism extends Organism {
   private static readonly SIZE = 0.5;
   private static readonly VELOCITY = 100;
-  private readonly CHANGE_DIRECTION_DELAY: number = 1000;
+  private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 1000;
   timer: number;
 
   constructor(
@@ -23,14 +23,21 @@ export class RandomOrganism extends Organism {
       frame
     );
     this.timer = 0;
+
+    scene.time.addEvent({
+      delay: this.CHANGE_DIRECTION_DELAY_MILLISECONDS,
+      callback: this.changeDirection,
+      callbackScope: this,
+      loop: true,
+    });
   }
 
   public update(time: number, delta: number): void {
     this.updateAge(delta);
-    this.timer += delta;
-    while (this.timer > this.CHANGE_DIRECTION_DELAY) {
-      this.timer -= this.CHANGE_DIRECTION_DELAY;
-      this.setVelocityX(0);
+  }
+
+  private changeDirection(): void {
+    this.setVelocityX(0);
       this.setVelocityY(0);
 
       // Random speed from -1 to 1 inclusive
@@ -39,6 +46,5 @@ export class RandomOrganism extends Organism {
 
       this.setVelocityX(this.velocity * randomX);
       this.setVelocityY(this.velocity * randomY);
-    }
   }
 }
