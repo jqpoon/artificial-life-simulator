@@ -24,8 +24,7 @@ export class ControllableOrganism extends Organism {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
   }
 
-  public update(time: number, delta: number): void {
-    this.updateAge(delta);
+  protected organismUpdate(time: number, delta: number): void {
     this.setVelocityX(0);
     this.setVelocityY(0);
 

@@ -41,7 +41,7 @@ export class EnvironmentScene extends Scene {
     );
     visualBorder.setStrokeStyle(1, 0x000000);
 
-    this.player = new RandomOrganism(this, 'blob');
+    this.player = new ControllableOrganism(this, 'blob');
 
     this.time.addEvent({
       delay: EnvironmentScene.foodSpawnDelayInMilliseconds,

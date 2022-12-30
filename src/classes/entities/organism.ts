@@ -5,7 +5,9 @@ export abstract class Organism extends Physics.Arcade.Sprite {
   private static readonly DEFAULT_Y = 300;
   private static readonly DEFAULT_SIZE = 0.5;
   protected readonly velocity: number;
+
   protected age: number;
+  protected energy: number;
 
   constructor(
     scene: Phaser.Scene,
@@ -30,12 +32,16 @@ export abstract class Organism extends Physics.Arcade.Sprite {
     this.setCircle(50);
     this.setDepth(1);
     this.velocity = velocity;
+
     this.age = 0;
+    this.energy = 100;
   }
 
-  protected updateAge(delta: number): void {
+  public update(time: number, delta: number): void {
     this.age += delta;
+    this.energy -= 0.5;
+    this.organismUpdate(time, delta);
   }
 
-  public abstract update(time: number, delta: number): void;
+  protected abstract organismUpdate(time:number, delta: number): void;
 }
