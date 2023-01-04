@@ -41,6 +41,10 @@ export class RandomOrganism extends Organism {
     return new RandomOrganism(this.scene, this.texture.key, this.x, this.y, this.frame.name);
   }
 
+  public onDestroy() {
+    this.timedEvent.remove(false);
+  }
+
   private changeDirection(): void {
     this.setVelocityX(0);
     this.setVelocityY(0);
