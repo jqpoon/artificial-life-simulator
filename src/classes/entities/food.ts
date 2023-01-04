@@ -1,5 +1,6 @@
 import { Physics } from 'phaser';
 import { EVENTS_NAME } from '../../consts';
+import { Organism } from './organism';
 
 export class Food extends Physics.Arcade.Sprite {
   constructor(
@@ -21,6 +22,9 @@ export class Food extends Physics.Arcade.Sprite {
     this.scene.physics.add.overlap(group, this, (obj1, obj2) => {
       this.scene.game.events.emit(EVENTS_NAME.addScore);
       obj2.destroy();
+      const organism = obj1 as Organism;
+      organism.addEnergy(10);
     });
   }
 }
+ 
