@@ -1,4 +1,5 @@
 import { Physics } from 'phaser';
+import { EVENTS_NAME } from '../../consts';
 
 export abstract class Organism extends Physics.Arcade.Sprite {
   private static readonly DEFAULT_X = 300;
@@ -39,8 +40,21 @@ export abstract class Organism extends Physics.Arcade.Sprite {
 
   public update(time: number, delta: number): void {
     this.age += delta;
-    this.energy -= 0.5;
+    this.energy -= 0.001;
     this.organismUpdate(time, delta);
+    this.scene.game.events.emit(EVENTS_NAME.updateEnergy, this.energy.toLocaleString('en-us', {maximumFractionDigits: 1}));
+
+    if (this.energy <= 0) {
+      this.destroy();
+    }
+  }
+
+  public addEnergy(amount: number): void {
+    this.energy += amount;
+  }
+
+  public getEnergy(): number {
+    return this.energy;
   }
 
   protected abstract organismUpdate(time:number, delta: number): void;
