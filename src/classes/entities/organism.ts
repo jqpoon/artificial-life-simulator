@@ -10,6 +10,9 @@ export abstract class Organism extends Physics.Arcade.Sprite {
   protected age: number;
   protected energy: number;
 
+  protected abstract clone(): any;
+  protected abstract organismUpdate(time:number, delta: number): void;
+
   constructor(
     scene: Phaser.Scene,
     texture: string,
@@ -40,12 +43,20 @@ export abstract class Organism extends Physics.Arcade.Sprite {
 
   public update(time: number, delta: number): void {
     this.age += delta;
-    this.energy -= 0.001;
+    this.energy -= 0.1;
+    this.scene.physics.world.wrap(this, -25);
+
     this.organismUpdate(time, delta);
-    this.scene.game.events.emit(EVENTS_NAME.updateEnergy, this.energy.toLocaleString('en-us', {maximumFractionDigits: 1}));
+    this.scene.game.events.emit(EVENTS_NAME.updateEnergy, this.energy.toLocaleString('en-us', {minimumFractionDigits: 1}));
 
     if (this.energy <= 0) {
       this.destroy();
+    }
+
+    if (this.energy > 105) {
+      let child = this.clone();
+      this.scene.game.events.emit(EVENTS_NAME.reproduceOrganism, child);
+      this.energy -= 50;
     }
   }
 
@@ -56,6 +67,4 @@ export abstract class Organism extends Physics.Arcade.Sprite {
   public getEnergy(): number {
     return this.energy;
   }
-
-  protected abstract organismUpdate(time:number, delta: number): void;
 }

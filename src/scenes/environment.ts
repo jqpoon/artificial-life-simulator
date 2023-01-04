@@ -1,10 +1,12 @@
 import { Scene } from 'phaser';
 import { ControllableOrganism } from '../classes/entities/controllableOrganism';
 import { Food } from '../classes/entities/food';
+import { Organism } from '../classes/entities/organism';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
+import { EVENTS_NAME } from '../consts';
 
 export class EnvironmentScene extends Scene {
-  player: Phaser.Physics.Arcade.Sprite;
+  organisms: Phaser.GameObjects.Group;
   timer: number;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 1500;
@@ -41,7 +43,11 @@ export class EnvironmentScene extends Scene {
     );
     visualBorder.setStrokeStyle(1, 0x000000);
 
-    this.player = new ControllableOrganism(this, 'blob');
+    let player = new RandomOrganism(this, 'blob');
+
+    this.organisms = this.add.group();
+    this.addOrganismToGroup(player);
+    this.organisms.runChildUpdate = true;
 
     this.time.addEvent({
       delay: EnvironmentScene.foodSpawnDelayInMilliseconds,
@@ -50,13 +56,15 @@ export class EnvironmentScene extends Scene {
       loop: true,
     });
 
-    this.updateTimeScale(1);
+    this.updateTimeScale(5);
+
+    this.game.events.on(EVENTS_NAME.reproduceOrganism, (organism: Organism) => {
+        this.addOrganismToGroup(organism);
+      }
+    );
   }
 
-  update(time: number, delta: number): void {
-    this.player.update(time, delta);
-    this.physics.world.wrap(this.player, -25);
-  }
+  update(time: number, delta: number): void {}
 
   private updateTimeScale(timeScale: number): void {
     this.tweens.timeScale = timeScale;
@@ -71,6 +79,10 @@ export class EnvironmentScene extends Scene {
       Math.random() * EnvironmentScene.worldHeight + EnvironmentScene.worldY,
       'food'
     );
-    food.addPredator(this.player);
+    food.addPredator(this.organisms);
+  }
+
+  private addOrganismToGroup(organism: Organism) {
+    this.organisms.add(organism);
   }
 }

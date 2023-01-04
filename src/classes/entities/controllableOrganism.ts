@@ -22,6 +22,7 @@ export class ControllableOrganism extends Organism {
       frame
     );
     this.cursors = this.scene.input.keyboard.createCursorKeys();
+    this.name = 'id ' + Date.now();
   }
 
   protected organismUpdate(time: number, delta: number): void {
@@ -39,5 +40,9 @@ export class ControllableOrganism extends Organism {
     } else if (this.cursors.down.isDown) {
       this.setVelocityY(this.velocity);
     }
+  }
+
+  protected clone(): any {
+    return new ControllableOrganism(this.scene, this.texture.key, this.x, this.y, this.frame.name);
   }
 }

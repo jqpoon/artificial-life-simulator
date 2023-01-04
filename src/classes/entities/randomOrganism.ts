@@ -4,7 +4,10 @@ export class RandomOrganism extends Organism {
   private static readonly SIZE = 0.5;
   private static readonly VELOCITY = 100;
   private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 1000;
+  
+  private timedEvent: Phaser.Time.TimerEvent;
   timer: number;
+  
 
   constructor(
     scene: Phaser.Scene,
@@ -24,7 +27,7 @@ export class RandomOrganism extends Organism {
     );
     this.timer = 0;
 
-    scene.time.addEvent({
+    this.timedEvent = scene.time.addEvent({
       delay: this.CHANGE_DIRECTION_DELAY_MILLISECONDS,
       callback: this.changeDirection,
       callbackScope: this,
@@ -33,6 +36,10 @@ export class RandomOrganism extends Organism {
   }
 
   protected organismUpdate(time: number, delta: number): void {}
+
+  protected clone(): any {
+    return new RandomOrganism(this.scene, this.texture.key, this.x, this.y, this.frame.name);
+  }
 
   private changeDirection(): void {
     this.setVelocityX(0);

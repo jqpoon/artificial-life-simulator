@@ -18,12 +18,12 @@ export class Food extends Physics.Arcade.Sprite {
     this.setCircle(50);
   }
 
-  public addPredator(group: Phaser.Physics.Arcade.Sprite) {
+  public addPredator(group: Phaser.GameObjects.Group) {
     this.scene.physics.add.overlap(group, this, (obj1, obj2) => {
       this.scene.game.events.emit(EVENTS_NAME.addScore);
       obj2.destroy();
       const organism = obj1 as Organism;
-      organism.addEnergy(10);
+      organism.addEnergy(50);
     });
   }
 }
