@@ -45,11 +45,13 @@ export abstract class Organism extends Physics.Arcade.Sprite {
 
     this.decreaseEnergyEvent = scene.time.addEvent({
       delay: 100,
-      args: [-0.5],
+      args: [-0.3],
       callback: this.addEnergy,
       callbackScope: this,
       loop: true,
     });
+
+    this.scene.game.events.emit(EVENTS_NAME.increaseCount, 1);
   }
 
   public update(time: number, delta: number): void {
@@ -61,6 +63,7 @@ export abstract class Organism extends Physics.Arcade.Sprite {
 
     if (this.energy <= 0) {
       this.onDestroy();
+      this.scene.game.events.emit(EVENTS_NAME.increaseCount, -1);
       this.destroy();
     }
 
