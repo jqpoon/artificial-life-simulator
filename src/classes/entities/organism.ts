@@ -5,8 +5,10 @@ export abstract class Organism extends Physics.Arcade.Sprite {
   private static readonly DEFAULT_X = 300;
   private static readonly DEFAULT_Y = 300;
   private static readonly DEFAULT_SIZE = 0.5;
-  protected readonly velocity: number;
 
+  private decreaseEnergyEvent: Phaser.Time.TimerEvent;
+
+  protected readonly velocity: number;
   protected age: number;
   protected energy: number;
 
@@ -40,11 +42,18 @@ export abstract class Organism extends Physics.Arcade.Sprite {
 
     this.age = 0;
     this.energy = 100;
+
+    this.decreaseEnergyEvent = scene.time.addEvent({
+      delay: 100,
+      args: [-0.5],
+      callback: this.addEnergy,
+      callbackScope: this,
+      loop: true,
+    });
   }
 
   public update(time: number, delta: number): void {
     this.age += delta;
-    this.energy -= 0.1;
     this.scene.physics.world.wrap(this, -25);
 
     this.organismUpdate(time, delta);
