@@ -44,7 +44,7 @@ export abstract class Organism extends Physics.Arcade.Sprite {
 
   public update(time: number, delta: number): void {
     this.age += delta;
-    this.energy -= 0.3;
+    this.energy -= 0.1;
     this.scene.physics.world.wrap(this, -25);
 
     this.organismUpdate(time, delta);

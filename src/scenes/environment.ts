@@ -57,18 +57,20 @@ export class EnvironmentScene extends Scene {
     });
 
     this.updateTimeScale(5);
+    this.game.events.on(EVENTS_NAME.updateTimeScale, (value: number) => {
+      this.updateTimeScale(value);
+    });
 
     this.game.events.on(EVENTS_NAME.reproduceOrganism, (organism: Organism) => {
-        this.addOrganismToGroup(organism);
-      }
-    );
+      this.addOrganismToGroup(organism);
+    });
   }
 
   update(time: number, delta: number): void {}
 
   private updateTimeScale(timeScale: number): void {
     this.tweens.timeScale = timeScale;
-    this.physics.world.timeScale = 1/timeScale;
+    this.physics.world.timeScale = 1 / timeScale;
     this.time.timeScale = timeScale;
   }
 
