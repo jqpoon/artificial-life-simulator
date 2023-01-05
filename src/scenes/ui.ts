@@ -34,7 +34,7 @@ export class UIScene extends Scene {
     });
 
     this.game.events.on(EVENTS_NAME.updateTimeScale, (value: number) => {
-      this.timeScale.setText('TimeScale: ' + value)
+      this.timeScale.setText('Speed: ' + value)
     })
   }
 }

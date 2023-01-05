@@ -15,7 +15,7 @@ export class SliderBar {
         { x: 15, y: 100 },
         { x: 140, y: 100 },
       ],
-      value: 0.1,
+      value: 0.5,
       enable: true,
       valuechangeCallback: valuechangeCallback,
       valuechangeCallbackScope: valuechangeCallbackScope,
