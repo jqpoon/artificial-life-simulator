@@ -4,4 +4,5 @@ export enum EVENTS_NAME {
     increaseCount = 'increase-count',
     updateEnergy = 'update-energy',
     updateTimeScale = 'update-time-scale',
+    updateWorldAge = 'update-world-age',
 }

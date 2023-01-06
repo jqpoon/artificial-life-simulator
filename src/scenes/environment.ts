@@ -10,7 +10,7 @@ export class EnvironmentScene extends Scene {
   timer: number;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 1500;
-  private static readonly worldX: number = 200;
+  private static readonly worldX: number = 300;
   private static readonly worldY: number = 50;
   private static readonly worldWidth: number = 800;
   private static readonly worldHeight: number = 800;
@@ -66,7 +66,9 @@ export class EnvironmentScene extends Scene {
     });
   }
 
-  update(time: number, delta: number): void {}
+  update(time: number, delta: number): void {
+    this.game.events.emit(EVENTS_NAME.updateWorldAge, this.time.timeScale);
+  }
 
   private updateTimeScale(timeScale: number): void {
     this.tweens.timeScale = timeScale;
