@@ -47,6 +47,7 @@ export class EnvironmentScene extends Scene {
 
     this.organisms = this.add.group();
     this.addOrganismToGroup(player);
+    this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
 
     this.time.addEvent({
