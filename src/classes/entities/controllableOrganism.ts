@@ -27,7 +27,7 @@ export class ControllableOrganism extends Organism {
 
   protected onDestroy(): void {}
 
-  protected organismUpdate(time: number, delta: number): void {
+  protected onUpdate(time: number, delta: number): void {
     this.setVelocityX(0);
     this.setVelocityY(0);
 

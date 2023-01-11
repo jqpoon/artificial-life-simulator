@@ -34,7 +34,7 @@ export class RandomOrganism extends Organism {
     });
   }
 
-  protected organismUpdate(time: number, delta: number): void {}
+  protected onUpdate(time: number, delta: number): void {}
 
   protected clone(): any {
     return new RandomOrganism(this.scene, this.texture.key, this.x, this.y, this.frame.name);

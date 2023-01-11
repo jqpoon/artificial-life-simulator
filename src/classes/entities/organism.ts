@@ -13,7 +13,7 @@ export abstract class Organism extends Physics.Arcade.Sprite {
   protected energy: number;
 
   protected abstract clone(): any;
-  protected abstract organismUpdate(time:number, delta: number): void;
+  protected abstract onUpdate(time:number, delta: number): void;
   protected abstract onDestroy(): void;
 
   constructor(
@@ -58,12 +58,12 @@ export abstract class Organism extends Physics.Arcade.Sprite {
     this.age += delta;
     this.scene.physics.world.wrap(this, -25);
 
-    this.organismUpdate(time, delta);
-    this.scene.game.events.emit(EVENTS_NAME.updateEnergy, this.energy.toLocaleString('en-us', {minimumFractionDigits: 1}));
+    this.onUpdate(time, delta);
 
     if (this.energy <= 0) {
       this.onDestroy();
       this.scene.game.events.emit(EVENTS_NAME.increaseCount, -1);
+      this.decreaseEnergyEvent.remove(false);
       this.destroy();
     }
 
@@ -76,9 +76,5 @@ export abstract class Organism extends Physics.Arcade.Sprite {
 
   public addEnergy(amount: number): void {
     this.energy += amount;
-  }
-
-  public getEnergy(): number {
-    return this.energy;
   }
 }
