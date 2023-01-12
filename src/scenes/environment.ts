@@ -44,7 +44,7 @@ export class EnvironmentScene extends Scene {
     this.game.events.emit(EVENTS_NAME.updateWorldAge, this.time.timeScale);
   }
 
-  private initListeners() {
+  private initListeners(): void {
     this.game.events.on(EVENTS_NAME.updateTimeScale, (value: number) => {
       this.updateTimeScale(value);
     });
@@ -54,7 +54,7 @@ export class EnvironmentScene extends Scene {
     });
   }
 
-  private initEvents() {
+  private initEvents(): void {
     this.time.addEvent({
       delay: EnvironmentScene.foodSpawnDelayInMilliseconds,
       callback: this.generateNewFood,
@@ -63,7 +63,7 @@ export class EnvironmentScene extends Scene {
     });
   }
 
-  private initCanvas() {
+  private initCanvas(): void {
     this.physics.world.setBounds(
       EnvironmentScene.worldX,
       EnvironmentScene.worldY,
@@ -98,7 +98,7 @@ export class EnvironmentScene extends Scene {
     food.addPredator(this.organisms);
   }
 
-  private addOrganismToGroup(organism: Organism) {
+  private addOrganismToGroup(organism: Organism): void {
     this.organisms.add(organism);
   }
 }

@@ -14,7 +14,7 @@ export abstract class Organism extends Physics.Arcade.Sprite {
   protected energy: number;
 
   protected abstract clone(): any;
-  protected abstract onUpdate(time:number, delta: number): void;
+  protected abstract onUpdate(time: number, delta: number): void;
   protected abstract onDestroy(): void;
 
   constructor(

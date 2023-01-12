@@ -45,6 +45,12 @@ export class ControllableOrganism extends Organism {
   }
 
   protected clone(): any {
-    return new ControllableOrganism(this.scene, this.texture.key, this.x, this.y, this.frame.name);
+    return new ControllableOrganism(
+      this.scene,
+      this.texture.key,
+      this.x,
+      this.y,
+      this.frame.name
+    );
   }
 }

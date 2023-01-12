@@ -2,7 +2,11 @@ import { Scene } from 'phaser';
 import Slider from 'phaser3-rex-plugins/plugins/slider.js';
 
 export class SliderBar {
-  constructor(scene: Scene, valuechangeCallback: (newValue: number) => void, valuechangeCallbackScope: any) {
+  constructor(
+    scene: Scene,
+    valuechangeCallback: (newValue: number) => void,
+    valuechangeCallbackScope: any
+  ) {
     let circle = scene.add.circle(0, 0, 12, 0xbbded6);
     circle.setStrokeStyle(1, 0x000000);
     circle.setDepth(1);

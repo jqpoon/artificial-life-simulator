@@ -27,4 +27,3 @@ export class Food extends Physics.Arcade.Sprite {
     });
   }
 }
- 
