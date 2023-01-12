@@ -80,6 +80,11 @@ export class EnvironmentScene extends Scene {
       0
     );
     visualBorder.setStrokeStyle(1, 0x000000);
+
+    visualBorder.setInteractive().on('pointerdown', (_: any, localX: number, localY:number) => {
+      let newOrganism = new RandomOrganism(this, 'blob', localX + EnvironmentScene.worldX, localY + EnvironmentScene.worldY);
+      this.addOrganismToGroup(newOrganism);
+    });
   }
 
   private updateTimeScale(timeScale: number): void {
