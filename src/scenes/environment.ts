@@ -1,13 +1,13 @@
 import { Scene } from 'phaser';
-import { ControllableOrganism } from '../classes/entities/controllableOrganism';
+
 import { Food } from '../classes/entities/food';
 import { Organism } from '../classes/entities/organism';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
 import { EVENTS_NAME } from '../consts';
 
 export class EnvironmentScene extends Scene {
-  organisms: Phaser.GameObjects.Group;
-  timer: number;
+  private organisms: Phaser.GameObjects.Group;
+  private timer: number;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 1500;
   private static readonly worldX: number = 300;
@@ -26,6 +26,44 @@ export class EnvironmentScene extends Scene {
   }
 
   create(): void {
+    let player = new RandomOrganism(this, 'blob');
+
+    this.organisms = this.add.group();
+    this.addOrganismToGroup(player);
+    this.physics.add.collider(this.organisms, this.organisms);
+    this.organisms.runChildUpdate = true;
+
+    this.updateTimeScale(5);
+
+    this.initCanvas();
+    this.initListeners();
+    this.initEvents();
+  }
+
+  update(time: number, delta: number): void {
+    this.game.events.emit(EVENTS_NAME.updateWorldAge, this.time.timeScale);
+  }
+
+  private initListeners() {
+    this.game.events.on(EVENTS_NAME.updateTimeScale, (value: number) => {
+      this.updateTimeScale(value);
+    });
+
+    this.game.events.on(EVENTS_NAME.reproduceOrganism, (organism: Organism) => {
+      this.addOrganismToGroup(organism);
+    });
+  }
+
+  private initEvents() {
+    this.time.addEvent({
+      delay: EnvironmentScene.foodSpawnDelayInMilliseconds,
+      callback: this.generateNewFood,
+      callbackScope: this,
+      loop: true,
+    });
+  }
+
+  private initCanvas() {
     this.physics.world.setBounds(
       EnvironmentScene.worldX,
       EnvironmentScene.worldY,
@@ -42,33 +80,6 @@ export class EnvironmentScene extends Scene {
       0
     );
     visualBorder.setStrokeStyle(1, 0x000000);
-
-    let player = new RandomOrganism(this, 'blob');
-
-    this.organisms = this.add.group();
-    this.addOrganismToGroup(player);
-    this.physics.add.collider(this.organisms, this.organisms);
-    this.organisms.runChildUpdate = true;
-
-    this.time.addEvent({
-      delay: EnvironmentScene.foodSpawnDelayInMilliseconds,
-      callback: this.generateNewFood,
-      callbackScope: this,
-      loop: true,
-    });
-
-    this.updateTimeScale(5);
-    this.game.events.on(EVENTS_NAME.updateTimeScale, (value: number) => {
-      this.updateTimeScale(value);
-    });
-
-    this.game.events.on(EVENTS_NAME.reproduceOrganism, (organism: Organism) => {
-      this.addOrganismToGroup(organism);
-    });
-  }
-
-  update(time: number, delta: number): void {
-    this.game.events.emit(EVENTS_NAME.updateWorldAge, this.time.timeScale);
   }
 
   private updateTimeScale(timeScale: number): void {

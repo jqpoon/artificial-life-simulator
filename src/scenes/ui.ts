@@ -1,17 +1,24 @@
-import { Scene } from 'phaser';
-import { Score, ScoreOperations } from '../classes/ui/score';
-import { SliderBar } from '../classes/ui/slider';
+import { GameObjects, Scene } from 'phaser';
+
 import { Label } from 'phaser3-rex-plugins/templates/ui/ui-components.js'
 import RoundRectangleCanvas from 'phaser3-rex-plugins/plugins/roundrectanglecanvas.js';
-import { Text } from '../classes/ui/text';
+
+import { SliderBar } from '../classes/ui/slider';
 import { EVENTS_NAME } from '../consts';
 
+const textDefaults = {
+  fontSize: '30px',
+  color: '#000',
+  fontFamily: 'Helvetica',
+  align: 'center',
+  wordWrap: {width: 600},
+};
+
 export class UIScene extends Scene {
-  private score: Score;
-  private timeScale: Text;
-  private countText: Text;
+  private timeScale: GameObjects.Text;
+  private countText: GameObjects.Text;
   private count: number = 0;
-  private worldAgeText: Text;
+  private worldAgeText: GameObjects.Text;
   private worldAge: number = 0;
 
   constructor() {
@@ -19,7 +26,6 @@ export class UIScene extends Scene {
   }
 
   create(): void {
-    new Text(this, 0, 0, "Jia's Life\nSimulator");
     new SliderBar(this, (value) => {this.game.events.emit(EVENTS_NAME.updateTimeScale, value * 10)}, this);
 
     let rec = new RoundRectangleCanvas(this, 0, 0, 0, 0, 10, 0x333333);
@@ -41,21 +47,20 @@ export class UIScene extends Scene {
       this.worldAge = 0;
     });
 
-    this.add.existing(btn);
-
-    this.score = new Score(this, 1200, 20, 0);
-    this.timeScale = new Text(this, 0, 120, 'Speed: 5.0');
-    this.countText = new Text(this, 0, 240, 'Count: 1');
-    this.worldAgeText = new Text(this, 0, 180, 'World Age: 0');
-
+    this.initTexts();
     this.initListeners();
   }
 
-  private initListeners(): void {
-    this.game.events.on(EVENTS_NAME.addScore, () => {
-      this.score.changeValue(ScoreOperations.INCREASE, 1);
-    });
+  private initTexts(): void {
+    this.add.text(0, 0, "Jia's Life\nSimulator", textDefaults);
+    this.add.text(1200, 50, "This is an artificial life simulator!\n\nControl simulation parameters by using the controls on the left.", textDefaults);
 
+    this.timeScale = this.add.text(0, 120, 'Speed: 5.0', textDefaults);
+    this.countText = this.add.text(0, 240, 'Count: 1', textDefaults);
+    this.worldAgeText = this.add.text(0, 180, 'World Age: 0', textDefaults);
+  }
+
+  private initListeners(): void {
     this.game.events.on(EVENTS_NAME.updateTimeScale, (value: number) => {
       this.timeScale.setText('Speed: ' + value.toLocaleString('en-us', {maximumFractionDigits: 1, minimumFractionDigits: 1}))
     })

@@ -1,4 +1,5 @@
 import { Physics } from 'phaser';
+
 import { EVENTS_NAME } from '../../consts';
 
 export abstract class Organism extends Physics.Arcade.Sprite {
