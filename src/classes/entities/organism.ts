@@ -1,11 +1,15 @@
 import { Physics } from 'phaser';
 
 import { EVENTS_NAME } from '../../consts';
+import { OrganismConfigs } from '../../typedefs';
 
 export abstract class Organism extends Physics.Arcade.Sprite {
-  private static readonly DEFAULT_X = 300;
-  private static readonly DEFAULT_Y = 300;
-  private static readonly DEFAULT_SIZE = 0.5;
+  private static readonly ORGANISM_DEFAULTS = {
+    velocity: 300,
+    size: 0.5,
+    x: 300,
+    y: 300,
+  };
 
   private decreaseEnergyEvent: Phaser.Time.TimerEvent;
 
@@ -17,34 +21,28 @@ export abstract class Organism extends Physics.Arcade.Sprite {
   protected abstract onUpdate(time: number, delta: number): void;
   protected abstract onDestroy(): void;
 
-  constructor(
-    scene: Phaser.Scene,
-    texture: string,
-    velocity: number,
-    size: number,
-    x?: number,
-    y?: number,
-    frame?: string | number
-  ) {
-    super(
-      scene,
-      x ?? Organism.DEFAULT_X,
-      y ?? Organism.DEFAULT_Y,
-      texture,
-      frame
-    );
-    scene.add.existing(this);
-    scene.physics.add.existing(this);
+  constructor(configs: OrganismConfigs) {
+    let mergedConfigs = {...Organism.ORGANISM_DEFAULTS, ...configs};
 
-    this.setScale(size ?? Organism.DEFAULT_SIZE);
+    super(
+      mergedConfigs.scene,
+      mergedConfigs.x,
+      mergedConfigs.y,
+      mergedConfigs.texture,
+      mergedConfigs.frame
+    );
+    mergedConfigs.scene.add.existing(this);
+    mergedConfigs.scene.physics.add.existing(this);
+
+    this.setScale(mergedConfigs.size);
     this.setCircle(50);
     this.setDepth(1);
-    this.velocity = velocity;
+    this.velocity = mergedConfigs.velocity;
 
     this.age = 0;
     this.energy = 100;
 
-    this.decreaseEnergyEvent = scene.time.addEvent({
+    this.decreaseEnergyEvent = mergedConfigs.scene.time.addEvent({
       delay: 100,
       args: [-0.3],
       callback: this.addEnergy,

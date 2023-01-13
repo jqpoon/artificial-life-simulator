@@ -1,26 +1,16 @@
+import { OrganismConfigs } from '../../typedefs';
 import { Organism } from './organism';
 
 export class ControllableOrganism extends Organism {
-  private static readonly SIZE = 0.5;
-  private static readonly VELOCITY = 300;
-  cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+  private static readonly CONTROLLABLE_ORGANISM_DEFAULTS = {
+    size: 0.5,
+    velocity: 300,
+  };
 
-  constructor(
-    scene: Phaser.Scene,
-    texture: string,
-    x?: number,
-    y?: number,
-    frame?: string | number
-  ) {
-    super(
-      scene,
-      texture,
-      ControllableOrganism.VELOCITY,
-      ControllableOrganism.SIZE,
-      x,
-      y,
-      frame
-    );
+  private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+
+  constructor(configs: OrganismConfigs) {
+    super({...ControllableOrganism.CONTROLLABLE_ORGANISM_DEFAULTS, ...configs});
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.name = 'id ' + Date.now();
   }
@@ -45,12 +35,12 @@ export class ControllableOrganism extends Organism {
   }
 
   protected clone(): any {
-    return new ControllableOrganism(
-      this.scene,
-      this.texture.key,
-      this.x,
-      this.y,
-      this.frame.name
-    );
+    return new ControllableOrganism({
+      scene: this.scene,
+      texture: this.texture.key,
+      x: this.x,
+      y: this.y,
+      frame: this.frame.name
+    });
   }
 }

@@ -1,32 +1,24 @@
+import { OrganismConfigs } from '../../typedefs';
 import { Organism } from './organism';
 
 export class RandomOrganism extends Organism {
+  private static readonly RANDOM_ORGANISM_DEFAULTS = {
+    size: 0.5,
+    velocity: 100,
+  };
   private static readonly SIZE = 0.5;
   private static readonly VELOCITY = 100;
   private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 1000;
 
   private timedEvent: Phaser.Time.TimerEvent;
-  timer: number;
+  private timer: number;
 
-  constructor(
-    scene: Phaser.Scene,
-    texture: string,
-    x?: number,
-    y?: number,
-    frame?: string | number
-  ) {
-    super(
-      scene,
-      texture,
-      RandomOrganism.VELOCITY,
-      RandomOrganism.SIZE,
-      x,
-      y,
-      frame
-    );
+  constructor(configs: OrganismConfigs) {
+    super({...RandomOrganism.RANDOM_ORGANISM_DEFAULTS, ...configs});
+
     this.timer = 0;
 
-    this.timedEvent = scene.time.addEvent({
+    this.timedEvent = configs.scene.time.addEvent({
       delay: this.CHANGE_DIRECTION_DELAY_MILLISECONDS,
       callback: this.changeDirection,
       callbackScope: this,
@@ -37,13 +29,13 @@ export class RandomOrganism extends Organism {
   protected onUpdate(time: number, delta: number): void {}
 
   protected clone(): any {
-    return new RandomOrganism(
-      this.scene,
-      this.texture.key,
-      this.x,
-      this.y,
-      this.frame.name
-    );
+    return new RandomOrganism({
+      scene: this.scene,
+      texture: this.texture.key,
+      x: this.x,
+      y: this.y,
+      frame: this.frame.name
+    });
   }
 
   public onDestroy() {

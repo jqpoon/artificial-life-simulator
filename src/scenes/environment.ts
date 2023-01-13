@@ -26,7 +26,10 @@ export class EnvironmentScene extends Scene {
   }
 
   create(): void {
-    let player = new RandomOrganism(this, 'blob');
+    let player = new RandomOrganism({
+      scene: this,
+      texture: 'blob',
+    });
 
     this.organisms = this.add.group();
     this.addOrganismToGroup(player);
@@ -82,7 +85,12 @@ export class EnvironmentScene extends Scene {
     visualBorder.setStrokeStyle(1, 0x000000);
 
     visualBorder.setInteractive().on('pointerdown', (_: any, localX: number, localY:number) => {
-      let newOrganism = new RandomOrganism(this, 'blob', localX + EnvironmentScene.worldX, localY + EnvironmentScene.worldY);
+      let newOrganism = new RandomOrganism({
+        scene: this,
+        texture: 'blob',
+        x: localX + EnvironmentScene.worldX,
+        y: localY + EnvironmentScene.worldY
+      });
       this.addOrganismToGroup(newOrganism);
     });
   }
