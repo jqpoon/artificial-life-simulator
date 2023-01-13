@@ -31,7 +31,13 @@ export class UIScene extends Scene {
       (value) => {
         this.game.events.emit(EVENTS_NAME.updateTimeScale, value * 10);
       },
-      this
+      this,
+      {
+        x1: 15,
+        y1: 100,
+        x2: 140,
+        y2: 100,
+      }
     );
 
     let rec = new RoundRectangleCanvas(this, 0, 0, 0, 0, 10, 0x333333);
