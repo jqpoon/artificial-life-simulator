@@ -12,7 +12,6 @@ export class ControllableOrganism extends Organism {
   constructor(configs: OrganismConfigs) {
     super({...ControllableOrganism.CONTROLLABLE_ORGANISM_DEFAULTS, ...configs});
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-    this.name = 'id ' + Date.now();
   }
 
   protected onDestroy(): void {}

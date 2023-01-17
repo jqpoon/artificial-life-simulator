@@ -6,17 +6,13 @@ export class RandomOrganism extends Organism {
     size: 0.5,
     velocity: 100,
   };
-  private static readonly SIZE = 0.5;
-  private static readonly VELOCITY = 100;
   private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 1000;
 
   private timedEvent: Phaser.Time.TimerEvent;
-  private timer: number;
 
   constructor(configs: OrganismConfigs) {
     super({...RandomOrganism.RANDOM_ORGANISM_DEFAULTS, ...configs});
 
-    this.timer = 0;
     this.scene.physics.add.existing(this, false);
 
     this.timedEvent = configs.scene.time.addEvent({

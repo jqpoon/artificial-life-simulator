@@ -7,7 +7,6 @@ import { EVENTS_NAME } from '../consts';
 
 export class EnvironmentScene extends Scene {
   private organisms: Phaser.GameObjects.Group;
-  private timer: number;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 1500;
   private static readonly worldX: number = 300;
@@ -17,7 +16,6 @@ export class EnvironmentScene extends Scene {
 
   constructor() {
     super('environment-scene');
-    this.timer = 0;
   }
 
   preload(): void {

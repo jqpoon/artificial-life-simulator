@@ -1,5 +1,3 @@
-import { Physics } from 'phaser';
-
 import { EVENTS_NAME } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
 
@@ -29,14 +27,11 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
       mergedConfigs.x,
       mergedConfigs.y,
       50, 50, 0xff0000
-      // mergedConfigs.texture,
-      // mergedConfigs.frame
     );
     mergedConfigs.scene.add.existing(this);
     mergedConfigs.scene.physics.add.existing(this);
 
     this.setScale(mergedConfigs.size);
-    // this.setCircle(50);
     this.setDepth(1);
     this.velocity = mergedConfigs.velocity;
 
