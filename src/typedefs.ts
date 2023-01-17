@@ -7,10 +7,15 @@ export interface SliderConfigs {
 
 export interface OrganismConfigs {
     scene: Phaser.Scene,
-    texture?: string,
     velocity?: number,
     size?: number,
     x?: number,
     y?: number,
-    frame?: string | number,
+}
+
+export interface FoodConfigs {
+    scene: Phaser.Scene,
+    x?: number,
+    y?: number,
+    color?: number,
 }

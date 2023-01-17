@@ -24,10 +24,7 @@ export class EnvironmentScene extends Scene {
   }
 
   create(): void {
-    let player = new RandomOrganism({
-      scene: this,
-      texture: 'blob',
-    });
+    let player = new RandomOrganism({scene: this});
 
     this.organisms = this.add.group();
     this.addOrganismToGroup(player);
@@ -85,7 +82,6 @@ export class EnvironmentScene extends Scene {
     visualBorder.setInteractive().on('pointerdown', (_: any, localX: number, localY:number) => {
       let newOrganism = new RandomOrganism({
         scene: this,
-        texture: 'blob',
         x: localX + EnvironmentScene.worldX,
         y: localY + EnvironmentScene.worldY
       });
@@ -100,12 +96,11 @@ export class EnvironmentScene extends Scene {
   }
 
   private generateNewFood(): void {
-    var food = new Food(
-      this,
-      Math.random() * EnvironmentScene.worldWidth + EnvironmentScene.worldX,
-      Math.random() * EnvironmentScene.worldHeight + EnvironmentScene.worldY,
-      'food'
-    );
+    var food = new Food({
+      scene: this,
+      x: Math.random() * EnvironmentScene.worldWidth + EnvironmentScene.worldX,
+      y: Math.random() * EnvironmentScene.worldHeight + EnvironmentScene.worldY,
+    });
     food.addPredator(this.organisms);
   }
 

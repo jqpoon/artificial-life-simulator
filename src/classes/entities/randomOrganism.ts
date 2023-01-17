@@ -3,7 +3,7 @@ import { Organism } from './organism';
 
 export class RandomOrganism extends Organism {
   private static readonly RANDOM_ORGANISM_DEFAULTS = {
-    size: 0.5,
+    size: 25,
     velocity: 100,
   };
   private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 1000;

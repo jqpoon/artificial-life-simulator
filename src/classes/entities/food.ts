@@ -1,21 +1,26 @@
-import { Physics } from 'phaser';
 import { EVENTS_NAME } from '../../consts';
+import { FoodConfigs } from '../../typedefs';
 import { Organism } from './organism';
 
-export class Food extends Physics.Arcade.Sprite {
-  constructor(
-    scene: Phaser.Scene,
-    x: number,
-    y: number,
-    texture: string,
-    frame?: string | number
-  ) {
-    super(scene, x, y, texture, frame);
-    scene.add.existing(this);
-    scene.physics.add.existing(this);
+export class Food extends Phaser.GameObjects.Ellipse {
+  private static readonly FOOD_DEFAULTS = {
+    size: 10,
+    color: 0xC3FD99,
+  };
 
-    this.setScale(0.3);
-    this.setCircle(50);
+  constructor(configs: FoodConfigs) {
+    let mergedConfigs = {...Food.FOOD_DEFAULTS, ...configs}
+
+    super(
+      mergedConfigs.scene,
+      mergedConfigs.x,
+      mergedConfigs.y,
+      mergedConfigs.size,
+      mergedConfigs.size,
+      mergedConfigs.color,
+    )
+    mergedConfigs.scene.add.existing(this);
+    mergedConfigs.scene.physics.add.existing(this);
   }
 
   public addPredator(group: Phaser.GameObjects.Group) {

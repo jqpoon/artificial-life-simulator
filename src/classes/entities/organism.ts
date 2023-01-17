@@ -4,9 +4,10 @@ import { OrganismConfigs } from '../../typedefs';
 export abstract class Organism extends Phaser.GameObjects.Ellipse {
   private static readonly ORGANISM_DEFAULTS = {
     velocity: 300,
-    size: 0.5,
+    size: 25,
     x: 300,
     y: 300,
+    color: 0xFF0000,
   };
 
   private decreaseEnergyEvent: Phaser.Time.TimerEvent;
@@ -26,12 +27,13 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
       mergedConfigs.scene,
       mergedConfigs.x,
       mergedConfigs.y,
-      50, 50, 0xff0000
+      mergedConfigs.size,
+      mergedConfigs.size,
+      mergedConfigs.color,
     );
     mergedConfigs.scene.add.existing(this);
     mergedConfigs.scene.physics.add.existing(this);
 
-    this.setScale(mergedConfigs.size);
     this.setDepth(1);
     this.velocity = mergedConfigs.velocity;
 
@@ -51,7 +53,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
 
   public update(time: number, delta: number): void {
     this.age += delta;
-    this.scene.physics.world.wrap(this, -25);
+    this.scene.physics.world.wrap(this, -this.width/2);
 
     this.onUpdate(time, delta);
 
