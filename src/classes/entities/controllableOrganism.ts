@@ -18,29 +18,27 @@ export class ControllableOrganism extends Organism {
   protected onDestroy(): void {}
 
   protected onUpdate(time: number, delta: number): void {
-    this.setVelocityX(0);
-    this.setVelocityY(0);
+    let body = this.body as Phaser.Physics.Arcade.Body;
+    body.setVelocity(0, 0);
 
     if (this.cursors.left.isDown) {
-      this.setVelocityX(-this.velocity);
+      body.setVelocityX(-this.velocity);
     } else if (this.cursors.right.isDown) {
-      this.setVelocityX(this.velocity);
+      body.setVelocityX(this.velocity);
     }
 
     if (this.cursors.up.isDown) {
-      this.setVelocityY(-this.velocity);
+      body.setVelocityY(-this.velocity);
     } else if (this.cursors.down.isDown) {
-      this.setVelocityY(this.velocity);
+      body.setVelocityY(this.velocity);
     }
   }
 
   protected clone(): any {
     return new ControllableOrganism({
       scene: this.scene,
-      texture: this.texture.key,
       x: this.x,
       y: this.y,
-      frame: this.frame.name
     });
   }
 }

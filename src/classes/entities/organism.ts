@@ -3,7 +3,7 @@ import { Physics } from 'phaser';
 import { EVENTS_NAME } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
 
-export abstract class Organism extends Physics.Arcade.Sprite {
+export abstract class Organism extends Phaser.GameObjects.Ellipse {
   private static readonly ORGANISM_DEFAULTS = {
     velocity: 300,
     size: 0.5,
@@ -28,14 +28,15 @@ export abstract class Organism extends Physics.Arcade.Sprite {
       mergedConfigs.scene,
       mergedConfigs.x,
       mergedConfigs.y,
-      mergedConfigs.texture,
-      mergedConfigs.frame
+      50, 50, 0xff0000
+      // mergedConfigs.texture,
+      // mergedConfigs.frame
     );
     mergedConfigs.scene.add.existing(this);
     mergedConfigs.scene.physics.add.existing(this);
 
     this.setScale(mergedConfigs.size);
-    this.setCircle(50);
+    // this.setCircle(50);
     this.setDepth(1);
     this.velocity = mergedConfigs.velocity;
 

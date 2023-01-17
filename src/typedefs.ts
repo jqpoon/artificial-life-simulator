@@ -7,7 +7,7 @@ export interface SliderConfigs {
 
 export interface OrganismConfigs {
     scene: Phaser.Scene,
-    texture: string,
+    texture?: string,
     velocity?: number,
     size?: number,
     x?: number,

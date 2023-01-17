@@ -17,6 +17,7 @@ export class RandomOrganism extends Organism {
     super({...RandomOrganism.RANDOM_ORGANISM_DEFAULTS, ...configs});
 
     this.timer = 0;
+    this.scene.physics.add.existing(this, false);
 
     this.timedEvent = configs.scene.time.addEvent({
       delay: this.CHANGE_DIRECTION_DELAY_MILLISECONDS,
@@ -31,10 +32,8 @@ export class RandomOrganism extends Organism {
   protected clone(): any {
     return new RandomOrganism({
       scene: this.scene,
-      texture: this.texture.key,
       x: this.x,
       y: this.y,
-      frame: this.frame.name
     });
   }
 
@@ -43,14 +42,15 @@ export class RandomOrganism extends Organism {
   }
 
   private changeDirection(): void {
-    this.setVelocityX(0);
-    this.setVelocityY(0);
+    // Casting required here because of types not properly defined in Phaser
+    // https://github.com/photonstorm/phaser/issues/6015
+    let body = this.body as Phaser.Physics.Arcade.Body;
+    body.setVelocity(0, 0);
 
     // Random speed from -1 to 1 inclusive
     let randomX = Math.round(Math.random() * 3 - 1.5);
     let randomY = Math.round(Math.random() * 3 - 1.5);
 
-    this.setVelocityX(this.velocity * randomX);
-    this.setVelocityY(this.velocity * randomY);
+    body.setVelocity(this.velocity * randomX, this.velocity * randomY);
   }
 }
