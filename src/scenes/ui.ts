@@ -1,6 +1,6 @@
 import { GameObjects, Scene } from 'phaser';
 
-import { Label } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
+import { Label, Chart } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
 import RoundRectangleCanvas from 'phaser3-rex-plugins/plugins/roundrectanglecanvas.js';
 
 import { SliderBar } from '../classes/ui/slider';
@@ -21,25 +21,71 @@ export class UIScene extends Scene {
   private worldAgeText: GameObjects.Text;
   private worldAge: number = 0;
 
+  private chartData: any;
+  private chart: Chart;
+
   constructor() {
     super('ui-scene');
   }
 
-  create(): void {
-    new SliderBar(
-      this,
-      (value) => {
-        this.game.events.emit(EVENTS_NAME.updateTimeScale, value * 10);
-      },
-      this,
-      {
-        x1: 15,
-        y1: 100,
-        x2: 140,
-        y2: 100,
-      }
-    );
+  preload(): void {
+    this.load.script('chartjs', 'https://cdn.jsdelivr.net/npm/chart.js');
+  }
 
+  create(): void {
+    this.chartData = {
+      labels: [],
+      datasets: [
+        {
+          label: 'Speed = 100, Size = 25',
+          data: [],
+          fill: false,
+          borderColor: '#FF0000',
+          pointRadius: 0,
+        },
+      ],
+    };
+
+    this.chart = new Chart(this, 1400, 500, 500, 500, {
+      type: 'line',
+      data: this.chartData,
+      options: {
+        animation: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+          x: {
+            type: 'linear',
+            ticks: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+    this.add.existing(this.chart);
+
+    this.time.addEvent({
+      delay: 100,
+      callback: this.updateChart,
+      callbackScope: this,
+      loop: true,
+    });
+
+    this.initTexts();
+    this.initListeners();
+    this.initInteractiveElements();
+  }
+
+  private updateChart(): void {
+    this.chartData.labels.push(this.worldAge);
+    this.chartData.datasets[0].data.push(this.count);
+    this.chart.chart.update();
+  }
+
+  private initInteractiveElements(): void {
+    // RESET button
     let rec = new RoundRectangleCanvas(this, 0, 0, 0, 0, 10, 0x333333);
     this.add.existing(rec);
     let btn = new Label(this, {
@@ -62,8 +108,20 @@ export class UIScene extends Scene {
         this.worldAge = 0;
       });
 
-    this.initTexts();
-    this.initListeners();
+    // Simulation speed control
+    new SliderBar(
+      this,
+      (value) => {
+        this.game.events.emit(EVENTS_NAME.updateTimeScale, value * 10);
+      },
+      this,
+      {
+        x1: 15,
+        y1: 100,
+        x2: 140,
+        y2: 100,
+      }
+    );
   }
 
   private initTexts(): void {
