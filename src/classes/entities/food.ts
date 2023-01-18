@@ -5,7 +5,7 @@ import { Organism } from './organism';
 export class Food extends Phaser.GameObjects.Ellipse {
   private static readonly FOOD_DEFAULTS = {
     size: 10,
-    color: 0xC3FD99,
+    color: 0x6CBF65, // Green,
   };
 
   constructor(configs: FoodConfigs) {

@@ -18,11 +18,6 @@ export class EnvironmentScene extends Scene {
     super('environment-scene');
   }
 
-  preload(): void {
-    this.load.image('blob', 'assets/blob.png');
-    this.load.image('food', 'assets/food.png');
-  }
-
   create(): void {
     let player = new RandomOrganism({scene: this});
 
@@ -83,7 +78,10 @@ export class EnvironmentScene extends Scene {
       let newOrganism = new RandomOrganism({
         scene: this,
         x: localX + EnvironmentScene.worldX,
-        y: localY + EnvironmentScene.worldY
+        y: localY + EnvironmentScene.worldY,
+        color: 0x2E639D,
+        size: 50,
+        velocity: 50,
       });
       this.addOrganismToGroup(newOrganism);
     });

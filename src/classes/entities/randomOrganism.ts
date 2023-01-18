@@ -30,6 +30,9 @@ export class RandomOrganism extends Organism {
       scene: this.scene,
       x: this.x,
       y: this.y,
+      color: this.fillColor,
+      velocity: this.velocity,
+      size: this.height,
     });
   }
 
