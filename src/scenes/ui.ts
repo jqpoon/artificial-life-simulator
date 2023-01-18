@@ -67,7 +67,7 @@ export class UIScene extends Scene {
     this.add.existing(this.chart);
 
     this.time.addEvent({
-      delay: 100,
+      delay: 500,
       callback: this.updateChart,
       callbackScope: this,
       loop: true,
@@ -81,7 +81,17 @@ export class UIScene extends Scene {
   private updateChart(): void {
     this.chartData.labels.push(this.worldAge);
     this.chartData.datasets[0].data.push(this.count);
-    this.chart.chart.update();
+    this.chart.chart.update('none');
+  }
+
+  private resetScene(): void {
+    let envScene = this.scene.get('environment-scene');
+    envScene.scene.restart();
+    this.count = 0;
+    this.worldAge = 0;
+
+    this.chartData.labels = Array();
+    this.chartData.datasets[0].data = Array();
   }
 
   private initInteractiveElements(): void {
@@ -101,12 +111,7 @@ export class UIScene extends Scene {
       .setPosition(50, 350)
       .layout()
       .setInteractive()
-      .on('pointerdown', () => {
-        let envScene = this.scene.get('environment-scene');
-        envScene.scene.restart();
-        this.count = 0;
-        this.worldAge = 0;
-      });
+      .on('pointerdown', this.resetScene, this);
 
     // Simulation speed control
     new SliderBar(
