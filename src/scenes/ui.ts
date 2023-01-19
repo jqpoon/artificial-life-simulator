@@ -16,10 +16,11 @@ const textDefaults = {
 
 export class UIScene extends Scene {
   private timeScale: GameObjects.Text;
-  private countText: GameObjects.Text;
   private count: number = 0;
   private worldAgeText: GameObjects.Text;
   private worldAge: number = 0;
+  public size: number = 50;
+  private sizeText: GameObjects.Text;
 
   private chartData: any;
   private chart: Chart;
@@ -46,10 +47,19 @@ export class UIScene extends Scene {
       ],
     };
 
-    this.chart = new Chart(this, 1400, 500, 500, 500, {
+    this.chart = new Chart(this, 1450, 600, 500, 500, {
       type: 'line',
       data: this.chartData,
       options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: 'Organism Count',
+          }
+        },
         animation: false,
         scales: {
           y: {
@@ -127,6 +137,23 @@ export class UIScene extends Scene {
         y2: 100,
       }
     );
+
+    new SliderBar(
+      this,
+      (value) => {
+        this.size = value * 100;
+        this.sizeText.setText(
+          'Size: ' + (value * 100).toLocaleString('en-us', {maximumFractionDigits: 0})
+        );
+      },
+      this,
+      {
+        x1: 15,
+        y1: 500,
+        x2: 140,
+        y2: 500,
+      }
+    );
   }
 
   private initTexts(): void {
@@ -134,13 +161,14 @@ export class UIScene extends Scene {
     this.add.text(
       1200,
       50,
-      'This is an artificial life simulator!\n\nControl simulation parameters by using the controls on the left.',
+      "Control simulation parameters by using the controls on the left.\n\nTo create a new organism, choose your desired size then click anywhere in the simulation.\nAn organism's speed is inversely related to its size.",
       textDefaults
     );
 
     this.timeScale = this.add.text(0, 120, 'Speed: 5.0', textDefaults);
-    this.countText = this.add.text(0, 240, 'Count: 1', textDefaults);
     this.worldAgeText = this.add.text(0, 180, 'World Age: 0', textDefaults);
+
+    this.sizeText = this.add.text(0, 520, 'Size: 50', textDefaults);
   }
 
   private initListeners(): void {
@@ -156,7 +184,6 @@ export class UIScene extends Scene {
 
     this.game.events.on(EVENTS_NAME.increaseCount, (amount: number) => {
       this.count += amount;
-      this.countText.setText('Count: ' + this.count);
     });
 
     this.game.events.on(EVENTS_NAME.updateWorldAge, (age: number) => {

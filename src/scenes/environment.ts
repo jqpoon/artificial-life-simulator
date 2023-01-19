@@ -4,6 +4,7 @@ import { Food } from '../classes/entities/food';
 import { Organism } from '../classes/entities/organism';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
 import { EVENTS_NAME } from '../consts';
+import { UIScene } from './ui';
 
 export class EnvironmentScene extends Scene {
   private organisms: Phaser.GameObjects.Group;
@@ -19,10 +20,7 @@ export class EnvironmentScene extends Scene {
   }
 
   create(): void {
-    let player = new RandomOrganism({scene: this});
-
     this.organisms = this.add.group();
-    this.addOrganismToGroup(player);
     this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
 
@@ -75,13 +73,14 @@ export class EnvironmentScene extends Scene {
     visualBorder.setStrokeStyle(1, 0x000000);
 
     visualBorder.setInteractive().on('pointerdown', (_: any, localX: number, localY:number) => {
+      let uiScene = this.scene.get('ui-scene') as UIScene;
       let newOrganism = new RandomOrganism({
         scene: this,
         x: localX + EnvironmentScene.worldX,
         y: localY + EnvironmentScene.worldY,
-        color: 0x2E639D,
-        size: 50,
-        velocity: 50,
+        // color: 0x2E639D,
+        size: uiScene.size,
+        velocity: 110 - uiScene.size,
       });
       this.addOrganismToGroup(newOrganism);
     });
