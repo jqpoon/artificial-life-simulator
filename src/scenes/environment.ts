@@ -78,7 +78,7 @@ export class EnvironmentScene extends Scene {
         scene: this,
         x: localX + EnvironmentScene.worldX,
         y: localY + EnvironmentScene.worldY,
-        // color: 0x2E639D,
+        color: this.registry.get('color'),
         size: uiScene.size,
         velocity: 110 - uiScene.size,
       });

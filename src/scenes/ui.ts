@@ -1,7 +1,11 @@
 import { GameObjects, Scene } from 'phaser';
 
-import { Label, Chart } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
+import {
+  Label,
+  Chart,
+} from 'phaser3-rex-plugins/templates/ui/ui-components.js';
 import RoundRectangleCanvas from 'phaser3-rex-plugins/plugins/roundrectanglecanvas.js';
+import { ColorPicker } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
 
 import { SliderBar } from '../classes/ui/slider';
 import { EVENTS_NAME } from '../consts';
@@ -58,7 +62,7 @@ export class UIScene extends Scene {
           title: {
             display: true,
             text: 'Organism Count',
-          }
+          },
         },
         animation: false,
         scales: {
@@ -138,12 +142,14 @@ export class UIScene extends Scene {
       }
     );
 
+    // Size of blob
     new SliderBar(
       this,
       (value) => {
         this.size = value * 100;
         this.sizeText.setText(
-          'Size: ' + (value * 100).toLocaleString('en-us', {maximumFractionDigits: 0})
+          'Size: ' +
+            (value * 100).toLocaleString('en-us', { maximumFractionDigits: 0 })
         );
       },
       this,
@@ -154,16 +160,40 @@ export class UIScene extends Scene {
         y2: 500,
       }
     );
+
+    // Colour of blob
+    let colourPicker = new ColorPicker(this, {
+      x: 50,
+      y: 700,
+
+      svPalette: {
+        width: 128,
+        height: 128,
+      },
+      hPalette: {
+        size: 32,
+      },
+
+      space: {
+        left: 10,
+        right: 10,
+        top: 10,
+        bottom: 10,
+        item: 10,
+      },
+
+      valuechangeCallback: (value) => {
+        this.registry.set('color', value);
+      },
+
+      valuechangeCallbackScope: this,
+
+      value: 0xFF0000,
+    }).layout();
   }
 
   private initTexts(): void {
     this.add.text(0, 0, "Jia's Life\nSimulator", textDefaults);
-    this.add.text(
-      1200,
-      50,
-      "Control simulation parameters by using the controls on the left.\n\nTo create a new organism, choose your desired size then click anywhere in the simulation.\nAn organism's speed is inversely related to its size.",
-      textDefaults
-    );
 
     this.timeScale = this.add.text(0, 120, 'Speed: 5.0', textDefaults);
     this.worldAgeText = this.add.text(0, 180, 'World Age: 0', textDefaults);
