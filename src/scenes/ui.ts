@@ -42,7 +42,6 @@ export class UIScene extends Scene {
       labels: [],
       datasets: [
         {
-          label: 'Speed = 100, Size = 25',
           data: [],
           fill: false,
           borderColor: '#FF0000',
@@ -56,19 +55,11 @@ export class UIScene extends Scene {
       data: this.chartData,
       options: {
         plugins: {
-          legend: {
-            display: false,
-          },
-          title: {
-            display: true,
-            text: 'Organism Count',
-          },
+          legend: { display: false },
         },
         animation: false,
         scales: {
-          y: {
-            beginAtZero: true,
-          },
+          y: { beginAtZero: true },
           x: {
             type: 'linear',
             ticks: {
@@ -95,7 +86,7 @@ export class UIScene extends Scene {
   private updateChart(): void {
     this.chartData.labels.push(this.worldAge);
     this.chartData.datasets[0].data.push(this.count);
-    this.chart.chart.update('none');
+    this.chart.chart.update('none'); // Update chart without animation
   }
 
   private resetScene(): void {
@@ -115,12 +106,7 @@ export class UIScene extends Scene {
     let btn = new Label(this, {
       background: rec,
       text: this.add.text(0, 0, 'Reset'),
-      space: {
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: 20,
-      },
+      space: { left: 20, right: 20, top: 20, bottom: 20 },
     })
       .setPosition(50, 350)
       .layout()
@@ -134,12 +120,7 @@ export class UIScene extends Scene {
         this.game.events.emit(EVENTS_NAME.updateTimeScale, value * 10);
       },
       this,
-      {
-        x1: 15,
-        y1: 100,
-        x2: 140,
-        y2: 100,
-      }
+      { x1: 15, y1: 100, x2: 140, y2: 100 }
     );
 
     // Size of blob
@@ -153,12 +134,7 @@ export class UIScene extends Scene {
         );
       },
       this,
-      {
-        x1: 15,
-        y1: 500,
-        x2: 140,
-        y2: 500,
-      }
+      { x1: 15, y1: 500, x2: 140, y2: 500 }
     );
 
     // Colour of blob
@@ -166,21 +142,10 @@ export class UIScene extends Scene {
       x: 50,
       y: 700,
 
-      svPalette: {
-        width: 128,
-        height: 128,
-      },
-      hPalette: {
-        size: 32,
-      },
+      svPalette: { width: 128, height: 128 },
+      hPalette: { size: 32 },
 
-      space: {
-        left: 10,
-        right: 10,
-        top: 10,
-        bottom: 10,
-        item: 10,
-      },
+      space: { left: 10, right: 10, top: 10, bottom: 10, item: 10 },
 
       valuechangeCallback: (value) => {
         this.registry.set('color', value);
@@ -188,7 +153,7 @@ export class UIScene extends Scene {
 
       valuechangeCallbackScope: this,
 
-      value: 0xFF0000,
+      value: 0xff0000,
     }).layout();
   }
 
