@@ -1,4 +1,5 @@
 import 'phaser';
+import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import { EnvironmentScene } from './scenes/environment';
 import { LoadingScene } from './scenes/loading';
 import { UIScene } from './scenes/ui';
@@ -17,6 +18,15 @@ let configObject: Phaser.Types.Core.GameConfig = {
     arcade: {
       debug: false,
     },
+  },
+  plugins: {
+    scene: [{
+        key: 'rexUI',
+        plugin: RexUIPlugin,
+        mapping: 'rexUI'
+    },
+    // ...
+    ]
   },
   backgroundColor: '#FFFFFF',
   scene: [LoadingScene, UIScene, EnvironmentScene],

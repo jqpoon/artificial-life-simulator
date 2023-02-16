@@ -3,9 +3,13 @@ import { GameObjects, Scene } from 'phaser';
 import {
   Label,
   Chart,
+  Sizer,
+  RoundRectangle,
+  Slider,
 } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
 import RoundRectangleCanvas from 'phaser3-rex-plugins/plugins/roundrectanglecanvas.js';
 import { ColorPicker } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
+import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 import { SliderBar } from '../classes/ui/slider';
 import { EVENTS_NAME } from '../consts';
@@ -18,7 +22,16 @@ const textDefaults = {
   wordWrap: { width: 600 },
 };
 
+const smallerText = {
+  fontSize: '20px',
+  color: '#000',
+  fontFamily: 'Helvetica',
+  align: 'center',
+  wordWrap: { width: 600 },
+};
+
 export class UIScene extends Scene {
+  rexUI: RexUIPlugin;
   private timeScale: GameObjects.Text;
   private count: number = 0;
   private worldAgeText: GameObjects.Text;
@@ -79,8 +92,8 @@ export class UIScene extends Scene {
     });
 
     this.initTexts();
-    this.initListeners();
     this.initInteractiveElements();
+    // this.initListeners();
   }
 
   private updateChart(): void {
@@ -103,11 +116,12 @@ export class UIScene extends Scene {
     // RESET button
     let rec = new RoundRectangleCanvas(this, 0, 0, 0, 0, 10, 0x333333);
     this.add.existing(rec);
-    let btn = new Label(this, {
-      background: rec,
-      text: this.add.text(0, 0, 'Reset'),
-      space: { left: 20, right: 20, top: 20, bottom: 20 },
-    })
+    this.rexUI.add
+      .label({
+        background: rec,
+        text: this.add.text(0, 0, 'Reset'),
+        space: { left: 20, right: 20, top: 20, bottom: 20 },
+      })
       .setPosition(50, 350)
       .layout()
       .setInteractive()
@@ -123,38 +137,69 @@ export class UIScene extends Scene {
       { x1: 15, y1: 100, x2: 140, y2: 100 }
     );
 
-    // Size of blob
-    new SliderBar(
-      this,
-      (value) => {
+    // Colour of blob
+    this.rexUI.add
+      .colorPicker({
+        x: 50,
+        y: 700,
+        svPalette: { width: 128, height: 128 },
+        hPalette: { size: 32 },
+        space: { left: 10, right: 10, top: 10, bottom: 10, item: 10 },
+        valuechangeCallback: (value) => {
+          this.registry.set('color', value);
+        },
+        valuechangeCallbackScope: this,
+        value: 0xff0000,
+      })
+      .layout()
+      .setDepth(1);
+
+    // Organism builder
+    let background: RoundRectangle = new RoundRectangle(this, {
+      width: 1,
+      height: 1,
+      radius: 10,
+      color: 0xe9e9ed,
+      strokeColor: 0x8f8f9c,
+    }).setDepth(-1);
+    this.add.existing(background);
+
+    this.sizeText = this.add.text(0, 0, 'Size: 50', smallerText);
+    let builderPreview = this.add.circle(0, 0, 12, 0xff0000);
+
+    let sizeSlider = this.rexUI.add.slider({
+      width: 100,
+      height: 10,
+      valuechangeCallback: (value) => {
         this.size = value * 100;
         this.sizeText.setText(
           'Size: ' +
             (value * 100).toLocaleString('en-us', { maximumFractionDigits: 0 })
         );
       },
-      this,
-      { x1: 15, y1: 500, x2: 140, y2: 500 }
-    );
+      input: 'click',
+      space: { top: 4, bottom: 4 },
 
-    // Colour of blob
-    let colourPicker = new ColorPicker(this, {
-      x: 50,
-      y: 700,
-
-      svPalette: { width: 128, height: 128 },
-      hPalette: { size: 32 },
-
-      space: { left: 10, right: 10, top: 10, bottom: 10, item: 10 },
-
-      valuechangeCallback: (value) => {
-        this.registry.set('color', value);
-      },
-
-      valuechangeCallbackScope: this,
-
-      value: 0xff0000,
+      track: this.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
+      thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
     }).layout();
+
+    this.rexUI.add
+      .sizer({
+        x: 140,
+        y: 500,
+        width: 270,
+        orientation: 'y',
+        space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
+      })
+      .add(this.add.text(0, 0, 'Organism Builder', smallerText), 0)
+      .add(builderPreview)
+      .add(this.rexUI.add.sizer({orientation: 'x', space: {item: 30}})
+        .add(this.sizeText)
+        .add(sizeSlider))
+      .addBackground(background)
+      .layout()
+      .setDepth(-1);
   }
 
   private initTexts(): void {
@@ -162,8 +207,6 @@ export class UIScene extends Scene {
 
     this.timeScale = this.add.text(0, 120, 'Speed: 5.0', textDefaults);
     this.worldAgeText = this.add.text(0, 180, 'World Age: 0', textDefaults);
-
-    this.sizeText = this.add.text(0, 520, 'Size: 50', textDefaults);
   }
 
   private initListeners(): void {
