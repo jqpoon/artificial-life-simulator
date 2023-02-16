@@ -31,13 +31,14 @@ const smallerText = {
 };
 
 export class UIScene extends Scene {
-  rexUI: RexUIPlugin;
+  private rexUI: RexUIPlugin;
   private timeScale: GameObjects.Text;
   private count: number = 0;
   private worldAgeText: GameObjects.Text;
   private worldAge: number = 0;
   public size: number = 50;
   private sizeText: GameObjects.Text;
+  private builderPreview: Phaser.GameObjects.Arc;
 
   private chartData: any;
   private chart: Chart;
@@ -137,23 +138,6 @@ export class UIScene extends Scene {
       { x1: 15, y1: 100, x2: 140, y2: 100 }
     );
 
-    // Colour of blob
-    this.rexUI.add
-      .colorPicker({
-        x: 50,
-        y: 700,
-        svPalette: { width: 128, height: 128 },
-        hPalette: { size: 32 },
-        space: { left: 10, right: 10, top: 10, bottom: 10, item: 10 },
-        valuechangeCallback: (value) => {
-          this.registry.set('color', value);
-        },
-        valuechangeCallbackScope: this,
-        value: 0xff0000,
-      })
-      .layout()
-      .setDepth(1);
-
     // Organism builder
     let background: RoundRectangle = new RoundRectangle(this, {
       width: 1,
@@ -164,25 +148,48 @@ export class UIScene extends Scene {
     }).setDepth(-1);
     this.add.existing(background);
 
-    this.sizeText = this.add.text(0, 0, 'Size: 50', smallerText);
-    let builderPreview = this.add.circle(0, 0, 12, 0xff0000);
+    this.sizeText = this.add.text(0, 0, '50', smallerText);
+    this.builderPreview = this.add.circle(0, 0, 12, 0xff0000);
 
-    let sizeSlider = this.rexUI.add.slider({
-      width: 100,
-      height: 10,
-      valuechangeCallback: (value) => {
-        this.size = value * 100;
-        this.sizeText.setText(
-          'Size: ' +
-            (value * 100).toLocaleString('en-us', { maximumFractionDigits: 0 })
-        );
-      },
-      input: 'click',
-      space: { top: 4, bottom: 4 },
+    // Colour of blob
+    this.rexUI.add
+      .colorPicker({
+        x: 50,
+        y: 700,
+        svPalette: { width: 128, height: 128 },
+        hPalette: { size: 32 },
+        space: { left: 10, right: 10, top: 10, bottom: 10, item: 10 },
+        valuechangeCallback: (value) => {
+          this.registry.set('color', value);
+          this.builderPreview.fillColor = value;
+        },
+        valuechangeCallbackScope: this,
+        value: 0xff0000,
+      })
+      .layout()
+      .setDepth(1);
 
-      track: this.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
-      thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
-    }).layout();
+    let sizeSlider = this.rexUI.add
+      .slider({
+        width: 100,
+        height: 10,
+        valuechangeCallback: (value) => {
+          this.size = value * 100;
+          this.builderPreview.setScale(value * 5);
+          this.sizeText.setText(
+              (value * 100).toLocaleString('en-us', {
+                maximumFractionDigits: 0,
+              })
+          );
+        },
+        input: 'click',
+        space: { top: 4, bottom: 4 },
+        value: 0.5,
+
+        track: this.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
+        thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
+      })
+      .layout();
 
     this.rexUI.add
       .sizer({
@@ -192,11 +199,19 @@ export class UIScene extends Scene {
         orientation: 'y',
         space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
       })
-      .add(this.add.text(0, 0, 'Organism Builder', smallerText), 0)
-      .add(builderPreview)
-      .add(this.rexUI.add.sizer({orientation: 'x', space: {item: 30}})
-        .add(this.sizeText)
-        .add(sizeSlider))
+      .add(this.add.text(0, 0, 'Organism Preview', smallerText))
+      .add(this.add.zone(0, 0, 0, 0), 10, 'center')
+      .add(this.add.zone(0, 0, 0, 0), 10, 'center')
+      .add(this.builderPreview)
+      .add(this.add.zone(0, 0, 0, 0), 10, 'center')
+      .add(this.add.zone(0, 0, 0, 0), 10, 'center')
+      .add(
+        this.rexUI.add
+          .sizer({ orientation: 'x', space: { item: 30 } })
+          .add(this.add.text(0, 0, 'Size', smallerText))
+          .add(sizeSlider)
+          .add(this.sizeText)
+      )
       .addBackground(background)
       .layout()
       .setDepth(-1);
