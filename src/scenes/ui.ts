@@ -97,7 +97,6 @@ export class UIScene extends Scene {
     // track the number of organisms for that species
     let chartDataset = this.registry.get('chartDataset');
     chartDataset.push({count: 0});
-    console.log(color);
 
     this.chartData.datasets.push({
       data: [],
@@ -123,7 +122,8 @@ export class UIScene extends Scene {
     this.worldAge = 0;
 
     this.chartData.labels = Array();
-    this.chartData.datasets[0].data = Array();
+    this.chartData.datasets = Array();
+    this.registry.set('chartDataset', []);
   }
 
   private initInteractiveElements(): void {
@@ -178,7 +178,7 @@ export class UIScene extends Scene {
           this.builderPreview.fillColor = value;
         },
         valuechangeCallbackScope: this,
-        value: 0xff0000,
+        value: 0x9d3857,
       })
       .layout()
       .setDepth(1);
