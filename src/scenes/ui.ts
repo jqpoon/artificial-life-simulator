@@ -55,14 +55,7 @@ export class UIScene extends Scene {
   create(): void {
     this.chartData = {
       labels: [],
-      datasets: [
-        {
-          data: [],
-          fill: false,
-          borderColor: '#FF0000',
-          pointRadius: 0,
-        },
-      ],
+      datasets: [],
     };
 
     this.chart = new Chart(this, 1450, 600, 500, 500, {
@@ -85,6 +78,7 @@ export class UIScene extends Scene {
       },
     });
     this.add.existing(this.chart);
+    this.registry.set('chartDataset', []);
 
     this.time.addEvent({
       delay: 500,
@@ -95,12 +89,30 @@ export class UIScene extends Scene {
 
     this.initTexts();
     this.initInteractiveElements();
-    // this.initListeners();
+    this.initListeners();
+  }
+
+  public newChartData(color: number) {
+    // Add new entry to chartDataset in registry, this is used to
+    // track the number of organisms for that species
+    let chartDataset = this.registry.get('chartDataset');
+    chartDataset.push({count: 0});
+    console.log(color);
+
+    this.chartData.datasets.push({
+      data: [],
+      fill: false,
+      borderColor: '#' + color.toString(16), // convert to string hex value
+      pointRadius: 0,
+    });
   }
 
   private updateChart(): void {
     this.chartData.labels.push(this.worldAge);
-    this.chartData.datasets[0].data.push(this.count);
+    let chartDataset = this.registry.get('chartDataset');
+    for (var [index, data] of chartDataset.entries()) {
+      this.chartData.datasets[index].data.push(data.count);
+    }
     this.chart.chart.update('none'); // Update chart without animation
   }
 
@@ -271,8 +283,9 @@ export class UIScene extends Scene {
       );
     });
 
-    this.game.events.on(EVENTS_NAME.increaseCount, (amount: number) => {
-      this.count += amount;
+    this.game.events.on(EVENTS_NAME.increaseCount, (value: number, speciesCount: number) => {
+       let chartDataset = this.registry.get('chartDataset');
+       chartDataset[speciesCount].count += value;
     });
 
     this.game.events.on(EVENTS_NAME.updateWorldAge, (age: number) => {

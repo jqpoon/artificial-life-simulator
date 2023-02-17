@@ -15,6 +15,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
   protected readonly velocity: number;
   protected age: number;
   protected energy: number;
+  protected name2: number;
 
   protected abstract clone(): any;
   protected abstract onUpdate(time: number, delta: number): void;
@@ -48,7 +49,9 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
       loop: true,
     });
 
-    this.scene.game.events.emit(EVENTS_NAME.increaseCount, 1);
+    this.name2 = mergedConfigs.name ?? -1;
+    // name = species index aka species count
+    this.scene.game.events.emit(EVENTS_NAME.increaseCount, 1, this.name2);
   }
 
   public update(time: number, delta: number): void {
@@ -59,7 +62,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
 
     if (this.energy <= 0) {
       this.onDestroy();
-      this.scene.game.events.emit(EVENTS_NAME.increaseCount, -1);
+      this.scene.game.events.emit(EVENTS_NAME.increaseCount, -1, this.name2);
       this.decreaseEnergyEvent.remove(false);
       this.destroy();
     }

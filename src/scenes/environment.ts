@@ -74,6 +74,9 @@ export class EnvironmentScene extends Scene {
 
     visualBorder.setInteractive().on('pointerdown', (_: any, localX: number, localY:number) => {
       let uiScene = this.scene.get('ui-scene') as UIScene;
+      let speciesCount = this.registry.get('chartDataset').length;
+      uiScene.newChartData(this.registry.get('color'));
+
       let newOrganism = new RandomOrganism({
         scene: this,
         x: localX + EnvironmentScene.worldX,
@@ -81,7 +84,9 @@ export class EnvironmentScene extends Scene {
         color: this.registry.get('color'),
         size: uiScene.size,
         velocity: this.registry.get('speed'),
+        name: speciesCount,
       });
+
       this.addOrganismToGroup(newOrganism);
     });
   }
