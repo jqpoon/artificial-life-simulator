@@ -38,6 +38,7 @@ export class UIScene extends Scene {
   private worldAge: number = 0;
   public size: number = 50;
   private sizeText: GameObjects.Text;
+  private speedText: GameObjects.Text;
   private builderPreview: Phaser.GameObjects.Arc;
 
   private chartData: any;
@@ -123,7 +124,7 @@ export class UIScene extends Scene {
         text: this.add.text(0, 0, 'Reset'),
         space: { left: 20, right: 20, top: 20, bottom: 20 },
       })
-      .setPosition(50, 350)
+      .setPosition(50, 260)
       .layout()
       .setInteractive()
       .on('pointerdown', this.resetScene, this);
@@ -149,10 +150,11 @@ export class UIScene extends Scene {
     this.add.existing(background);
 
     this.sizeText = this.add.text(0, 0, '50', smallerText);
+    this.speedText = this.add.text(0, 0, '50', smallerText);
     this.builderPreview = this.add.circle(0, 0, 12, 0xff0000);
 
-    // Colour of blob
-    this.rexUI.add
+    // Colour of organism
+    let colorPicker = this.rexUI.add
       .colorPicker({
         x: 50,
         y: 700,
@@ -169,6 +171,7 @@ export class UIScene extends Scene {
       .layout()
       .setDepth(1);
 
+    // Size of organism
     let sizeSlider = this.rexUI.add
       .slider({
         width: 100,
@@ -191,10 +194,32 @@ export class UIScene extends Scene {
       })
       .layout();
 
+    // Speed of organism
+    let speedSlider = this.rexUI.add
+    .slider({
+      width: 100,
+      height: 10,
+      valuechangeCallback: (value) => {
+        this.registry.set('speed', value * 100)
+        this.speedText.setText(
+            (value * 100).toLocaleString('en-us', {
+              maximumFractionDigits: 0,
+            })
+        );
+      },
+      input: 'click',
+      space: { top: 4, bottom: 4 },
+      value: 0.5,
+
+      track: this.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
+      thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
+    })
+    .layout();
+
     this.rexUI.add
       .sizer({
         x: 140,
-        y: 500,
+        y: 600,
         width: 270,
         orientation: 'y',
         space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
@@ -212,6 +237,17 @@ export class UIScene extends Scene {
           .add(sizeSlider)
           .add(this.sizeText)
       )
+      .add(
+        this.rexUI.add
+          .sizer({ orientation: 'x', space: { item: 30 } })
+          .add(this.add.text(0, 0, 'Speed', smallerText))
+          .add(speedSlider)
+          .add(this.speedText)
+      )
+      .add(this.rexUI.add
+        .sizer({ orientation: 'x', space: { item: 30 } })
+        .add(this.add.text(0, 0, 'Colour', smallerText))
+        .add(colorPicker))
       .addBackground(background)
       .layout()
       .setDepth(-1);

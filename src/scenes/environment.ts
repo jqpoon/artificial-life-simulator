@@ -80,7 +80,7 @@ export class EnvironmentScene extends Scene {
         y: localY + EnvironmentScene.worldY,
         color: this.registry.get('color'),
         size: uiScene.size,
-        velocity: 110 - uiScene.size,
+        velocity: this.registry.get('speed'),
       });
       this.addOrganismToGroup(newOrganism);
     });
