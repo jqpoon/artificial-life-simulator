@@ -1,14 +1,10 @@
 import { GameObjects, Scene } from 'phaser';
 
 import {
-  Label,
   Chart,
-  Sizer,
   RoundRectangle,
-  Slider,
 } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
 import RoundRectangleCanvas from 'phaser3-rex-plugins/plugins/roundrectanglecanvas.js';
-import { ColorPicker } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 import { SliderBar } from '../classes/ui/slider';
@@ -33,7 +29,6 @@ const smallerText = {
 export class UIScene extends Scene {
   private rexUI: RexUIPlugin;
   private timeScale: GameObjects.Text;
-  private count: number = 0;
   private worldAgeText: GameObjects.Text;
   private worldAge: number = 0;
   public size: number = 50;
@@ -58,26 +53,6 @@ export class UIScene extends Scene {
       datasets: [],
     };
 
-    this.chart = new Chart(this, 1450, 600, 500, 500, {
-      type: 'line',
-      data: this.chartData,
-      options: {
-        plugins: {
-          legend: { display: false },
-        },
-        animation: false,
-        scales: {
-          y: { beginAtZero: true },
-          x: {
-            type: 'linear',
-            ticks: {
-              display: false,
-            },
-          },
-        },
-      },
-    });
-    this.add.existing(this.chart);
     this.registry.set('chartDataset', []);
 
     this.time.addEvent({
@@ -90,13 +65,14 @@ export class UIScene extends Scene {
     this.initTexts();
     this.initInteractiveElements();
     this.initListeners();
+    this.initChart();
   }
 
   public newChartData(color: number) {
     // Add new entry to chartDataset in registry, this is used to
     // track the number of organisms for that species
     let chartDataset = this.registry.get('chartDataset');
-    chartDataset.push({count: 0});
+    chartDataset.push({ count: 0 });
 
     this.chartData.datasets.push({
       data: [],
@@ -104,6 +80,36 @@ export class UIScene extends Scene {
       borderColor: '#' + color.toString(16), // convert to string hex value
       pointRadius: 0,
     });
+  }
+
+  private initChart() {
+    this.chart = new Chart(this, 1450, 600, 500, 500, {
+      type: 'line',
+      data: this.chartData,
+      options: {
+        plugins: {
+          legend: { display: false },
+        },
+        animation: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Number of Organisms',
+              font: { size: 30 },
+            },
+            ticks: { font: { size: 30 } },
+          },
+          x: {
+            type: 'linear',
+            title: { display: true, text: 'Time', font: { size: 30 } },
+            ticks: { display: false },
+          },
+        },
+      },
+    });
+    this.add.existing(this.chart);
   }
 
   private updateChart(): void {
@@ -118,7 +124,6 @@ export class UIScene extends Scene {
   private resetScene(): void {
     let envScene = this.scene.get('environment-scene');
     envScene.scene.restart();
-    this.count = 0;
     this.worldAge = 0;
 
     this.chartData.labels = Array();
@@ -192,9 +197,9 @@ export class UIScene extends Scene {
           this.size = value * 100;
           this.builderPreview.setScale(value * 5);
           this.sizeText.setText(
-              (value * 100).toLocaleString('en-us', {
-                maximumFractionDigits: 0,
-              })
+            (value * 100).toLocaleString('en-us', {
+              maximumFractionDigits: 0,
+            })
           );
         },
         input: 'click',
@@ -208,25 +213,25 @@ export class UIScene extends Scene {
 
     // Speed of organism
     let speedSlider = this.rexUI.add
-    .slider({
-      width: 100,
-      height: 10,
-      valuechangeCallback: (value) => {
-        this.registry.set('speed', value * 100)
-        this.speedText.setText(
+      .slider({
+        width: 100,
+        height: 10,
+        valuechangeCallback: (value) => {
+          this.registry.set('speed', value * 100);
+          this.speedText.setText(
             (value * 100).toLocaleString('en-us', {
               maximumFractionDigits: 0,
             })
-        );
-      },
-      input: 'click',
-      space: { top: 4, bottom: 4 },
-      value: 0.5,
+          );
+        },
+        input: 'click',
+        space: { top: 4, bottom: 4 },
+        value: 0.5,
 
-      track: this.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
-      thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
-    })
-    .layout();
+        track: this.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
+        thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
+      })
+      .layout();
 
     this.rexUI.add
       .sizer({
@@ -256,10 +261,12 @@ export class UIScene extends Scene {
           .add(speedSlider)
           .add(this.speedText)
       )
-      .add(this.rexUI.add
-        .sizer({ orientation: 'x', space: { item: 30 } })
-        .add(this.add.text(0, 0, 'Colour', smallerText))
-        .add(colorPicker))
+      .add(
+        this.rexUI.add
+          .sizer({ orientation: 'x', space: { item: 30 } })
+          .add(this.add.text(0, 0, 'Colour', smallerText))
+          .add(colorPicker)
+      )
       .addBackground(background)
       .layout()
       .setDepth(-1);
@@ -283,10 +290,13 @@ export class UIScene extends Scene {
       );
     });
 
-    this.game.events.on(EVENTS_NAME.increaseCount, (value: number, speciesCount: number) => {
-       let chartDataset = this.registry.get('chartDataset');
-       chartDataset[speciesCount].count += value;
-    });
+    this.game.events.on(
+      EVENTS_NAME.increaseCount,
+      (value: number, speciesCount: number) => {
+        let chartDataset = this.registry.get('chartDataset');
+        chartDataset[speciesCount].count += value;
+      }
+    );
 
     this.game.events.on(EVENTS_NAME.updateWorldAge, (age: number) => {
       this.worldAge += age;
