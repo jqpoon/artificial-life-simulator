@@ -32,7 +32,8 @@ export class EnvironmentScene extends Scene {
   }
 
   update(time: number, delta: number): void {
-    this.game.events.emit(EVENTS_NAME.updateWorldAge, this.time.timeScale);
+    let worldAge: number = this.registry.get('worldAge');
+    this.registry.set('worldAge', worldAge + this.time.timeScale);
   }
 
   private initListeners(): void {
@@ -82,7 +83,7 @@ export class EnvironmentScene extends Scene {
         x: localX + EnvironmentScene.worldX,
         y: localY + EnvironmentScene.worldY,
         color: this.registry.get('color'),
-        size: uiScene.size,
+        size: this.registry.get('organismSize'),
         velocity: this.registry.get('speed'),
         name: speciesCount,
       });

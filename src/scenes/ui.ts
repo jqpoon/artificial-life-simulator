@@ -28,14 +28,6 @@ const smallerText = {
 
 export class UIScene extends Scene {
   private rexUI: RexUIPlugin;
-  private timeScale: GameObjects.Text;
-  private worldAgeText: GameObjects.Text;
-  private worldAge: number = 0;
-  public size: number = 50;
-  private sizeText: GameObjects.Text;
-  private speedText: GameObjects.Text;
-  private builderPreview: Phaser.GameObjects.Arc;
-
   private chartData: any;
   private chart: Chart;
 
@@ -48,12 +40,7 @@ export class UIScene extends Scene {
   }
 
   create(): void {
-    this.chartData = {
-      labels: [],
-      datasets: [],
-    };
-
-    this.registry.set('chartDataset', []);
+    this.resetScene();
 
     this.time.addEvent({
       delay: 500,
@@ -67,6 +54,8 @@ export class UIScene extends Scene {
     this.initListeners();
     this.initChart();
   }
+
+  update(time: number, delta: number): void {}
 
   public newChartData(color: number) {
     // Add new entry to chartDataset in registry, this is used to
@@ -99,12 +88,12 @@ export class UIScene extends Scene {
               text: 'Number of Organisms',
               font: { size: 30 },
             },
-            ticks: { font: { size: 30 } },
+            ticks: { font: { size: 20 } },
           },
           x: {
             type: 'linear',
-            title: { display: true, text: 'Time', font: { size: 30 } },
-            ticks: { display: false },
+            title: { display: true, text: 'World Age', font: { size: 30 } },
+            ticks: { font: { size: 20 } },
           },
         },
       },
@@ -113,7 +102,7 @@ export class UIScene extends Scene {
   }
 
   private updateChart(): void {
-    this.chartData.labels.push(this.worldAge);
+    this.chartData.labels.push(this.registry.get('worldAge'));
     let chartDataset = this.registry.get('chartDataset');
     for (var [index, data] of chartDataset.entries()) {
       this.chartData.datasets[index].data.push(data.count);
@@ -124,11 +113,13 @@ export class UIScene extends Scene {
   private resetScene(): void {
     let envScene = this.scene.get('environment-scene');
     envScene.scene.restart();
-    this.worldAge = 0;
 
-    this.chartData.labels = Array();
-    this.chartData.datasets = Array();
+    this.chartData = {
+      labels: [],
+      datasets: [],
+    };
     this.registry.set('chartDataset', []);
+    this.registry.set('worldAge', 0);
   }
 
   private initInteractiveElements(): void {
@@ -146,16 +137,6 @@ export class UIScene extends Scene {
       .setInteractive()
       .on('pointerdown', this.resetScene, this);
 
-    // Simulation speed control
-    new SliderBar(
-      this,
-      (value) => {
-        this.game.events.emit(EVENTS_NAME.updateTimeScale, value * 10);
-      },
-      this,
-      { x1: 15, y1: 100, x2: 140, y2: 100 }
-    );
-
     // Organism builder
     let background: RoundRectangle = new RoundRectangle(this, {
       width: 1,
@@ -166,9 +147,9 @@ export class UIScene extends Scene {
     }).setDepth(-1);
     this.add.existing(background);
 
-    this.sizeText = this.add.text(0, 0, '50', smallerText);
-    this.speedText = this.add.text(0, 0, '50', smallerText);
-    this.builderPreview = this.add.circle(0, 0, 12, 0xff0000);
+    let sizeText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
+    let speedText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
+    let builderPreview: GameObjects.Arc = this.add.circle(0, 0, 12, 0xff0000);
 
     // Colour of organism
     let colorPicker = this.rexUI.add
@@ -180,7 +161,7 @@ export class UIScene extends Scene {
         space: { left: 10, right: 10, top: 10, bottom: 10, item: 10 },
         valuechangeCallback: (value) => {
           this.registry.set('color', value);
-          this.builderPreview.fillColor = value;
+          builderPreview.fillColor = value;
         },
         valuechangeCallbackScope: this,
         value: 0x9d3857,
@@ -194,9 +175,9 @@ export class UIScene extends Scene {
         width: 100,
         height: 10,
         valuechangeCallback: (value) => {
-          this.size = value * 100;
-          this.builderPreview.setScale(value * 5);
-          this.sizeText.setText(
+          this.registry.set('organismSize', value * 100);
+          builderPreview.setScale(value * 5);
+          sizeText.setText(
             (value * 100).toLocaleString('en-us', {
               maximumFractionDigits: 0,
             })
@@ -218,7 +199,7 @@ export class UIScene extends Scene {
         height: 10,
         valuechangeCallback: (value) => {
           this.registry.set('speed', value * 100);
-          this.speedText.setText(
+          speedText.setText(
             (value * 100).toLocaleString('en-us', {
               maximumFractionDigits: 0,
             })
@@ -244,7 +225,7 @@ export class UIScene extends Scene {
       .add(this.add.text(0, 0, 'Organism Preview', smallerText))
       .add(this.add.zone(0, 0, 0, 0), 10, 'center')
       .add(this.add.zone(0, 0, 0, 0), 10, 'center')
-      .add(this.builderPreview)
+      .add(builderPreview)
       .add(this.add.zone(0, 0, 0, 0), 10, 'center')
       .add(this.add.zone(0, 0, 0, 0), 10, 'center')
       .add(
@@ -252,14 +233,14 @@ export class UIScene extends Scene {
           .sizer({ orientation: 'x', space: { item: 30 } })
           .add(this.add.text(0, 0, 'Size', smallerText))
           .add(sizeSlider)
-          .add(this.sizeText)
+          .add(sizeText)
       )
       .add(
         this.rexUI.add
           .sizer({ orientation: 'x', space: { item: 30 } })
           .add(this.add.text(0, 0, 'Speed', smallerText))
           .add(speedSlider)
-          .add(this.speedText)
+          .add(speedText)
       )
       .add(
         this.rexUI.add
@@ -274,22 +255,9 @@ export class UIScene extends Scene {
 
   private initTexts(): void {
     this.add.text(0, 0, "Jia's Life\nSimulator", textDefaults);
-
-    this.timeScale = this.add.text(0, 120, 'Speed: 5.0', textDefaults);
-    this.worldAgeText = this.add.text(0, 180, 'World Age: 0', textDefaults);
   }
 
   private initListeners(): void {
-    this.game.events.on(EVENTS_NAME.updateTimeScale, (value: number) => {
-      this.timeScale.setText(
-        'Speed: ' +
-          value.toLocaleString('en-us', {
-            maximumFractionDigits: 1,
-            minimumFractionDigits: 1,
-          })
-      );
-    });
-
     this.game.events.on(
       EVENTS_NAME.increaseCount,
       (value: number, speciesCount: number) => {
@@ -297,13 +265,5 @@ export class UIScene extends Scene {
         chartDataset[speciesCount].count += value;
       }
     );
-
-    this.game.events.on(EVENTS_NAME.updateWorldAge, (age: number) => {
-      this.worldAge += age;
-      this.worldAgeText.setText(
-        'World Age: ' +
-          this.worldAge.toLocaleString('en-us', { maximumFractionDigits: 0 })
-      );
-    });
   }
 }
