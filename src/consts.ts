@@ -1,8 +1,12 @@
 export enum EVENTS_NAME {
-    addScore = 'add-score',
-    reproduceOrganism = 'reproduce-organism',
-    increaseCount = 'increase-count',
-    updateEnergy = 'update-energy',
-    updateTimeScale = 'update-time-scale',
-    updateWorldAge = 'update-world-age',
+  reproduceOrganism = 'reproduce-organism', // Adds organism to groups in env
+  changeCount = 'change-count', // Updates graph in UI
+}
+
+export enum REGISTRY_KEYS {
+  organismColour = 'organism-colour',
+  organismSpeed = 'organism-speed',
+  organismSize = 'organism-size',
+  worldAge = 'world-age',
+  chartDataset = 'chart-dataset',
 }

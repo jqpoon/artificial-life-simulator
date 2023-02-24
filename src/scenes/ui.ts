@@ -7,8 +7,7 @@ import {
 import RoundRectangleCanvas from 'phaser3-rex-plugins/plugins/roundrectanglecanvas.js';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
-import { SliderBar } from '../classes/ui/slider';
-import { EVENTS_NAME } from '../consts';
+import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 
 const textDefaults = {
   fontSize: '30px',
@@ -60,7 +59,7 @@ export class UIScene extends Scene {
   public newChartData(color: number) {
     // Add new entry to chartDataset in registry, this is used to
     // track the number of organisms for that species
-    let chartDataset = this.registry.get('chartDataset');
+    let chartDataset = this.registry.get(REGISTRY_KEYS.chartDataset);
     chartDataset.push({ count: 0 });
 
     this.chartData.datasets.push({
@@ -102,8 +101,8 @@ export class UIScene extends Scene {
   }
 
   private updateChart(): void {
-    this.chartData.labels.push(this.registry.get('worldAge'));
-    let chartDataset = this.registry.get('chartDataset');
+    this.chartData.labels.push(this.registry.get(REGISTRY_KEYS.worldAge));
+    let chartDataset = this.registry.get(REGISTRY_KEYS.chartDataset);
     for (var [index, data] of chartDataset.entries()) {
       this.chartData.datasets[index].data.push(data.count);
     }
@@ -118,8 +117,8 @@ export class UIScene extends Scene {
       labels: [],
       datasets: [],
     };
-    this.registry.set('chartDataset', []);
-    this.registry.set('worldAge', 0);
+    this.registry.set(REGISTRY_KEYS.chartDataset, []);
+    this.registry.set(REGISTRY_KEYS.worldAge, 0);
   }
 
   private initInteractiveElements(): void {
@@ -160,7 +159,7 @@ export class UIScene extends Scene {
         hPalette: { size: 32 },
         space: { left: 10, right: 10, top: 10, bottom: 10, item: 10 },
         valuechangeCallback: (value) => {
-          this.registry.set('color', value);
+          this.registry.set(REGISTRY_KEYS.organismColour, value);
           builderPreview.fillColor = value;
         },
         valuechangeCallbackScope: this,
@@ -175,7 +174,7 @@ export class UIScene extends Scene {
         width: 100,
         height: 10,
         valuechangeCallback: (value) => {
-          this.registry.set('organismSize', value * 100);
+          this.registry.set(REGISTRY_KEYS.organismSize, value * 100);
           builderPreview.setScale(value * 5);
           sizeText.setText(
             (value * 100).toLocaleString('en-us', {
@@ -198,7 +197,7 @@ export class UIScene extends Scene {
         width: 100,
         height: 10,
         valuechangeCallback: (value) => {
-          this.registry.set('speed', value * 100);
+          this.registry.set(REGISTRY_KEYS.organismSpeed, value * 100);
           speedText.setText(
             (value * 100).toLocaleString('en-us', {
               maximumFractionDigits: 0,
@@ -259,9 +258,9 @@ export class UIScene extends Scene {
 
   private initListeners(): void {
     this.game.events.on(
-      EVENTS_NAME.increaseCount,
+      EVENTS_NAME.changeCount,
       (value: number, speciesCount: number) => {
-        let chartDataset = this.registry.get('chartDataset');
+        let chartDataset = this.registry.get(REGISTRY_KEYS.chartDataset);
         chartDataset[speciesCount].count += value;
       }
     );

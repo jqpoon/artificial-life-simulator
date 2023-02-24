@@ -3,7 +3,7 @@ import { Scene } from 'phaser';
 import { Food } from '../classes/entities/food';
 import { Organism } from '../classes/entities/organism';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
-import { EVENTS_NAME } from '../consts';
+import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 import { UIScene } from './ui';
 
 export class EnvironmentScene extends Scene {
@@ -24,23 +24,17 @@ export class EnvironmentScene extends Scene {
     this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
 
-    this.updateTimeScale(5);
-
     this.initCanvas();
     this.initListeners();
     this.initEvents();
   }
 
   update(time: number, delta: number): void {
-    let worldAge: number = this.registry.get('worldAge');
-    this.registry.set('worldAge', worldAge + this.time.timeScale);
+    let worldAge: number = this.registry.get(REGISTRY_KEYS.worldAge);
+    this.registry.set(REGISTRY_KEYS.worldAge, worldAge + this.time.timeScale);
   }
 
   private initListeners(): void {
-    this.game.events.on(EVENTS_NAME.updateTimeScale, (value: number) => {
-      this.updateTimeScale(value);
-    });
-
     this.game.events.on(EVENTS_NAME.reproduceOrganism, (organism: Organism) => {
       this.addOrganismToGroup(organism);
     });
@@ -73,29 +67,24 @@ export class EnvironmentScene extends Scene {
     );
     visualBorder.setStrokeStyle(1, 0x000000);
 
+    // Generate new species when clicking on canvas
     visualBorder.setInteractive().on('pointerdown', (_: any, localX: number, localY:number) => {
       let uiScene = this.scene.get('ui-scene') as UIScene;
-      let speciesCount = this.registry.get('chartDataset').length;
-      uiScene.newChartData(this.registry.get('color'));
+      let speciesCount = this.registry.get(REGISTRY_KEYS.chartDataset).length;
+      uiScene.newChartData(this.registry.get(REGISTRY_KEYS.organismColour));
 
       let newOrganism = new RandomOrganism({
         scene: this,
         x: localX + EnvironmentScene.worldX,
         y: localY + EnvironmentScene.worldY,
-        color: this.registry.get('color'),
-        size: this.registry.get('organismSize'),
-        velocity: this.registry.get('speed'),
+        color: this.registry.get(REGISTRY_KEYS.organismColour),
+        size: this.registry.get(REGISTRY_KEYS.organismSize),
+        velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
         name: speciesCount,
       });
 
       this.addOrganismToGroup(newOrganism);
     });
-  }
-
-  private updateTimeScale(timeScale: number): void {
-    this.tweens.timeScale = timeScale;
-    this.physics.world.timeScale = 1 / timeScale;
-    this.time.timeScale = timeScale;
   }
 
   private generateNewFood(): void {

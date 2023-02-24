@@ -25,7 +25,6 @@ export class Food extends Phaser.GameObjects.Ellipse {
 
   public addPredator(group: Phaser.GameObjects.Group) {
     this.scene.physics.add.overlap(group, this, (obj1, obj2) => {
-      this.scene.game.events.emit(EVENTS_NAME.addScore);
       obj2.destroy();
       const organism = obj1 as Organism;
       organism.addEnergy(50);
