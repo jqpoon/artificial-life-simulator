@@ -155,22 +155,28 @@ export class UIScene extends Scene {
     let builderPreview: GameObjects.Arc = this.add.circle(0, 0, 12, 0xff0000);
 
     // Colour of organism
-    let colorPicker = this.rexUI.add
-      .colorPicker({
-        x: 50,
-        y: 700,
-        svPalette: { width: 128, height: 128 },
-        hPalette: { size: 32 },
-        space: { left: 10, right: 10, top: 10, bottom: 10, item: 10 },
-        valuechangeCallback: (value) => {
-          this.registry.set(REGISTRY_KEYS.organismColour, value);
-          builderPreview.fillColor = value;
-        },
-        valuechangeCallbackScope: this,
-        value: 0x9d3857,
-      })
-      .layout()
-      .setDepth(1);
+    let setColour = (color: number) => {
+      this.registry.set(REGISTRY_KEYS.organismColour, color);
+      builderPreview.fillColor = color;
+    };
+
+    let colorPicker = this.rexUI.add.sizer({
+      orientation: 'y',
+      space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
+    })
+    .add(this.rexUI.add.sizer({space: {item: 10}})
+      .add(this.rexUI.add.roundRectangle(0, 0, 30, 30, 3, 0xe8000b).setInteractive().on('pointerdown', () => {setColour(0xe8000b)}, this))
+      .add(this.rexUI.add.roundRectangle(0, 0, 30, 30, 3, 0xff7c00).setInteractive().on('pointerdown', () => {setColour(0xff7c00)}, this))
+      .add(this.rexUI.add.roundRectangle(0, 0, 30, 30, 3, 0xffc400).setInteractive().on('pointerdown', () => {setColour(0xffc400)}, this))
+      .add(this.rexUI.add.roundRectangle(0, 0, 30, 30, 3, 0x1ac938).setInteractive().on('pointerdown', () => {setColour(0x1ac938)}, this))
+    )
+    .add(this.rexUI.add.sizer({space: {item: 10}})
+      .add(this.rexUI.add.roundRectangle(0, 0, 30, 30, 3, 0x00d7ff).setInteractive().on('pointerdown', () => {setColour(0x00d7ff)}, this))
+      .add(this.rexUI.add.roundRectangle(0, 0, 30, 30, 3, 0x023eff).setInteractive().on('pointerdown', () => {setColour(0x023eff)}, this))
+      .add(this.rexUI.add.roundRectangle(0, 0, 30, 30, 3, 0x8b2be2).setInteractive().on('pointerdown', () => {setColour(0x8b2be2)}, this))
+      .add(this.rexUI.add.roundRectangle(0, 0, 30, 30, 3, 0xf14cc1).setInteractive().on('pointerdown', () => {setColour(0xf14cc1)}, this))
+    )
+    .layout();
 
     // Size of organism
     let sizeSlider = this.rexUI.add
