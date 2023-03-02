@@ -119,6 +119,11 @@ export class UIScene extends Scene {
     };
     this.registry.set(REGISTRY_KEYS.chartDataset, []);
     this.registry.set(REGISTRY_KEYS.worldAge, 0);
+
+    this.registry.set(REGISTRY_KEYS.organismColour, 0xe8000b);
+    this.registry.set(REGISTRY_KEYS.organismEnergy, 0.3);
+    this.registry.set(REGISTRY_KEYS.organismSize, 50);
+    this.registry.set(REGISTRY_KEYS.organismSpeed, 50);
   }
 
   private initInteractiveElements(): void {
@@ -152,7 +157,7 @@ export class UIScene extends Scene {
     let sizeText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
     let speedText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
     let energyText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
-    let builderPreview: GameObjects.Arc = this.add.circle(0, 0, 12, 0xff0000);
+    let builderPreview: GameObjects.Arc = this.add.circle(0, 0, 12, 0xe8000b);
 
     // Colour of organism
     let setColour = (color: number) => {
