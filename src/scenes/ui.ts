@@ -134,7 +134,10 @@ export class UIScene extends Scene {
       .setPosition(50, 260)
       .layout()
       .setInteractive()
-      .on('pointerdown', this.resetScene, this);
+      .on('pointerdown', () => {
+        this.resetScene();
+        this.chart.chart.data = this.chartData; // Point chart data at correct variable again, since we have reset it earlier
+      }, this);
 
     // Organism builder
     let background: RoundRectangle = new RoundRectangle(this, {
