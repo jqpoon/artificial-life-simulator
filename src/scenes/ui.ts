@@ -63,7 +63,7 @@ export class UIScene extends Scene {
     chartDataset.push({ count: 0 });
 
     this.chartData.datasets.push({
-      data: [],
+      data: Array(this.chartData.labels.length).fill(null), // So that graph starts at correct point in time
       fill: false,
       borderColor: '#' + color.toString(16), // convert to string hex value
       pointRadius: 0,
