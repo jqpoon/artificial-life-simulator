@@ -24,6 +24,8 @@ export class EnvironmentScene extends Scene {
     this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
 
+    this.updateTimeScale(3);
+
     this.initCanvas();
     this.initListeners();
     this.initEvents();
@@ -85,6 +87,12 @@ export class EnvironmentScene extends Scene {
 
       this.addOrganismToGroup(newOrganism);
     });
+  }
+
+  private updateTimeScale(timeScale: number): void {
+    this.tweens.timeScale = timeScale;
+    this.physics.world.timeScale = 1 / timeScale;
+    this.time.timeScale = timeScale;
   }
 
   private generateNewFood(): void {
