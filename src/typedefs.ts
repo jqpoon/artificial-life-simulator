@@ -12,7 +12,9 @@ export interface OrganismConfigs {
     x?: number,
     y?: number,
     color?: number,
+    alpha?: number,
     name?: number,
+    energyLoss?: number,
 }
 
 export interface FoodConfigs {

@@ -7,6 +7,7 @@ export enum REGISTRY_KEYS {
   organismColour = 'organism-colour',
   organismSpeed = 'organism-speed',
   organismSize = 'organism-size',
+  organismEnergy = 'organism-energy',
   worldAge = 'world-age',
   chartDataset = 'chart-dataset',
 }

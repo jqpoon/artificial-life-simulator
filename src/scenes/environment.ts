@@ -10,7 +10,7 @@ export class EnvironmentScene extends Scene {
   private organisms: Phaser.GameObjects.Group;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 1500;
-  private static readonly worldX: number = 300;
+  private static readonly worldX: number = 400;
   private static readonly worldY: number = 50;
   private static readonly worldWidth: number = 800;
   private static readonly worldHeight: number = 800;

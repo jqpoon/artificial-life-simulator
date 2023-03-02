@@ -8,6 +8,8 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     x: 300,
     y: 300,
     color: 0xFF0000,
+    energyLoss: 0.3,
+    alpha: 1,
   };
 
   private decreaseEnergyEvent: Phaser.Time.TimerEvent;
@@ -31,6 +33,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
       mergedConfigs.size,
       mergedConfigs.size,
       mergedConfigs.color,
+      mergedConfigs.alpha,
     );
     mergedConfigs.scene.add.existing(this);
     mergedConfigs.scene.physics.add.existing(this);
@@ -43,7 +46,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
 
     this.decreaseEnergyEvent = mergedConfigs.scene.time.addEvent({
       delay: 100,
-      args: [-0.3],
+      args: [-mergedConfigs.energyLoss],
       callback: this.addEnergy,
       callbackScope: this,
       loop: true,
@@ -57,6 +60,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
   public update(time: number, delta: number): void {
     this.age += delta;
     this.scene.physics.world.wrap(this, -this.width/2);
+    this.setAlpha(Math.round(this.energy / 20) / 5); // Round to nearest 0.05
 
     this.onUpdate(time, delta);
 

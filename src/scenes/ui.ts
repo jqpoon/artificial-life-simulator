@@ -151,6 +151,7 @@ export class UIScene extends Scene {
 
     let sizeText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
     let speedText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
+    let energyText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
     let builderPreview: GameObjects.Arc = this.add.circle(0, 0, 12, 0xff0000);
 
     // Colour of organism
@@ -216,9 +217,31 @@ export class UIScene extends Scene {
       })
       .layout();
 
+      // Energy of organism
+      let energySlider = this.rexUI.add
+      .slider({
+        width: 100,
+        height: 10,
+        valuechangeCallback: (value) => {
+          this.registry.set(REGISTRY_KEYS.organismEnergy, value);
+          energyText.setText(
+            (value).toLocaleString('en-us', {
+              maximumFractionDigits: 1,
+            })
+          );
+        },
+        input: 'click',
+        space: { top: 4, bottom: 4 },
+        value: 0.5,
+
+        track: this.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
+        thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
+      })
+      .layout();
+
     this.rexUI.add
       .sizer({
-        x: 140,
+        x: 180,
         y: 600,
         width: 270,
         orientation: 'y',
@@ -243,6 +266,13 @@ export class UIScene extends Scene {
           .add(this.add.text(0, 0, 'Speed', smallerText))
           .add(speedSlider)
           .add(speedText)
+      )
+      .add(
+        this.rexUI.add
+          .sizer({ orientation: 'x', space: { item: 30 } })
+          .add(this.add.text(0, 0, 'Energy Loss', smallerText))
+          .add(energySlider)
+          .add(energyText)
       )
       .add(
         this.rexUI.add
