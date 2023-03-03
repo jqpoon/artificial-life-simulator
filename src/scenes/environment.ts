@@ -4,6 +4,7 @@ import { Food } from '../classes/entities/food';
 import { Organism } from '../classes/entities/organism';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
+import { OrganismConfigs } from '../typedefs';
 import { UIScene } from './ui';
 
 export class EnvironmentScene extends Scene {
@@ -71,22 +72,33 @@ export class EnvironmentScene extends Scene {
 
     // Generate new species when clicking on canvas
     visualBorder.setInteractive().on('pointerdown', (_: any, localX: number, localY:number) => {
-      let uiScene = this.scene.get('ui-scene') as UIScene;
-      let speciesCount = this.registry.get(REGISTRY_KEYS.chartDataset).length;
-      uiScene.newChartData(this.registry.get(REGISTRY_KEYS.organismColour));
-
-      let newOrganism = new RandomOrganism({
+      this.createNewSpecies({
         scene: this,
+        velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
+        size: this.registry.get(REGISTRY_KEYS.organismSize),
         x: localX + EnvironmentScene.worldX,
         y: localY + EnvironmentScene.worldY,
         color: this.registry.get(REGISTRY_KEYS.organismColour),
-        size: this.registry.get(REGISTRY_KEYS.organismSize),
-        velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
-        name: speciesCount,
       });
-
-      this.addOrganismToGroup(newOrganism);
     });
+  }
+
+  private createNewSpecies(configs: OrganismConfigs): void {
+    let uiScene = this.scene.get('ui-scene') as UIScene;
+    let speciesCount = this.registry.get(REGISTRY_KEYS.chartDataset).length;
+    uiScene.newChartData(this.registry.get(REGISTRY_KEYS.organismColour));
+
+    let newOrganism = new RandomOrganism({
+      scene: this,
+      x: configs.x,
+      y: configs.y,
+      color: configs.color,
+      size: configs.size,
+      velocity: configs.velocity,
+      name: speciesCount,
+    });
+
+    this.addOrganismToGroup(newOrganism);
   }
 
   private updateTimeScale(timeScale: number): void {
@@ -106,5 +118,29 @@ export class EnvironmentScene extends Scene {
 
   private addOrganismToGroup(organism: Organism): void {
     this.organisms.add(organism);
+  }
+
+  public loadScenario1(): void {
+    this.registry.set(REGISTRY_KEYS.organismColour, 0x8b2be2);
+    this.createNewSpecies({
+      scene: this,
+      velocity: 80,
+      size: 30,
+      x: 10,
+      y: 100,
+      color: 0x8b2be2,
+      energyLoss: 0.5,
+    });
+
+    this.registry.set(REGISTRY_KEYS.organismColour, 0xffc400);
+    this.createNewSpecies({
+      scene: this,
+      velocity: 35,
+      size: 80,
+      x: 10,
+      y: 10,
+      color: 0xffc400,
+      energyLoss: 0.1,
+    });
   }
 }

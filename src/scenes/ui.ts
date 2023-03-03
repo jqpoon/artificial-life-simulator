@@ -4,10 +4,10 @@ import {
   Chart,
   RoundRectangle,
 } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
-import RoundRectangleCanvas from 'phaser3-rex-plugins/plugins/roundrectanglecanvas.js';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
+import { EnvironmentScene } from './environment';
 
 const textDefaults = {
   fontSize: '30px',
@@ -127,12 +127,17 @@ export class UIScene extends Scene {
   }
 
   private initInteractiveElements(): void {
-    // RESET button
-    let rec = new RoundRectangleCanvas(this, 0, 0, 0, 0, 10, 0x333333);
-    this.add.existing(rec);
-    this.rexUI.add
+    // Preset-scenarios
+    this.rexUI.add.sizer({
+      x: 605, y: 910,
+      orientation: 'x',
+      space: { item: 20 },
+    })
+    .add(this.rexUI.add
       .label({
-        background: rec,
+        width: 100, height: 30,
+        align: 'center',
+        background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x333333),
         text: this.add.text(0, 0, 'Reset'),
         space: { left: 20, right: 20, top: 20, bottom: 20 },
       })
@@ -142,7 +147,26 @@ export class UIScene extends Scene {
       .on('pointerdown', () => {
         this.resetScene();
         this.chart.chart.data = this.chartData; // Point chart data at correct variable again, since we have reset it earlier
-      }, this);
+      }, this)
+    )
+    .add(this.rexUI.add
+      .label({
+        background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x888888),
+        text: this.add.text(0, 0, 'Scenario 1'),
+        space: { left: 20, right: 20, top: 20, bottom: 20 },
+      })
+      .setPosition(50, 200)
+      .layout()
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.resetScene();
+        this.chart.chart.data = this.chartData;
+
+        let envScene = this.scene.get('environment-scene') as EnvironmentScene;
+        setTimeout(() => {envScene.loadScenario1()}, 100);
+      }, this)
+    )
+    .layout();
 
     // Organism builder
     let background: RoundRectangle = new RoundRectangle(this, {
