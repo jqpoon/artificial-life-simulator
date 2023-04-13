@@ -2,11 +2,12 @@ import { Chart } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIComponent } from './UIComponent';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
+import { UIScene } from './mainUI';
 
 export class ChartsComponent extends Chart implements UIComponent {
   private chartData: any;
 
-  constructor(scene: Phaser.Scene) {
+  constructor(scene: UIScene) {
     super(scene, 1450, 600, 500, 500, {
       type: 'line',
       data: null,

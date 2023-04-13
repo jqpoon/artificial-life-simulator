@@ -8,6 +8,7 @@ import { OrganismConfigs } from '../typedefs';
 
 export class EnvironmentScene extends Scene {
   private organisms: Phaser.GameObjects.Group;
+  private currentScenario: number;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 1500;
   private static readonly worldX: number = 400;
@@ -20,6 +21,7 @@ export class EnvironmentScene extends Scene {
   }
 
   create(): void {
+    this.currentScenario = 0; // Default, empty canvas
     this.organisms = this.add.group();
     this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
@@ -39,6 +41,14 @@ export class EnvironmentScene extends Scene {
   private initListeners(): void {
     this.game.events.on(EVENTS_NAME.reproduceOrganism, (organism: Organism) => {
       this.addOrganismToGroup(organism);
+    });
+
+    this.game.events.once(EVENTS_NAME.loadScenario, (scenarioID: number) => {
+      // Without this, the scenario is loaded multiple times
+      if (scenarioID == this.currentScenario) return;
+
+      this.currentScenario = scenarioID;
+      this.loadScenario1();
     });
   }
 

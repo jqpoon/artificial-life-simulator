@@ -4,8 +4,8 @@ import { RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components.j
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
-import { EnvironmentScene } from '../environment';
 import { ChartsComponent } from './chartsComponent';
+import { ScenarioControl } from './scenarioControl';
 
 const textDefaults = {
   fontSize: '30px',
@@ -24,8 +24,9 @@ const smallerText = {
 };
 
 export class UIScene extends Scene {
-  private rexUI: RexUIPlugin;
-  public chartsComponent: ChartsComponent; // TODO: CHANGE BACK TO PRIVATE
+  public rexUI: RexUIPlugin;
+  private chartsComponent: ChartsComponent;
+  private scenarioControl: ScenarioControl;
 
   constructor() {
     super('ui-scene');
@@ -37,6 +38,7 @@ export class UIScene extends Scene {
 
   create(): void {
     this.chartsComponent = new ChartsComponent(this);
+    this.scenarioControl = new ScenarioControl(this);
 
     this.resetScene();
     this.initTexts();
@@ -46,11 +48,12 @@ export class UIScene extends Scene {
 
   update(time: number, delta: number): void {}
 
-  private resetScene(): void {
+  public resetScene(): void {
     let envScene = this.scene.get('environment-scene');
     envScene.scene.restart();
 
     this.chartsComponent.reset();
+    this.scenarioControl.reset();
 
     this.registry.set(REGISTRY_KEYS.worldAge, 0);
     this.registry.set(REGISTRY_KEYS.organismColour, 0xe8000b);
@@ -60,60 +63,7 @@ export class UIScene extends Scene {
 
   private initInteractiveElements(): void {
     // Preset-scenarios
-    this.rexUI.add
-      .sizer({
-        x: 605,
-        y: 910,
-        orientation: 'x',
-        space: { item: 20 },
-      })
-      .add(
-        this.rexUI.add
-          .label({
-            width: 100,
-            height: 30,
-            align: 'center',
-            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x333333),
-            text: this.add.text(0, 0, 'Reset'),
-            space: { left: 20, right: 20, top: 20, bottom: 20 },
-          })
-          .setPosition(50, 260)
-          .layout()
-          .setInteractive()
-          .on(
-            'pointerdown',
-            () => {
-              this.resetScene();
-            },
-            this
-          )
-      )
-      .add(
-        this.rexUI.add
-          .label({
-            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x888888),
-            text: this.add.text(0, 0, 'Scenario 1'),
-            space: { left: 20, right: 20, top: 20, bottom: 20 },
-          })
-          .setPosition(50, 200)
-          .layout()
-          .setInteractive()
-          .on(
-            'pointerdown',
-            () => {
-              this.resetScene();
 
-              let envScene = this.scene.get(
-                'environment-scene'
-              ) as EnvironmentScene;
-              setTimeout(() => {
-                envScene.loadScenario1();
-              }, 100);
-            },
-            this
-          )
-      )
-      .layout();
 
     // Organism builder
     let background: RoundRectangle = new RoundRectangle(this, {

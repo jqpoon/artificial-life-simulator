@@ -2,6 +2,7 @@ export enum EVENTS_NAME {
   createNewSpecies = 'create-new-species', // Adds a new species
   reproduceOrganism = 'reproduce-organism', // Adds a new organism
   changeCount = 'change-count', // Updates graph in UI
+  loadScenario = 'load-scenario', // Load a pre-defined scenario
 }
 
 export enum REGISTRY_KEYS {
