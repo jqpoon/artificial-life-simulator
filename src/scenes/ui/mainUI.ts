@@ -6,7 +6,6 @@ import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
 import { EnvironmentScene } from '../environment';
 import { ChartsComponent } from './chartsComponent';
-import { UIComponent } from './UIComponent';
 
 const textDefaults = {
   fontSize: '30px',
@@ -30,18 +29,16 @@ export class UIScene extends Scene {
 
   constructor() {
     super('ui-scene');
-    this.chartsComponent = new ChartsComponent(this);
   }
 
   preload(): void {
-    this.chartsComponent.preload();
+    this.load.script('chartjs', 'https://cdn.jsdelivr.net/npm/chart.js');
   }
 
   create(): void {
-    this.chartsComponent.create();
+    this.chartsComponent = new ChartsComponent(this);
 
     this.resetScene();
-
     this.initTexts();
     this.initInteractiveElements();
     this.initListeners();
@@ -130,7 +127,6 @@ export class UIScene extends Scene {
 
     let sizeText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
     let speedText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
-    let energyText: GameObjects.Text = this.add.text(0, 0, '50', smallerText);
     let builderPreview: GameObjects.Arc = this.add.circle(0, 0, 12, 0xe8000b);
 
     // Colour of organism
