@@ -7,7 +7,7 @@ export enum REGISTRY_KEYS {
   organismColour = 'organism-colour',
   organismSpeed = 'organism-speed',
   organismSize = 'organism-size',
-  organismEnergy = 'organism-energy',
+  organismEnergyLoss = 'organism-energy-loss', // Normally calculated, can be manually overridden
   worldAge = 'world-age',
   chartDataset = 'chart-dataset',
 }

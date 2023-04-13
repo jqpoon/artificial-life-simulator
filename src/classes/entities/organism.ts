@@ -1,4 +1,4 @@
-import { EVENTS_NAME } from '../../consts';
+import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
 
 export abstract class Organism extends Phaser.GameObjects.Ellipse {
@@ -8,11 +8,10 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     x: 300,
     y: 300,
     color: 0xFF0000,
-    energyLoss: 0.3,
     alpha: 1,
   };
 
-  private decreaseEnergyEvent: Phaser.Time.TimerEvent;
+  private readonly basalEnergyLossPerUpdate: number;
 
   protected readonly velocity: number;
   protected age: number;
@@ -44,13 +43,9 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     this.age = 0;
     this.energy = 100;
 
-    this.decreaseEnergyEvent = mergedConfigs.scene.time.addEvent({
-      delay: 100,
-      args: [-mergedConfigs.energyLoss],
-      callback: this.addEnergy,
-      callbackScope: this,
-      loop: true,
-    });
+    // Energy loss is calculated as a function of size and speed based on Kleiber's law
+    // Can be manually overridden if provided
+    this.basalEnergyLossPerUpdate = mergedConfigs.energyLoss ?? (0.001 * Math.pow(mergedConfigs.size, 0.75));
 
     this.name2 = mergedConfigs.name ?? -1;
     // name = species index aka species count
@@ -64,10 +59,14 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
 
     this.onUpdate(time, delta);
 
+    // Basal energy loss and energy loss due to organism moving
+    let velocity = this.body.velocity as Phaser.Math.Vector2; // Cast here due to weird typing issue
+    let totalEnergyLoss = this.basalEnergyLossPerUpdate + velocity.length() * 0.001;
+    this.addEnergy(-totalEnergyLoss);
+
     if (this.energy <= 0) {
       this.onDestroy();
       this.scene.game.events.emit(EVENTS_NAME.changeCount, -1, this.name2);
-      this.decreaseEnergyEvent.remove(false);
       this.destroy();
     }
 
