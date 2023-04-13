@@ -10,7 +10,10 @@ export class ControllableOrganism extends Organism {
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
 
   constructor(configs: OrganismConfigs) {
-    super({...ControllableOrganism.CONTROLLABLE_ORGANISM_DEFAULTS, ...configs});
+    super({
+      ...ControllableOrganism.CONTROLLABLE_ORGANISM_DEFAULTS,
+      ...configs,
+    });
     this.cursors = this.scene.input.keyboard.createCursorKeys();
   }
 

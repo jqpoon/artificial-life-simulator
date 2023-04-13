@@ -20,13 +20,13 @@ let configObject: Phaser.Types.Core.GameConfig = {
     },
   },
   plugins: {
-    scene: [{
+    scene: [
+      {
         key: 'rexUI',
         plugin: RexUIPlugin,
-        mapping: 'rexUI'
-    },
-    // ...
-    ]
+        mapping: 'rexUI',
+      },
+    ],
   },
   backgroundColor: '#FFFFFF',
   scene: [LoadingScene, UIScene, EnvironmentScene],

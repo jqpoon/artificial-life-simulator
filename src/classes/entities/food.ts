@@ -5,11 +5,11 @@ import { Organism } from './organism';
 export class Food extends Phaser.GameObjects.Ellipse {
   private static readonly FOOD_DEFAULTS = {
     size: 10,
-    color: 0x6CBF65, // Green,
+    color: 0x6cbf65, // Green,
   };
 
   constructor(configs: FoodConfigs) {
-    let mergedConfigs = {...Food.FOOD_DEFAULTS, ...configs}
+    let mergedConfigs = { ...Food.FOOD_DEFAULTS, ...configs };
 
     super(
       mergedConfigs.scene,
@@ -17,8 +17,8 @@ export class Food extends Phaser.GameObjects.Ellipse {
       mergedConfigs.y,
       mergedConfigs.size,
       mergedConfigs.size,
-      mergedConfigs.color,
-    )
+      mergedConfigs.color
+    );
     mergedConfigs.scene.add.existing(this);
     mergedConfigs.scene.physics.add.existing(this);
   }

@@ -11,7 +11,7 @@ export class RandomOrganism extends Organism {
   private timedEvent: Phaser.Time.TimerEvent;
 
   constructor(configs: OrganismConfigs) {
-    super({...RandomOrganism.RANDOM_ORGANISM_DEFAULTS, ...configs});
+    super({ ...RandomOrganism.RANDOM_ORGANISM_DEFAULTS, ...configs });
 
     this.scene.physics.add.existing(this, false);
 

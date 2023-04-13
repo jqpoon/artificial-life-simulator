@@ -71,16 +71,18 @@ export class EnvironmentScene extends Scene {
     visualBorder.setStrokeStyle(1, 0x000000);
 
     // Generate new species when clicking on canvas
-    visualBorder.setInteractive().on('pointerdown', (_: any, localX: number, localY:number) => {
-      this.createNewSpecies({
-        scene: this,
-        velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
-        size: this.registry.get(REGISTRY_KEYS.organismSize),
-        x: localX + EnvironmentScene.worldX,
-        y: localY + EnvironmentScene.worldY,
-        color: this.registry.get(REGISTRY_KEYS.organismColour),
+    visualBorder
+      .setInteractive()
+      .on('pointerdown', (_: any, localX: number, localY: number) => {
+        this.createNewSpecies({
+          scene: this,
+          velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
+          size: this.registry.get(REGISTRY_KEYS.organismSize),
+          x: localX + EnvironmentScene.worldX,
+          y: localY + EnvironmentScene.worldY,
+          color: this.registry.get(REGISTRY_KEYS.organismColour),
+        });
       });
-    });
   }
 
   private createNewSpecies(configs: OrganismConfigs): void {

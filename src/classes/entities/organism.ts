@@ -7,7 +7,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     size: 25,
     x: 300,
     y: 300,
-    color: 0xFF0000,
+    color: 0xff0000,
     alpha: 1,
   };
 
@@ -23,7 +23,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
   protected abstract onDestroy(): void;
 
   constructor(configs: OrganismConfigs) {
-    let mergedConfigs = {...Organism.ORGANISM_DEFAULTS, ...configs};
+    let mergedConfigs = { ...Organism.ORGANISM_DEFAULTS, ...configs };
 
     super(
       mergedConfigs.scene,
@@ -32,7 +32,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
       mergedConfigs.size,
       mergedConfigs.size,
       mergedConfigs.color,
-      mergedConfigs.alpha,
+      mergedConfigs.alpha
     );
     mergedConfigs.scene.add.existing(this);
     mergedConfigs.scene.physics.add.existing(this);
@@ -45,7 +45,8 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
 
     // Energy loss is calculated as a function of size and speed based on Kleiber's law
     // Can be manually overridden if provided
-    this.basalEnergyLossPerUpdate = mergedConfigs.energyLoss ?? (0.001 * Math.pow(mergedConfigs.size, 0.75));
+    this.basalEnergyLossPerUpdate =
+      mergedConfigs.energyLoss ?? 0.001 * Math.pow(mergedConfigs.size, 0.75);
 
     this.name2 = mergedConfigs.name ?? -1;
     // name = species index aka species count
@@ -54,14 +55,15 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
 
   public update(time: number, delta: number): void {
     this.age += delta;
-    this.scene.physics.world.wrap(this, -this.width/2);
+    this.scene.physics.world.wrap(this, -this.width / 2);
     this.setAlpha(Math.round(this.energy / 20) / 5); // Round to nearest 0.05
 
     this.onUpdate(time, delta);
 
     // Basal energy loss and energy loss due to organism moving
     let velocity = this.body.velocity as Phaser.Math.Vector2; // Cast here due to weird typing issue
-    let totalEnergyLoss = this.basalEnergyLossPerUpdate + velocity.length() * 0.001;
+    let totalEnergyLoss =
+      this.basalEnergyLossPerUpdate + velocity.length() * 0.001;
     this.addEnergy(-totalEnergyLoss);
 
     if (this.energy <= 0) {
