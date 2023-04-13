@@ -1,5 +1,6 @@
 export enum EVENTS_NAME {
-  reproduceOrganism = 'reproduce-organism', // Adds organism to groups in env
+  createNewSpecies = 'create-new-species', // Adds a new species
+  reproduceOrganism = 'reproduce-organism', // Adds a new organism
   changeCount = 'change-count', // Updates graph in UI
 }
 

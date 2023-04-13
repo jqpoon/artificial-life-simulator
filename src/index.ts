@@ -2,7 +2,7 @@ import 'phaser';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import { EnvironmentScene } from './scenes/environment';
 import { LoadingScene } from './scenes/loading';
-import { UIScene } from './scenes/ui';
+import { UIScene } from './scenes/ui/mainUI';
 
 let configObject: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,

@@ -5,7 +5,7 @@ import { Organism } from '../classes/entities/organism';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 import { OrganismConfigs } from '../typedefs';
-import { UIScene } from './ui';
+import { UIScene } from './ui/mainUI';
 
 export class EnvironmentScene extends Scene {
   private organisms: Phaser.GameObjects.Group;
@@ -88,7 +88,7 @@ export class EnvironmentScene extends Scene {
   private createNewSpecies(configs: OrganismConfigs): void {
     let uiScene = this.scene.get('ui-scene') as UIScene;
     let speciesCount = this.registry.get(REGISTRY_KEYS.chartDataset).length;
-    uiScene.newChartData(this.registry.get(REGISTRY_KEYS.organismColour));
+    uiScene.chartsComponent.newChartData(this.registry.get(REGISTRY_KEYS.organismColour));
 
     let newOrganism = new RandomOrganism({
       scene: this,
