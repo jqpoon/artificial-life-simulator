@@ -4,11 +4,19 @@ import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
 import { UIScene } from './mainUI';
 
-export class ChartsComponent extends Chart implements UIComponent {
+export class ChartsComponent extends UIComponent {
   private chartData: any;
+  private chart: Chart;
 
   constructor(scene: UIScene) {
-    super(scene, 1450, 600, 500, 500, {
+    super(scene, {
+      x: 1450,
+      y: 600,
+      height: 500,
+      width: 500,
+    });
+
+    this.chart = new Chart(scene, 1450, 600, 500, 500, {
       type: 'line',
       data: null,
       options: {
@@ -36,20 +44,18 @@ export class ChartsComponent extends Chart implements UIComponent {
     });
 
     scene.add.existing(this);
+    scene.add.existing(this.chart);
+    this.add(this.chart);
 
-    this.scene.time.addEvent({
+    this.initListeners();
+
+    scene.time.addEvent({
       delay: 500,
       callback: this.updateChart_,
       callbackScope: this,
       loop: true,
     });
 
-    this.scene.game.events.on(
-      EVENTS_NAME.createNewSpecies,
-      (configs: OrganismConfigs) => {
-        this.newChartData(configs.color ?? 0);
-      }
-    );
   }
 
   reset(): void {
@@ -59,7 +65,7 @@ export class ChartsComponent extends Chart implements UIComponent {
     };
     this.scene.registry.set(REGISTRY_KEYS.chartDataset, []);
 
-    this.chart.data = this.chartData; // Point chart data at correct variable again, since we have reset it earlier
+    this.chart.chart.data = this.chartData; // Point chart data at correct variable again, since we have reset it earlier
   }
 
   public newChartData(color: number) {
@@ -82,6 +88,23 @@ export class ChartsComponent extends Chart implements UIComponent {
     for (var [index, data] of chartDataset.entries()) {
       this.chartData.datasets[index].data.push(data.count);
     }
-    this.chart.update('none'); // Update chart without animation
+    this.chart.chart.update('none'); // Update chart without animation
+  }
+
+  private initListeners(): void {
+    this.scene.game.events.on(
+      EVENTS_NAME.createNewSpecies,
+      (configs: OrganismConfigs) => {
+        this.newChartData(configs.color ?? 0);
+      }
+    );
+
+    this.scene.game.events.on(
+      EVENTS_NAME.changeCount,
+      (value: number, speciesCount: number) => {
+        let chartDataset = this.scene.registry.get(REGISTRY_KEYS.chartDataset);
+        chartDataset[speciesCount].count += value;
+      }
+    );
   }
 }

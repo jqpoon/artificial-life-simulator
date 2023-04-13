@@ -3,9 +3,10 @@ import { GameObjects, Scene } from 'phaser';
 import { RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
-import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
+import { REGISTRY_KEYS } from '../../consts';
 import { ChartsComponent } from './chartsComponent';
 import { ScenarioControl } from './scenarioControl';
+import { UIComponent } from './UIComponent';
 
 const textDefaults = {
   fontSize: '30px',
@@ -26,7 +27,7 @@ const smallerText = {
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;
   private chartsComponent: ChartsComponent;
-  private scenarioControl: ScenarioControl;
+  private scenarioControl: UIComponent;
 
   constructor() {
     super('ui-scene');
@@ -43,7 +44,6 @@ export class UIScene extends Scene {
     this.resetScene();
     this.initTexts();
     this.initInteractiveElements();
-    this.initListeners();
   }
 
   update(time: number, delta: number): void {}
@@ -62,9 +62,6 @@ export class UIScene extends Scene {
   }
 
   private initInteractiveElements(): void {
-    // Preset-scenarios
-
-
     // Organism builder
     let background: RoundRectangle = new RoundRectangle(this, {
       width: 1,
@@ -282,15 +279,5 @@ export class UIScene extends Scene {
 
   private initTexts(): void {
     this.add.text(0, 0, "Jia's Life\nSimulator", textDefaults);
-  }
-
-  private initListeners(): void {
-    this.game.events.on(
-      EVENTS_NAME.changeCount,
-      (value: number, speciesCount: number) => {
-        let chartDataset = this.registry.get(REGISTRY_KEYS.chartDataset);
-        chartDataset[speciesCount].count += value;
-      }
-    );
   }
 }
