@@ -65,7 +65,7 @@ export class UIScene extends Scene {
     this.chartData.datasets.push({
       data: Array(this.chartData.labels.length).fill(null), // So that graph starts at correct point in time
       fill: false,
-      borderColor: '#' + color.toString(16), // convert to string hex value
+      borderColor: '#' + color.toString(16).padStart(6, '0'), // convert to string hex value, ensuring 0 padding
       pointRadius: 0,
     });
   }
