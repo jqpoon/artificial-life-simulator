@@ -13,7 +13,7 @@ export interface OrganismConfigs {
   y?: number;
   color?: number;
   alpha?: number;
-  name?: number;
+  species?: number;
   energyLoss?: number;
 }
 

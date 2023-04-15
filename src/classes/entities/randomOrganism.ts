@@ -1,4 +1,6 @@
 import { OrganismConfigs } from '../../typedefs';
+import { Conversion } from '../utils/conversion';
+import { Mutation } from '../utils/mutation';
 import { Organism } from './organism';
 
 export class RandomOrganism extends Organism {
@@ -26,14 +28,40 @@ export class RandomOrganism extends Organism {
   protected onUpdate(time: number, delta: number): void {}
 
   protected clone(): any {
+    let mutationRate = 0.1;
+
+    let newColor = this.fillColor;
+    let newVelocity = this.velocity;
+    let newSize = this.height;
+
+    // Do some mutation
+    if (Math.random() < mutationRate) {
+      // newColor = Conversion.stringColorToNumberColour(
+      //   '#' +
+      //     Mutation.inversionMutation(
+      //       Conversion.numberColorToStringColour(this.fillColor).substring(1),
+      //       16
+      //     )
+      // );
+
+      newVelocity = parseInt(
+        Mutation.inversionMutation(this.velocity.toString(10), 10),
+        10
+      );
+      newSize = parseInt(
+        Mutation.inversionMutation(this.height.toString(10), 10),
+        10
+      );
+    }
+
     return new RandomOrganism({
       scene: this.scene,
       x: this.x,
       y: this.y,
-      color: this.fillColor,
-      velocity: this.velocity,
-      size: this.height,
-      name: this.name2,
+      color: newColor,
+      velocity: newVelocity,
+      size: newSize,
+      species: this.species,
     });
   }
 

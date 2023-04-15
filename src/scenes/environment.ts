@@ -105,7 +105,7 @@ export class EnvironmentScene extends Scene {
       color: configs.color,
       size: configs.size,
       velocity: configs.velocity,
-      name: speciesCount,
+      species: speciesCount,
     });
 
     this.addOrganismToGroup(newOrganism);

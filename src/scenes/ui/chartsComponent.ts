@@ -3,6 +3,7 @@ import { UIComponent } from './UIComponent';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
 import { UIScene } from './mainUI';
+import { Conversion } from '../../classes/utils/conversion';
 
 export class ChartsComponent extends UIComponent {
   private chartData: any;
@@ -77,7 +78,7 @@ export class ChartsComponent extends UIComponent {
     this.chartData.datasets.push({
       data: Array(this.chartData.labels.length).fill(null), // So that graph starts at correct point in time
       fill: false,
-      borderColor: '#' + color.toString(16).padStart(6, '0'), // convert to string hex value, ensuring 0 padding
+      borderColor: Conversion.numberColorToStringColour(color),
       pointRadius: 0,
     });
   }

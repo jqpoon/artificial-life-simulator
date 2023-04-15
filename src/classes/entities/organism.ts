@@ -1,4 +1,4 @@
-import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
+import { EVENTS_NAME } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
 
 export abstract class Organism extends Phaser.GameObjects.Ellipse {
@@ -16,7 +16,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
   protected readonly velocity: number;
   protected age: number;
   protected energy: number;
-  protected name2: number;
+  protected species: number;
 
   protected abstract clone(): any;
   protected abstract onUpdate(time: number, delta: number): void;
@@ -48,9 +48,9 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     this.basalEnergyLossPerUpdate =
       mergedConfigs.energyLoss ?? 0.001 * Math.pow(mergedConfigs.size, 0.75);
 
-    this.name2 = mergedConfigs.name ?? -1;
+    this.species = mergedConfigs.species ?? -1;
     // name = species index aka species count
-    this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.name2);
+    this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
   }
 
   public update(time: number, delta: number): void {
@@ -68,7 +68,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
 
     if (this.energy <= 0) {
       this.onDestroy();
-      this.scene.game.events.emit(EVENTS_NAME.changeCount, -1, this.name2);
+      this.scene.game.events.emit(EVENTS_NAME.changeCount, -1, this.species);
       this.destroy();
     }
 
