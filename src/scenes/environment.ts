@@ -27,6 +27,7 @@ export class EnvironmentScene extends Scene {
     this.organisms.runChildUpdate = true;
 
     this.updateTimeScale(3);
+    this.physics.world.setFPS(15);
 
     this.initCanvas();
     this.initListeners();
