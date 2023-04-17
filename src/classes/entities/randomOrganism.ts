@@ -28,7 +28,7 @@ export class RandomOrganism extends Organism {
   protected onUpdate(time: number, delta: number): void {}
 
   protected clone(): any {
-    let mutationRate = 0.1;
+    let mutationRate = 0.5;
 
     let newColor = this.fillColor;
     let newVelocity = this.velocity;

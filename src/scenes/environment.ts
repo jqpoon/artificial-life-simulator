@@ -49,7 +49,14 @@ export class EnvironmentScene extends Scene {
       if (scenarioID == this.currentScenario) return;
 
       this.currentScenario = scenarioID;
-      this.loadScenario1();
+      switch (scenarioID) {
+        case 1:
+          this.loadScenario1();
+          break;
+        case 2:
+          this.loadScenario2();
+          break;
+      }
     });
   }
 
@@ -152,6 +159,18 @@ export class EnvironmentScene extends Scene {
       y: 10,
       color: 0xffc400,
       energyLoss: 0.1,
+    });
+  }
+
+  public loadScenario2(): void {
+    this.registry.set(REGISTRY_KEYS.organismColour, 0x8b2be2);
+    this.createNewSpecies({
+      scene: this,
+      velocity: 50,
+      size: 20,
+      x: 0,
+      y: 400,
+      color: 0x8b2be2,
     });
   }
 }

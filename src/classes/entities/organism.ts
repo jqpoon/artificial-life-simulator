@@ -25,6 +25,12 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
   constructor(configs: OrganismConfigs) {
     let mergedConfigs = { ...Organism.ORGANISM_DEFAULTS, ...configs };
 
+    // Limit size and velocity
+    mergedConfigs.size = Math.max(10, mergedConfigs.size);
+    mergedConfigs.size = Math.min(100, mergedConfigs.size);
+    mergedConfigs.velocity = Math.max(1, mergedConfigs.velocity);
+    mergedConfigs.velocity = Math.min(100, mergedConfigs.velocity);
+
     super(
       mergedConfigs.scene,
       mergedConfigs.x,
@@ -72,10 +78,11 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
       this.destroy();
     }
 
-    if (this.energy > 100) {
+    // Scale energy needed to reproduce to size of organism
+    if (this.energy > this.height * 5) {
       let child = this.clone();
       this.scene.game.events.emit(EVENTS_NAME.reproduceOrganism, child);
-      this.energy -= 50;
+      this.energy *= 0.1;
     }
   }
 

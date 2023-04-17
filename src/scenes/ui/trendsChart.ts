@@ -55,6 +55,7 @@ export class TrendsChart extends ChartComponent {
       datasets: [{
         data: Array(),
         fill: false,
+        borderColor: 0xffffff,
         pointRadius: 0,
       }],
     };

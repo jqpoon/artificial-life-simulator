@@ -55,6 +55,33 @@ export class ScenarioControl extends UIComponent {
             }, 50);
           })
       )
+      .add(
+        scene.rexUI.add
+          .label({
+            background: scene.rexUI.add.roundRectangle(
+              0,
+              0,
+              0,
+              0,
+              10,
+              0x888888
+            ),
+            text: scene.add.text(0, 0, 'Scenario 2'),
+            space: { left: 20, right: 20, top: 20, bottom: 20 },
+          })
+          .setPosition(50, 200)
+          .layout()
+          .setInteractive()
+          .on('pointerdown', () => {
+            scene.resetScene();
+
+            // Weird things happen without this timeout, presumably because
+            // the scene reset is slower than loading a scenario...
+            setTimeout(() => {
+              scene.game.events.emit(EVENTS_NAME.loadScenario, 2);
+            }, 50);
+          })
+      )
       .layout();
   }
 
