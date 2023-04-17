@@ -1,6 +1,5 @@
 import {
   RoundRectangle,
-  Sizer,
 } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIComponent } from './UIComponent';
 import { UIScene } from './mainUI';
@@ -8,7 +7,7 @@ import { GameObjects } from 'phaser';
 import { smallerText } from './UIConstants';
 import { REGISTRY_KEYS } from '../../consts';
 
-export class OrganismBuilder extends Sizer implements UIComponent {
+export class OrganismBuilder extends UIComponent {
   constructor(scene: UIScene) {
     super(scene, {
       x: 180,

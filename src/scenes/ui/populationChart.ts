@@ -1,11 +1,11 @@
 import { Chart } from 'phaser3-rex-plugins/templates/ui/ui-components';
-import { UIComponent } from './UIComponent';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
 import { UIScene } from './mainUI';
 import { Conversion } from '../../classes/utils/conversion';
+import { ChartComponent } from './chartComponent';
 
-export class ChartsComponent extends UIComponent {
+export default class PopulationChart extends ChartComponent {
   private chartData: any;
   private chart: Chart;
 
@@ -83,7 +83,7 @@ export class ChartsComponent extends UIComponent {
     });
   }
 
-  private updateChart_(): void {
+  public updateChart_(): void {
     this.chartData.labels.push(this.scene.registry.get(REGISTRY_KEYS.worldAge));
     let chartDataset = this.scene.registry.get(REGISTRY_KEYS.chartDataset);
     for (var [index, data] of chartDataset.entries()) {

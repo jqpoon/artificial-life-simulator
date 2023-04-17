@@ -3,7 +3,7 @@ import { Scene } from 'phaser';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 import { UIComponent } from './UIComponent';
-import { ChartsComponent } from './chartsComponent';
+import PopulationChart from './populationChart';
 import { ScenarioControl } from './scenarioControl';
 import { OrganismBuilder } from './organismBuilder';
 
@@ -12,7 +12,7 @@ import { REGISTRY_KEYS } from '../../consts';
 
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;
-  private chartsComponent: ChartsComponent;
+  private chartsComponent: PopulationChart;
   private scenarioControl: UIComponent;
   private organismBuilder: OrganismBuilder;
 
@@ -25,7 +25,7 @@ export class UIScene extends Scene {
   }
 
   create(): void {
-    this.chartsComponent = new ChartsComponent(this);
+    this.chartsComponent = new PopulationChart(this);
     this.scenarioControl = new ScenarioControl(this);
     this.organismBuilder = new OrganismBuilder(this);
 
