@@ -7,7 +7,7 @@ import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 import { OrganismConfigs } from '../typedefs';
 
 export class EnvironmentScene extends Scene {
-  private organisms: Phaser.GameObjects.Group;
+  public organisms: Phaser.GameObjects.Group;
   private currentScenario: number;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 1500;
@@ -26,7 +26,7 @@ export class EnvironmentScene extends Scene {
     this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
 
-    this.updateTimeScale(3);
+    this.updateTimeScale(5);
     this.physics.world.setFPS(15);
 
     this.initCanvas();

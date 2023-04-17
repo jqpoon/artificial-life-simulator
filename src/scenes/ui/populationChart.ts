@@ -12,12 +12,12 @@ export default class PopulationChart extends ChartComponent {
   constructor(scene: UIScene) {
     super(scene, {
       x: 1450,
-      y: 600,
-      height: 500,
+      y: 700,
+      height: 400,
       width: 500,
     });
 
-    this.chart = new Chart(scene, 1450, 600, 500, 500, {
+    this.chart = new Chart(scene, 1450, 700, 500, 400, {
       type: 'line',
       data: null,
       options: {

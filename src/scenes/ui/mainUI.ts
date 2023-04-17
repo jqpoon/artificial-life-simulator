@@ -9,10 +9,12 @@ import { OrganismBuilder } from './organismBuilder';
 
 import { textDefaults } from './UIConstants';
 import { REGISTRY_KEYS } from '../../consts';
+import { TrendsChart } from './trendsChart';
 
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;
-  private chartsComponent: PopulationChart;
+  private populationChart: PopulationChart;
+  private trendsChart: TrendsChart;
   private scenarioControl: UIComponent;
   private organismBuilder: OrganismBuilder;
 
@@ -25,12 +27,14 @@ export class UIScene extends Scene {
   }
 
   create(): void {
-    this.chartsComponent = new PopulationChart(this);
+    this.populationChart = new PopulationChart(this);
+    this.trendsChart = new TrendsChart(this);
     this.scenarioControl = new ScenarioControl(this);
     this.organismBuilder = new OrganismBuilder(this);
 
     this.resetScene();
     this.initTexts();
+    this.initListeners();
   }
 
   update(time: number, delta: number): void {}
@@ -39,7 +43,8 @@ export class UIScene extends Scene {
     let envScene = this.scene.get('environment-scene');
     envScene.scene.restart();
 
-    this.chartsComponent.reset();
+    this.trendsChart.reset();
+    this.populationChart.reset();
     this.scenarioControl.reset();
     this.organismBuilder.reset();
 
@@ -51,5 +56,21 @@ export class UIScene extends Scene {
 
   private initTexts(): void {
     this.add.text(0, 0, "Jia's Life\nSimulator", textDefaults);
+  }
+
+  private initListeners(): void {
+    this.time.addEvent({
+      delay: 500,
+      callback: this.populationChart.updateChart_,
+      callbackScope: this.populationChart,
+      loop: true,
+    });
+
+    this.time.addEvent({
+      delay: 500,
+      callback: this.trendsChart.updateChart_,
+      callbackScope: this.trendsChart,
+      loop: true,
+    });
   }
 }

@@ -12,4 +12,5 @@ export enum REGISTRY_KEYS {
   organismEnergyLoss = 'organism-energy-loss', // Normally calculated, can be manually overridden
   worldAge = 'world-age',
   chartDataset = 'chart-dataset',
+  trendsDataset = 'trends-dataset',
 }
