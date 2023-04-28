@@ -14,7 +14,11 @@ export class ControllableOrganism extends Organism {
       ...ControllableOrganism.CONTROLLABLE_ORGANISM_DEFAULTS,
       ...configs,
     });
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
+
+    // Check if keyboard plugin exists, should be created by default
+    if (this.scene.input.keyboard) {
+      this.cursors = this.scene.input.keyboard.createCursorKeys();
+    }
   }
 
   protected onDestroy(): void {}

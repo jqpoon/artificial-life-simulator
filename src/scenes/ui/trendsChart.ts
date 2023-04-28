@@ -74,6 +74,7 @@ export class TrendsChart extends ChartComponent {
     organisms.children.each((organism) => {
       totalSize += (organism as Organism).height;
       count += 1;
+      return true; // Needed to fit the type description
     });
 
     this.chartData.datasets[0].data.push(totalSize / count);

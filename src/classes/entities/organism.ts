@@ -71,7 +71,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     this.onUpdate(time, delta);
 
     // Basal energy loss and energy loss due to organism moving
-    let velocity = this.body.velocity as Phaser.Math.Vector2; // Cast here due to weird typing issue
+    let velocity = body.velocity as Phaser.Math.Vector2; // Cast here due to weird typing issue
     let totalEnergyLoss =
       this.basalEnergyLossPerUpdate + velocity.length() * 0.001;
     this.addEnergy(-totalEnergyLoss);
