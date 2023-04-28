@@ -61,7 +61,11 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
 
   public update(time: number, delta: number): void {
     this.age += delta;
-    this.scene.physics.world.wrap(this, -this.width / 2);
+
+    // Collide with world boundaries, cast this because static bodies can't call that function...
+    let body = this.body as Phaser.Physics.Arcade.Body;
+    body.setCollideWorldBounds(true);
+
     this.setAlpha(Math.round(this.energy / 20) / 5); // Round to nearest 0.05
 
     this.onUpdate(time, delta);
