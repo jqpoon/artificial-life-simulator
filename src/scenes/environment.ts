@@ -26,7 +26,7 @@ export class EnvironmentScene extends Scene {
     this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
 
-    this.physics.world.setFPS(15);
+    this.physics.world.setFPS(30);
 
     this.initCanvas();
     this.initListeners();

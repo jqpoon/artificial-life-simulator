@@ -13,8 +13,8 @@ export default class PopulationChart extends ChartComponent {
     super(scene, {
       x: 1450,
       y: 700,
-      height: 400,
-      width: 500,
+      height: 300,
+      width: 400,
     });
 
     this.chart = new Chart(scene, 1450, 700, 500, 400, {

@@ -13,8 +13,8 @@ export class TrendsChart extends ChartComponent {
     super(scene, {
       x: 1450,
       y: 300,
-      height: 400,
-      width: 500,
+      height: 300,
+      width: 400,
     });
 
     this.chart = new Chart(scene, 1450, 300, 500, 400, {
@@ -23,11 +23,40 @@ export class TrendsChart extends ChartComponent {
       options: {
         plugins: {
           legend: { display: false },
+          annotation: {
+            annotations: {
+              annotation1: {
+                type: 'line',
+                borderColor: 'black',
+                borderWidth: 3,
+                label: {
+                  backgroundColor: 'red',
+                  content: 'Minimum Size',
+                  display: true
+                },
+                scaleID: 'y',
+                value: 10
+              },
+              annotation2: {
+                type: 'line',
+                borderColor: 'black',
+                borderWidth: 3,
+                label: {
+                  backgroundColor: 'red',
+                  content: 'Maximum Size',
+                  display: true
+                },
+                scaleID: 'y',
+                value: 100
+              },
+            }
+          }
         },
         animation: false,
         scales: {
           y: {
             beginAtZero: true,
+            max: 120,
             title: {
               display: true,
               text: 'Average Size',
