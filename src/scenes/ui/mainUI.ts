@@ -10,6 +10,7 @@ import { OrganismBuilder } from './organismBuilder';
 import { textDefaults } from './UIConstants';
 import { REGISTRY_KEYS } from '../../consts';
 import { TrendsChart } from './trendsChart';
+import { SpeedControls } from './speedControls';
 
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;
@@ -17,6 +18,7 @@ export class UIScene extends Scene {
   private trendsChart: TrendsChart;
   private scenarioControl: UIComponent;
   private organismBuilder: OrganismBuilder;
+  private speedControls: SpeedControls;
 
   constructor() {
     super('ui-scene');
@@ -24,6 +26,10 @@ export class UIScene extends Scene {
 
   preload(): void {
     this.load.script('chartjs', 'https://cdn.jsdelivr.net/npm/chart.js');
+    this.load.image('pause', 'assets/pause.png');
+    this.load.image('speed1', 'assets/speed1.png');
+    this.load.image('speed2', 'assets/speed2.png');
+    this.load.image('speed3', 'assets/speed3.png');
   }
 
   create(): void {
@@ -31,6 +37,7 @@ export class UIScene extends Scene {
     this.trendsChart = new TrendsChart(this);
     this.scenarioControl = new ScenarioControl(this);
     this.organismBuilder = new OrganismBuilder(this);
+    this.speedControls = new SpeedControls(this);
 
     this.resetScene();
     this.initTexts();
@@ -47,6 +54,7 @@ export class UIScene extends Scene {
     this.populationChart.reset();
     this.scenarioControl.reset();
     this.organismBuilder.reset();
+    this.speedControls.reset();
 
     this.registry.set(REGISTRY_KEYS.worldAge, 0);
     this.registry.set(REGISTRY_KEYS.organismColour, 0xe8000b);

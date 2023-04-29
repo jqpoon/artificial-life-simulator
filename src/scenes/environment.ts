@@ -26,7 +26,6 @@ export class EnvironmentScene extends Scene {
     this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
 
-    this.updateTimeScale(5);
     this.physics.world.setFPS(15);
 
     this.initCanvas();
@@ -44,7 +43,7 @@ export class EnvironmentScene extends Scene {
       this.addOrganismToGroup(organism);
     });
 
-    this.game.events.once(EVENTS_NAME.loadScenario, (scenarioID: number) => {
+    this.game.events.on(EVENTS_NAME.loadScenario, (scenarioID: number) => {
       // Without this, the scenario is loaded multiple times
       if (scenarioID == this.currentScenario) return;
 
@@ -57,6 +56,10 @@ export class EnvironmentScene extends Scene {
           this.loadScenario2();
           break;
       }
+    });
+
+    this.game.events.on(EVENTS_NAME.updateTimeScale, (timeScale: number) => {
+      this.updateTimeScale(timeScale);
     });
   }
 
@@ -123,6 +126,12 @@ export class EnvironmentScene extends Scene {
     this.tweens.timeScale = timeScale;
     this.physics.world.timeScale = 1 / timeScale;
     this.time.timeScale = timeScale;
+
+    if (timeScale == 0) {
+      this.scene.pause();
+    } else {
+      this.scene.resume();
+    }
   }
 
   private generateNewFood(): void {

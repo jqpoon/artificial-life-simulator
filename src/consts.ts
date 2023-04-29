@@ -3,6 +3,7 @@ export enum EVENTS_NAME {
   reproduceOrganism = 'reproduce-organism', // Adds a new organism
   changeCount = 'change-count', // Updates graph in UI
   loadScenario = 'load-scenario', // Load a pre-defined scenario
+  updateTimeScale = 'update-timescale', // Used to pause and start the simulation
 }
 
 export enum REGISTRY_KEYS {
