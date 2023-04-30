@@ -1,6 +1,4 @@
-import {
-  RoundRectangle,
-} from 'phaser3-rex-plugins/templates/ui/ui-components';
+import { RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIComponent } from './UIComponent';
 import { UIScene } from './mainUI';
 import { GameObjects } from 'phaser';
@@ -202,16 +200,24 @@ export class OrganismBuilder extends UIComponent {
       .add(
         scene.rexUI.add
           .sizer({ orientation: 'x', space: { item: 30 } })
-          .add(scene.add.text(0, 0, 'Size', smallerText))
-          .add(sizeSlider)
-          .add(sizeText)
-      )
-      .add(
-        scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 30 } })
-          .add(scene.add.text(0, 0, 'Speed', smallerText))
-          .add(speedSlider)
-          .add(speedText)
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 20 } })
+              .add(scene.add.text(0, 0, 'Size', smallerText))
+              .add(scene.add.text(0, 0, 'Speed', smallerText))
+          )
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 20 } })
+              .add(sizeSlider)
+              .add(speedSlider)
+          )
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 20 } })
+              .add(sizeText)
+              .add(speedText)
+          )
       )
       .add(
         scene.rexUI.add

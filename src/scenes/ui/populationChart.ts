@@ -10,12 +10,7 @@ export default class PopulationChart extends ChartComponent {
   private chart: Chart;
 
   constructor(scene: UIScene) {
-    super(scene, {
-      x: 1450,
-      y: 700,
-      height: 300,
-      width: 400,
-    });
+    super(scene);
 
     this.chart = new Chart(scene, 1450, 700, 500, 400, {
       type: 'line',
@@ -30,14 +25,14 @@ export default class PopulationChart extends ChartComponent {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Number of Organisms',
-              font: { size: 30 },
+              text: 'No. of Organisms',
+              font: { size: 20 },
             },
             ticks: { font: { size: 20 } },
           },
           x: {
             type: 'linear',
-            title: { display: true, text: 'World Age', font: { size: 30 } },
+            title: { display: true, text: 'World Age', font: { size: 20 } },
             ticks: { font: { size: 20 } },
           },
         },

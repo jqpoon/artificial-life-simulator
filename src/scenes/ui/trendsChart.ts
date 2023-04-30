@@ -10,12 +10,7 @@ export class TrendsChart extends ChartComponent {
   private chart: Chart;
 
   constructor(scene: UIScene) {
-    super(scene, {
-      x: 1450,
-      y: 300,
-      height: 300,
-      width: 400,
-    });
+    super(scene);
 
     this.chart = new Chart(scene, 1450, 300, 500, 400, {
       type: 'line',
@@ -60,13 +55,13 @@ export class TrendsChart extends ChartComponent {
             title: {
               display: true,
               text: 'Average Size',
-              font: { size: 30 },
+              font: { size: 20 },
             },
             ticks: { font: { size: 20 } },
           },
           x: {
             type: 'linear',
-            title: { display: true, text: 'World Age', font: { size: 30 } },
+            title: { display: true, text: 'World Age', font: { size: 20 } },
             ticks: { font: { size: 20 } },
           },
         },
