@@ -1,4 +1,4 @@
-import { RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components';
+import { RoundRectangle, Slider } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIComponent } from './UIComponent';
 import { UIScene } from './mainUI';
 import { GameObjects } from 'phaser';
@@ -6,6 +6,10 @@ import { smallerText } from './UIConstants';
 import { REGISTRY_KEYS } from '../../consts';
 
 export class OrganismBuilder extends UIComponent {
+  private speedSlider: Slider;
+  private sizeSlider: Slider;
+  private builderPreview: GameObjects.Arc;
+
   constructor(scene: UIScene) {
     super(scene, {
       x: 180,
@@ -27,13 +31,7 @@ export class OrganismBuilder extends UIComponent {
 
     let sizeText: GameObjects.Text = scene.add.text(0, 0, '50', smallerText);
     let speedText: GameObjects.Text = scene.add.text(0, 0, '50', smallerText);
-    let builderPreview: GameObjects.Arc = scene.add.circle(0, 0, 12, 0xe8000b);
-
-    // Colour of organism
-    let setColour = (color: number) => {
-      scene.registry.set(REGISTRY_KEYS.organismColour, color);
-      builderPreview.fillColor = color;
-    };
+    this.builderPreview = scene.add.circle(0, 0, 12, 0xe8000b);
 
     let colorPicker = scene.rexUI.add
       .sizer({
@@ -50,7 +48,7 @@ export class OrganismBuilder extends UIComponent {
               .on(
                 'pointerdown',
                 () => {
-                  setColour(0xe8000b);
+                  this.setColour(0xe8000b);
                 },
                 this
               )
@@ -62,7 +60,7 @@ export class OrganismBuilder extends UIComponent {
               .on(
                 'pointerdown',
                 () => {
-                  setColour(0xff7c00);
+                  this.setColour(0xff7c00);
                 },
                 this
               )
@@ -74,7 +72,7 @@ export class OrganismBuilder extends UIComponent {
               .on(
                 'pointerdown',
                 () => {
-                  setColour(0xffc400);
+                  this.setColour(0xffc400);
                 },
                 this
               )
@@ -86,7 +84,7 @@ export class OrganismBuilder extends UIComponent {
               .on(
                 'pointerdown',
                 () => {
-                  setColour(0x1ac938);
+                  this.setColour(0x1ac938);
                 },
                 this
               )
@@ -102,7 +100,7 @@ export class OrganismBuilder extends UIComponent {
               .on(
                 'pointerdown',
                 () => {
-                  setColour(0x00d7ff);
+                  this.setColour(0x00d7ff);
                 },
                 this
               )
@@ -114,7 +112,7 @@ export class OrganismBuilder extends UIComponent {
               .on(
                 'pointerdown',
                 () => {
-                  setColour(0x023eff);
+                  this.setColour(0x023eff);
                 },
                 this
               )
@@ -126,7 +124,7 @@ export class OrganismBuilder extends UIComponent {
               .on(
                 'pointerdown',
                 () => {
-                  setColour(0x8b2be2);
+                  this.setColour(0x8b2be2);
                 },
                 this
               )
@@ -138,7 +136,7 @@ export class OrganismBuilder extends UIComponent {
               .on(
                 'pointerdown',
                 () => {
-                  setColour(0xf14cc1);
+                  this.setColour(0xf14cc1);
                 },
                 this
               )
@@ -147,13 +145,13 @@ export class OrganismBuilder extends UIComponent {
       .layout();
 
     // Size of organism
-    let sizeSlider = scene.rexUI.add
+    this.sizeSlider = scene.rexUI.add
       .slider({
         width: 100,
         height: 10,
         valuechangeCallback: (value) => {
           scene.registry.set(REGISTRY_KEYS.organismSize, value * 100);
-          builderPreview.setScale(value * 5);
+          this.builderPreview.setScale(value * 5);
           sizeText.setText(
             (value * 100).toLocaleString('en-us', {
               maximumFractionDigits: 0,
@@ -170,7 +168,7 @@ export class OrganismBuilder extends UIComponent {
       .layout();
 
     // Speed of organism
-    let speedSlider = scene.rexUI.add
+    this.speedSlider = scene.rexUI.add
       .slider({
         width: 100,
         height: 10,
@@ -194,7 +192,7 @@ export class OrganismBuilder extends UIComponent {
     this.add(scene.add.text(0, 0, 'Organism Preview', smallerText))
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
-      .add(builderPreview)
+      .add(this.builderPreview)
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(
@@ -209,8 +207,8 @@ export class OrganismBuilder extends UIComponent {
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 20 } })
-              .add(sizeSlider)
-              .add(speedSlider)
+              .add(this.sizeSlider)
+              .add(this.speedSlider)
           )
           .add(
             scene.rexUI.add
@@ -230,5 +228,14 @@ export class OrganismBuilder extends UIComponent {
       .setDepth(-1);
   }
 
-  reset(): void {}
+  reset(): void {
+    this.speedSlider.setValue(0.5);
+    this.sizeSlider.setValue(0.5);
+    this.setColour(0xe8000b);
+  }
+
+  private setColour(color: number): void {
+    this.scene.registry.set(REGISTRY_KEYS.organismColour, color);
+    this.builderPreview.fillColor = color;
+  };
 }
