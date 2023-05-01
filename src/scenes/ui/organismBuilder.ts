@@ -2,7 +2,7 @@ import { RoundRectangle, Slider } from 'phaser3-rex-plugins/templates/ui/ui-comp
 import { UIComponent } from './UIComponent';
 import { UIScene } from './mainUI';
 import { GameObjects } from 'phaser';
-import { smallerText } from './UIConstants';
+import { smallerText, textDefaults } from './UIConstants';
 import { REGISTRY_KEYS } from '../../consts';
 
 export class OrganismBuilder extends UIComponent {
@@ -13,7 +13,7 @@ export class OrganismBuilder extends UIComponent {
   constructor(scene: UIScene) {
     super(scene, {
       x: 180,
-      y: 600,
+      y: 700,
       width: 270,
       orientation: 'y',
       space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
@@ -189,7 +189,7 @@ export class OrganismBuilder extends UIComponent {
       })
       .layout();
 
-    this.add(scene.add.text(0, 0, 'Organism Preview', smallerText))
+    this.add(scene.add.text(0, 0, 'Organism Preview', textDefaults))
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(this.builderPreview)

@@ -11,6 +11,7 @@ import { textDefaults } from './UIConstants';
 import { REGISTRY_KEYS } from '../../consts';
 import { TrendsChart } from './trendsChart';
 import { SpeedControls } from './speedControls';
+import { OrganismViewer } from './organismViewer';
 
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;
@@ -18,6 +19,7 @@ export class UIScene extends Scene {
   private trendsChart: TrendsChart;
   private scenarioControl: UIComponent;
   private organismBuilder: OrganismBuilder;
+  private organismViewer: OrganismViewer;
   private speedControls: SpeedControls;
 
   constructor() {
@@ -39,6 +41,7 @@ export class UIScene extends Scene {
     this.scenarioControl = new ScenarioControl(this);
     this.organismBuilder = new OrganismBuilder(this);
     this.speedControls = new SpeedControls(this);
+    this.organismViewer = new OrganismViewer(this);
 
     this.resetScene();
     this.initTexts();
@@ -56,6 +59,7 @@ export class UIScene extends Scene {
     this.scenarioControl.reset();
     this.organismBuilder.reset();
     this.speedControls.reset();
+    this.organismViewer.reset();
 
     this.registry.set(REGISTRY_KEYS.worldAge, 0);
     this.registry.set(REGISTRY_KEYS.organismColour, 0xe8000b);

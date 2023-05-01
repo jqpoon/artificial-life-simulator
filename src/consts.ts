@@ -4,6 +4,7 @@ export enum EVENTS_NAME {
   changeCount = 'change-count', // Updates graph in UI
   loadScenario = 'load-scenario', // Load a pre-defined scenario
   updateTimeScale = 'update-timescale', // Used to pause and start the simulation
+  selectOrganism = 'select-organism', // When user clicks on an organism
 }
 
 export enum REGISTRY_KEYS {

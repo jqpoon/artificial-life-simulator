@@ -1,5 +1,6 @@
 import { EVENTS_NAME } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
+import {v4 as uuidv4} from 'uuid';
 
 export abstract class Organism extends Phaser.GameObjects.Ellipse {
   private static readonly ORGANISM_DEFAULTS = {
@@ -14,10 +15,12 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
   };
 
   private readonly basalEnergyLossPerUpdate: number;
+  private isSelected: boolean;
+  private timeCounter: number;
 
-  protected readonly velocity: number;
+  public energy: number;
+  public readonly velocity: number;
   protected age: number;
-  protected energy: number;
   protected species: number;
   protected energySplitParentRatio: number;
 
@@ -50,8 +53,11 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     this.velocity = mergedConfigs.velocity;
 
     this.age = 0;
+    this.timeCounter = 0;
+    this.isSelected = false;
     this.energy = mergedConfigs.startingEnergy;
     this.energySplitParentRatio = mergedConfigs.energySplitParentRatio;
+    this.name = uuidv4();
 
     // Energy loss is calculated as a function of size and speed based on Kleiber's law
     // Can be manually overridden if provided
@@ -61,6 +67,20 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     this.species = mergedConfigs.species ?? -1;
     // name = species index aka species count
     this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
+
+    // Logic for selecting an organism to view more information
+    this.setInteractive();
+    this.on('pointerdown', () => {
+      this.scene.game.events.emit(EVENTS_NAME.selectOrganism, this);
+
+      this.selectOrganism(true);
+    });
+
+    this.scene.game.events.on(EVENTS_NAME.selectOrganism, (organism: Organism) => {
+      if (organism.name !== this.name) {
+        this.selectOrganism(false);
+      }
+    });
   }
 
   public update(time: number, delta: number): void {
@@ -70,7 +90,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     let body = this.body as Phaser.Physics.Arcade.Body;
     body.setCollideWorldBounds(true);
 
-    this.setAlpha(Math.round(this.energy / 20) / 5); // Round to nearest 0.05
+    this.setAlpha(Math.max(Math.round(this.energy / 20) / 5, 0.1)); // Round to nearest 0.05
 
     this.onUpdate(time, delta);
 
@@ -81,6 +101,11 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     this.addEnergy(-totalEnergyLoss);
 
     if (this.energy <= 0) {
+      // Send a last update to organism viewer
+      if (this.isSelected) {
+        this.scene.game.events.emit(EVENTS_NAME.selectOrganism, this);
+      }
+
       this.onDestroy();
       this.scene.game.events.emit(EVENTS_NAME.changeCount, -1, this.species);
       this.destroy();
@@ -92,9 +117,28 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
       this.scene.game.events.emit(EVENTS_NAME.reproduceOrganism, child);
       this.energy = this.energy / 2 * this.energySplitParentRatio;
     }
+
+    // Only do these updates once in awhile
+    this.timeCounter += delta;
+    if (this.timeCounter >= 200) {
+      if (this.isSelected) {
+        this.scene.game.events.emit(EVENTS_NAME.selectOrganism, this);
+      }
+      this.timeCounter -= 200;
+    }
   }
 
   public addEnergy(amount: number): void {
     this.energy += amount;
+  }
+
+  private selectOrganism(isSelected: boolean) {
+    this.isSelected = isSelected;
+    if (isSelected) {
+      this.strokeColor = 0x8f8f9c;
+      this.setStrokeStyle(3); // Sets a border
+    } else {
+      this.setStrokeStyle();
+    }
   }
 }
