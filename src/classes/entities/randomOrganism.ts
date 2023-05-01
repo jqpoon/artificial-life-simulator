@@ -1,5 +1,4 @@
 import { OrganismConfigs } from '../../typedefs';
-import { Conversion } from '../utils/conversion';
 import { Mutation } from '../utils/mutation';
 import { Organism } from './organism';
 
@@ -33,6 +32,8 @@ export class RandomOrganism extends Organism {
     let newColor = this.fillColor;
     let newVelocity = this.velocity;
     let newSize = this.height;
+    // Reduce energy by half first then divide between parent and child
+    let newEnergy = this.energy / 2 * (1 - this.energySplitParentRatio);
 
     // Do some mutation
     if (Math.random() < mutationRate) {
@@ -62,6 +63,7 @@ export class RandomOrganism extends Organism {
       velocity: newVelocity,
       size: newSize,
       species: this.species,
+      startingEnergy: newEnergy,
     });
   }
 

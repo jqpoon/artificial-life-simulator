@@ -15,6 +15,8 @@ export interface OrganismConfigs {
   alpha?: number;
   species?: number;
   energyLoss?: number;
+  startingEnergy?: number;
+  energySplitParentRatio?: number;
 }
 
 export interface FoodConfigs {
