@@ -12,6 +12,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     alpha: 1,
     startingEnergy: 100,
     energySplitParentRatio: 0.5,
+    generation: 0,
   };
 
   private readonly basalEnergyLossPerUpdate: number;
@@ -19,11 +20,12 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
   private timeCounter: number;
   private gameIsPaused: boolean;
 
+  public generation: number;
   public energy: number;
   public readonly velocity: number;
   protected age: number;
   protected species: number;
-  protected energySplitParentRatio: number;
+  public energySplitParentRatio: number;
 
   protected abstract clone(): any;
   protected abstract onUpdate(time: number, delta: number): void;
@@ -58,6 +60,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     this.isSelected = false;
     this.energy = mergedConfigs.startingEnergy;
     this.energySplitParentRatio = mergedConfigs.energySplitParentRatio;
+    this.generation = mergedConfigs.generation;
     this.name = uuidv4();
 
     // Energy loss is calculated as a function of size and speed based on Kleiber's law

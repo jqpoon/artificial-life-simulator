@@ -17,6 +17,7 @@ export interface OrganismConfigs {
   energyLoss?: number;
   startingEnergy?: number;
   energySplitParentRatio?: number;
+  generation?: number;
 }
 
 export interface FoodConfigs {

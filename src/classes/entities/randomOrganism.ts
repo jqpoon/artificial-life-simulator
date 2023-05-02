@@ -32,6 +32,7 @@ export class RandomOrganism extends Organism {
     let newColor = this.fillColor;
     let newVelocity = this.velocity;
     let newSize = this.height;
+    let newEnergySplitParentRatio = this.energySplitParentRatio;
     // Reduce energy by half first then divide between parent and child
     let newEnergy = this.energy / 2 * (1 - this.energySplitParentRatio);
 
@@ -53,6 +54,12 @@ export class RandomOrganism extends Organism {
         Mutation.inversionMutation(this.height.toString(10), 10),
         10
       );
+
+      // TODO: Clean this up (Multiplied by 10 and divided by 10 here because it's a decimal)
+      newEnergySplitParentRatio = parseInt(
+        Mutation.inversionMutation((this.energySplitParentRatio * 10).toString(10), 10),
+        10
+      ) / 10;
     }
 
     return new RandomOrganism({
@@ -64,6 +71,7 @@ export class RandomOrganism extends Organism {
       size: newSize,
       species: this.species,
       startingEnergy: newEnergy,
+      generation: this.generation + 1,
     });
   }
 
