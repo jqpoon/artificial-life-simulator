@@ -29,10 +29,10 @@ module.exports = {
           from: 'index.html',
           context: 'src/',
         },
-        // {
-        //   from: 'assets/*',
-        //   context: 'src/',
-        // },
+        {
+          from: 'assets/*',
+          context: 'src/',
+        },
       ],
     }),
   ],
