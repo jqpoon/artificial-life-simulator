@@ -128,9 +128,9 @@ export class EnvironmentScene extends Scene {
     this.time.timeScale = timeScale;
 
     if (timeScale == 0) {
-      this.scene.pause();
+      this.physics.world.pause();
     } else {
-      this.scene.resume();
+      this.physics.world.resume();
     }
   }
 

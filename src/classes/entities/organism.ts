@@ -17,6 +17,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
   private readonly basalEnergyLossPerUpdate: number;
   private isSelected: boolean;
   private timeCounter: number;
+  private gameIsPaused: boolean;
 
   public energy: number;
   public readonly velocity: number;
@@ -81,9 +82,19 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
         this.selectOrganism(false);
       }
     });
+
+    //
+    this.scene.game.events.on(EVENTS_NAME.updateTimeScale, (timeScale: number) => {
+      this.gameIsPaused = timeScale === 0;
+    });
   }
 
   public update(time: number, delta: number): void {
+    // Don't update anything if game is paused
+    if (this.gameIsPaused) {
+      return;
+    }
+
     this.age += delta;
 
     // Collide with world boundaries, cast this because static bodies can't call that function...
@@ -121,9 +132,11 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     // Only do these updates once in awhile
     this.timeCounter += delta;
     if (this.timeCounter >= 200) {
+      // Update organism information
       if (this.isSelected) {
         this.scene.game.events.emit(EVENTS_NAME.selectOrganism, this);
       }
+
       this.timeCounter -= 200;
     }
   }
