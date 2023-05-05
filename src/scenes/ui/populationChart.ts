@@ -1,12 +1,13 @@
 import { Chart } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
-import { OrganismConfigs } from '../../typedefs';
+import { ChartData, SpeciesCounts } from '../../typedefs';
 import { UIScene } from './mainUI';
 import { Conversion } from '../../classes/utils/conversion';
 import { ChartComponent } from './chartComponent';
+import { speciesInfo } from './UIConstants';
 
 export default class PopulationChart extends ChartComponent {
-  private chartData: any;
+  private chartData: ChartData;
   private chart: Chart;
 
   constructor(scene: UIScene) {
@@ -55,51 +56,42 @@ export default class PopulationChart extends ChartComponent {
   }
 
   reset(): void {
-    this.chartData = {
-      labels: [],
-      datasets: [],
-    };
-    this.scene.registry.set(REGISTRY_KEYS.chartDataset, []);
+    let counts: SpeciesCounts = {};
+    this.chartData = { datasets: [] };
+    for (var species of Object.values(speciesInfo)) {
+      this.chartData.datasets.push({
+        data: {},
+        fill: false,
+        borderColor: Conversion.numberColorToStringColour(species.color),
+        pointRadius: 0,
+      });
+
+      counts[species.id] = 0;
+    }
+
+    this.scene.registry.set(REGISTRY_KEYS.speciesCounts, counts);
 
     this.chart.chart.data = this.chartData; // Point chart data at correct variable again, since we have reset it earlier
   }
 
-  public newChartData(color: number) {
-    // Add new entry to chartDataset in registry, this is used to
-    // track the number of organisms for that species
-    let chartDataset = this.scene.registry.get(REGISTRY_KEYS.chartDataset);
-    chartDataset.push({ count: 0 });
-
-    this.chartData.datasets.push({
-      data: Array(this.chartData.labels.length).fill(null), // So that graph starts at correct point in time
-      fill: false,
-      borderColor: Conversion.numberColorToStringColour(color),
-      pointRadius: 0,
-    });
-  }
-
   public updateChart_(): void {
-    this.chartData.labels.push(this.scene.registry.get(REGISTRY_KEYS.worldAge));
-    let chartDataset = this.scene.registry.get(REGISTRY_KEYS.chartDataset);
-    for (var [index, data] of chartDataset.entries()) {
-      this.chartData.datasets[index].data.push(data.count);
+    let worldAge = this.scene.registry.get(REGISTRY_KEYS.worldAge);
+    let speciesCounts: SpeciesCounts = this.scene.registry.get(REGISTRY_KEYS.speciesCounts);
+
+    for (var [speciesID, count] of Object.entries(speciesCounts)) {
+      let speciesDataset = this.chartData.datasets[parseInt(speciesID)];
+      speciesDataset.data[worldAge] = count;
     }
+
     this.chart.chart.update('none'); // Update chart without animation
   }
 
   private initListeners(): void {
     this.scene.game.events.on(
-      EVENTS_NAME.createNewSpecies,
-      (configs: OrganismConfigs) => {
-        this.newChartData(configs.color ?? 0);
-      }
-    );
-
-    this.scene.game.events.on(
       EVENTS_NAME.changeCount,
-      (value: number, speciesCount: number) => {
-        let chartDataset = this.scene.registry.get(REGISTRY_KEYS.chartDataset);
-        chartDataset[speciesCount].count += value;
+      (value: number, speciesID: number) => {
+        let speciesCounts: SpeciesCounts = this.scene.registry.get(REGISTRY_KEYS.speciesCounts)
+        speciesCounts[speciesID] += value;
       }
     );
   }

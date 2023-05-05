@@ -3,7 +3,7 @@ export interface SliderConfigs {
   y1: number;
   x2: number;
   y2: number;
-}
+};
 
 export interface OrganismConfigs {
   scene: Phaser.Scene;
@@ -18,11 +18,22 @@ export interface OrganismConfigs {
   startingEnergy?: number;
   energySplitParentRatio?: number;
   generation?: number;
-}
+};
 
 export interface FoodConfigs {
   scene: Phaser.Scene;
   x?: number;
   y?: number;
   color?: number;
+};
+
+type Datapoints = { [key: number]: number }; // x:y values
+type Dataset = { data: Datapoints, fill?: boolean, borderColor?: string, pointRadius?: number }; // Defines a single dataset
+type Datasets = Dataset[];
+export type ChartData = {
+  datasets: Datasets,
+};
+
+export type SpeciesCounts = {
+  [key: number]: number
 }

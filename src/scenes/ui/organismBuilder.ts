@@ -52,6 +52,7 @@ export class OrganismBuilder extends UIComponent {
             'pointerdown',
             () => {
               this.setColour(species.color);
+              this.scene.registry.set(REGISTRY_KEYS.organismSpecies, species.id);
             },
             this
           )

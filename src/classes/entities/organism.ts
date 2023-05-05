@@ -12,6 +12,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     startingEnergy: 100,
     energySplitParentRatio: 0.5,
     generation: 0,
+    species: -1,
   };
 
   private readonly basalEnergyLossPerUpdate: number;
@@ -61,14 +62,14 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     this.energySplitParentRatio = mergedConfigs.energySplitParentRatio;
     this.generation = mergedConfigs.generation;
     this.name = Phaser.Math.RND.uuid();
+    this.species = mergedConfigs.species;
 
     // Energy loss is calculated as a function of size and speed based on Kleiber's law
     // Can be manually overridden if provided
     this.basalEnergyLossPerUpdate =
       mergedConfigs.energyLoss ?? 0.001 * Math.pow(mergedConfigs.size, 0.75);
 
-    this.species = mergedConfigs.species ?? -1;
-    // name = species index aka species count
+    // Used to update statistics about this species
     this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
 
     // Logic for selecting an organism to view more information
@@ -85,7 +86,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
       }
     });
 
-    //
+    // Stop any updates to this organism
     this.scene.game.events.on(EVENTS_NAME.updateTimeScale, (timeScale: number) => {
       this.gameIsPaused = timeScale === 0;
     });

@@ -11,8 +11,8 @@ export enum REGISTRY_KEYS {
   organismColour = 'organism-colour',
   organismSpeed = 'organism-speed',
   organismSize = 'organism-size',
-  organismEnergyLoss = 'organism-energy-loss', // Normally calculated, can be manually overridden
+  organismSpecies = 'organism-species',
   worldAge = 'world-age',
-  chartDataset = 'chart-dataset',
+  speciesCounts = 'species-counts',
   trendsDataset = 'trends-dataset',
 }

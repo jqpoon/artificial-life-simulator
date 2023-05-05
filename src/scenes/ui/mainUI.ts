@@ -62,6 +62,7 @@ export class UIScene extends Scene {
     this.organismViewer.reset();
 
     this.registry.set(REGISTRY_KEYS.worldAge, 0);
+    this.registry.set(REGISTRY_KEYS.organismSpecies, 0);
     this.registry.set(REGISTRY_KEYS.organismColour, 0xe8000b);
     this.registry.set(REGISTRY_KEYS.organismSize, 50);
     this.registry.set(REGISTRY_KEYS.organismSpeed, 50);

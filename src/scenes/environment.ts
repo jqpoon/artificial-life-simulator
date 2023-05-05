@@ -94,30 +94,20 @@ export class EnvironmentScene extends Scene {
     visualBorder
       .setInteractive()
       .on('pointerdown', (_: any, localX: number, localY: number) => {
-        this.createNewSpecies({
+        this.addToSpecies({
           scene: this,
           velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
           size: this.registry.get(REGISTRY_KEYS.organismSize),
           x: localX + EnvironmentScene.worldX,
           y: localY + EnvironmentScene.worldY,
           color: this.registry.get(REGISTRY_KEYS.organismColour),
+          species: this.registry.get(REGISTRY_KEYS.organismSpecies),
         });
       });
   }
 
-  private createNewSpecies(configs: OrganismConfigs): void {
-    let speciesCount = this.registry.get(REGISTRY_KEYS.chartDataset).length;
-    this.game.events.emit(EVENTS_NAME.createNewSpecies, configs);
-
-    let newOrganism = new RandomOrganism({
-      scene: this,
-      x: configs.x,
-      y: configs.y,
-      color: configs.color,
-      size: configs.size,
-      velocity: configs.velocity,
-      species: speciesCount,
-    });
+  private addToSpecies(configs: OrganismConfigs): void {
+    let newOrganism = new RandomOrganism(configs);
 
     this.addOrganismToGroup(newOrganism);
   }
@@ -149,7 +139,7 @@ export class EnvironmentScene extends Scene {
 
   public loadScenario1(): void {
     this.registry.set(REGISTRY_KEYS.organismColour, 0x8b2be2);
-    this.createNewSpecies({
+    this.addToSpecies({
       scene: this,
       velocity: 80,
       size: 30,
@@ -160,7 +150,7 @@ export class EnvironmentScene extends Scene {
     });
 
     this.registry.set(REGISTRY_KEYS.organismColour, 0xffc400);
-    this.createNewSpecies({
+    this.addToSpecies({
       scene: this,
       velocity: 35,
       size: 80,
@@ -173,7 +163,7 @@ export class EnvironmentScene extends Scene {
 
   public loadScenario2(): void {
     this.registry.set(REGISTRY_KEYS.organismColour, 0x8b2be2);
-    this.createNewSpecies({
+    this.addToSpecies({
       scene: this,
       velocity: 50,
       size: 20,
