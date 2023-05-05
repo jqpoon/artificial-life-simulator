@@ -147,6 +147,7 @@ export class EnvironmentScene extends Scene {
       y: 100,
       color: 0x8b2be2,
       energyLoss: 0.5,
+      species: 6,
     });
 
     this.registry.set(REGISTRY_KEYS.organismColour, 0xffc400);
@@ -158,6 +159,7 @@ export class EnvironmentScene extends Scene {
       y: 10,
       color: 0xffc400,
       energyLoss: 0.1,
+      species: 2,
     });
   }
 
@@ -170,6 +172,7 @@ export class EnvironmentScene extends Scene {
       x: 0,
       y: 400,
       color: 0x8b2be2,
+      species: 0,
     });
   }
 }
