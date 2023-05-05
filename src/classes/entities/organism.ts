@@ -1,6 +1,5 @@
 import { EVENTS_NAME } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
-import {v4 as uuidv4} from 'uuid';
 
 export abstract class Organism extends Phaser.GameObjects.Ellipse {
   private static readonly ORGANISM_DEFAULTS = {
@@ -61,7 +60,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     this.energy = mergedConfigs.startingEnergy;
     this.energySplitParentRatio = mergedConfigs.energySplitParentRatio;
     this.generation = mergedConfigs.generation;
-    this.name = uuidv4();
+    this.name = Phaser.Math.RND.uuid();
 
     // Energy loss is calculated as a function of size and speed based on Kleiber's law
     // Can be manually overridden if provided

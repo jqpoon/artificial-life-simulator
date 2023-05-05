@@ -21,8 +21,7 @@
   "homepage": "https://github.com/jqpoon/artificial-life-simulator#readme",
   "dependencies": {
     "phaser": "^3.55.2",
-    "phaser3-rex-plugins": "^1.1.81",
-    "uuid": "^9.0.0"
+    "phaser3-rex-plugins": "^1.1.81"
   },
   "devDependencies": {
     "@types/uuid": "^9.0.1",

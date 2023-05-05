@@ -86,8 +86,8 @@ export class RandomOrganism extends Organism {
     body.setVelocity(0, 0);
 
     // Random speed from -1 to 1 inclusive
-    let randomX = Math.round(Math.random() * 3 - 1.5);
-    let randomY = Math.round(Math.random() * 3 - 1.5);
+    let randomX = Phaser.Math.RND.realInRange(-1, 1);
+    let randomY = Phaser.Math.RND.realInRange(-1, 1);
 
     body.setVelocity(this.velocity * randomX, this.velocity * randomY);
   }
