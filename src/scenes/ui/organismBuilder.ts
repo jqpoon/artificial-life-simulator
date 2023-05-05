@@ -2,7 +2,7 @@ import { RoundRectangle, Slider } from 'phaser3-rex-plugins/templates/ui/ui-comp
 import { UIComponent } from './UIComponent';
 import { UIScene } from './mainUI';
 import { GameObjects } from 'phaser';
-import { smallerText, textDefaults } from './UIConstants';
+import { smallerText, speciesInfo, textDefaults } from './UIConstants';
 import { REGISTRY_KEYS } from '../../consts';
 
 export class OrganismBuilder extends UIComponent {
@@ -19,7 +19,6 @@ export class OrganismBuilder extends UIComponent {
       space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
     });
 
-    // Organism builder
     let background: RoundRectangle = new RoundRectangle(scene, {
       width: 1,
       height: 1,
@@ -33,115 +32,39 @@ export class OrganismBuilder extends UIComponent {
     let speedText: GameObjects.Text = scene.add.text(0, 0, '50', smallerText);
     this.builderPreview = scene.add.circle(0, 0, 12, 0xe8000b);
 
+    // Color picker
+    let topColorPicker = scene.rexUI.add.sizer({ space: { item: 10 } });
+    let bottomColorPicker = scene.rexUI.add.sizer({ space: { item: 10 } });
+
+    Object.values(speciesInfo).forEach((species) => {
+      let colorPicker;
+      if (species.id <= 3) {
+        colorPicker = topColorPicker;
+      } else {
+        colorPicker = bottomColorPicker;
+      }
+
+      colorPicker.add(
+        scene.rexUI.add
+          .roundRectangle(0, 0, 30, 30, 3, species.color)
+          .setInteractive()
+          .on(
+            'pointerdown',
+            () => {
+              this.setColour(species.color);
+            },
+            this
+          )
+      );
+    });
+
     let colorPicker = scene.rexUI.add
       .sizer({
         orientation: 'y',
         space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
       })
-      .add(
-        scene.rexUI.add
-          .sizer({ space: { item: 10 } })
-          .add(
-            scene.rexUI.add
-              .roundRectangle(0, 0, 30, 30, 3, 0xe8000b)
-              .setInteractive()
-              .on(
-                'pointerdown',
-                () => {
-                  this.setColour(0xe8000b);
-                },
-                this
-              )
-          )
-          .add(
-            scene.rexUI.add
-              .roundRectangle(0, 0, 30, 30, 3, 0xff7c00)
-              .setInteractive()
-              .on(
-                'pointerdown',
-                () => {
-                  this.setColour(0xff7c00);
-                },
-                this
-              )
-          )
-          .add(
-            scene.rexUI.add
-              .roundRectangle(0, 0, 30, 30, 3, 0xffc400)
-              .setInteractive()
-              .on(
-                'pointerdown',
-                () => {
-                  this.setColour(0xffc400);
-                },
-                this
-              )
-          )
-          .add(
-            scene.rexUI.add
-              .roundRectangle(0, 0, 30, 30, 3, 0x1ac938)
-              .setInteractive()
-              .on(
-                'pointerdown',
-                () => {
-                  this.setColour(0x1ac938);
-                },
-                this
-              )
-          )
-      )
-      .add(
-        scene.rexUI.add
-          .sizer({ space: { item: 10 } })
-          .add(
-            scene.rexUI.add
-              .roundRectangle(0, 0, 30, 30, 3, 0x00d7ff)
-              .setInteractive()
-              .on(
-                'pointerdown',
-                () => {
-                  this.setColour(0x00d7ff);
-                },
-                this
-              )
-          )
-          .add(
-            scene.rexUI.add
-              .roundRectangle(0, 0, 30, 30, 3, 0x023eff)
-              .setInteractive()
-              .on(
-                'pointerdown',
-                () => {
-                  this.setColour(0x023eff);
-                },
-                this
-              )
-          )
-          .add(
-            scene.rexUI.add
-              .roundRectangle(0, 0, 30, 30, 3, 0x8b2be2)
-              .setInteractive()
-              .on(
-                'pointerdown',
-                () => {
-                  this.setColour(0x8b2be2);
-                },
-                this
-              )
-          )
-          .add(
-            scene.rexUI.add
-              .roundRectangle(0, 0, 30, 30, 3, 0xf14cc1)
-              .setInteractive()
-              .on(
-                'pointerdown',
-                () => {
-                  this.setColour(0xf14cc1);
-                },
-                this
-              )
-          )
-      )
+      .add(topColorPicker)
+      .add(bottomColorPicker)
       .layout();
 
     // Size of organism
