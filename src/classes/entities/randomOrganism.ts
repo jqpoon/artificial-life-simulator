@@ -8,23 +8,19 @@ export class RandomOrganism extends Organism {
     velocity: 100,
   };
   private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 1000;
-
-  private timedEvent: Phaser.Time.TimerEvent;
+  private changeDirectionCounter: number = 0;
 
   constructor(configs: OrganismConfigs) {
     super({ ...RandomOrganism.RANDOM_ORGANISM_DEFAULTS, ...configs });
-
-    this.scene.physics.add.existing(this, false);
-
-    this.timedEvent = configs.scene.time.addEvent({
-      delay: this.CHANGE_DIRECTION_DELAY_MILLISECONDS,
-      callback: this.changeDirection,
-      callbackScope: this,
-      loop: true,
-    });
   }
 
-  protected onUpdate(time: number, delta: number): void {}
+  protected onUpdate(time: number, delta: number): void {
+    this.changeDirectionCounter += delta;
+    if (this.changeDirectionCounter >= this.CHANGE_DIRECTION_DELAY_MILLISECONDS) {
+      this.changeDirection();
+      this.changeDirectionCounter -= 200;
+    }
+  }
 
   protected clone(): any {
     let mutationRate = 0.5;
@@ -75,9 +71,7 @@ export class RandomOrganism extends Organism {
     });
   }
 
-  public onDestroy() {
-    this.timedEvent.remove(false);
-  }
+  protected onDestroy() {}
 
   private changeDirection(): void {
     // Casting required here because of types not properly defined in Phaser

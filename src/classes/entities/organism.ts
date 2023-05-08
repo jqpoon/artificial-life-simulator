@@ -72,24 +72,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     // Used to update statistics about this species
     this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
 
-    // Logic for selecting an organism to view more information
-    this.setInteractive();
-    this.on('pointerdown', () => {
-      this.scene.game.events.emit(EVENTS_NAME.selectOrganism, this);
-
-      this.selectOrganism(true);
-    });
-
-    this.scene.game.events.on(EVENTS_NAME.selectOrganism, (organism: Organism) => {
-      if (organism.name !== this.name) {
-        this.selectOrganism(false);
-      }
-    });
-
-    // Stop any updates to this organism
-    this.scene.game.events.on(EVENTS_NAME.updateTimeScale, (timeScale: number) => {
-      this.gameIsPaused = timeScale === 0;
-    });
+    this.initListeners();
   }
 
   public update(time: number, delta: number): void {
@@ -104,9 +87,8 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     let body = this.body as Phaser.Physics.Arcade.Body;
     body.setCollideWorldBounds(true);
 
+    // Update the transparency of an organism to reflect its energy
     this.setAlpha(Math.max(Math.round(this.energy / 20) / 5, 0.1)); // Round to nearest 0.05
-
-    this.onUpdate(time, delta);
 
     // Basal energy loss and energy loss due to organism moving
     let velocity = body.velocity as Phaser.Math.Vector2; // Cast here due to weird typing issue
@@ -129,7 +111,7 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
     if (this.energy > this.height * 5) {
       let child = this.clone();
       this.scene.game.events.emit(EVENTS_NAME.reproduceOrganism, child);
-      this.energy = this.energy / 2 * this.energySplitParentRatio;
+      this.energy = (this.energy / 2) * this.energySplitParentRatio;
     }
 
     // Only do these updates once in awhile
@@ -142,12 +124,44 @@ export abstract class Organism extends Phaser.GameObjects.Ellipse {
 
       this.timeCounter -= 200;
     }
+
+    // Child update function
+    this.onUpdate(time, delta);
   }
 
   public addEnergy(amount: number): void {
     this.energy += amount;
   }
 
+  /* Initialises listener functions for this organism, like the on-select behaviour */
+  private initListeners() {
+    // Logic for selecting an organism to view more information
+    this.setInteractive();
+    this.on('pointerdown', () => {
+      this.scene.game.events.emit(EVENTS_NAME.selectOrganism, this);
+      this.selectOrganism(true);
+    });
+
+    // Deselect this organism if another one has been selected
+    this.scene.game.events.on(
+      EVENTS_NAME.selectOrganism,
+      (organism: Organism) => {
+        if (organism.name !== this.name) {
+          this.selectOrganism(false);
+        }
+      }
+    );
+
+    // Stop any updates to this organism
+    this.scene.game.events.on(
+      EVENTS_NAME.updateTimeScale,
+      (timeScale: number) => {
+        this.gameIsPaused = timeScale === 0;
+      }
+    );
+  }
+
+  /* Updates the visual style of the organism when it is selected */
   private selectOrganism(isSelected: boolean) {
     this.isSelected = isSelected;
     if (isSelected) {
