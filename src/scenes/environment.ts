@@ -1,10 +1,12 @@
 import { Scene } from 'phaser';
 
 import { Food } from '../classes/entities/food';
-import { Organism } from '../classes/entities/organism';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 import { OrganismConfigs } from '../typedefs';
+import { VisionOrganism } from '../classes/entities/visionOrganism';
+import { ControllableOrganism } from '../classes/entities/controllableOrganism';
+import { Organism } from '../classes/entities/organism';
 
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
@@ -107,7 +109,7 @@ export class EnvironmentScene extends Scene {
   }
 
   private addToSpecies(configs: OrganismConfigs): void {
-    let newOrganism = new RandomOrganism(configs);
+    let newOrganism = new ControllableOrganism(configs);
 
     this.addOrganismToGroup(newOrganism);
   }
@@ -125,12 +127,12 @@ export class EnvironmentScene extends Scene {
   }
 
   private generateNewFood(): void {
-    var food = new Food({
-      scene: this,
-      x: Math.random() * EnvironmentScene.worldWidth + EnvironmentScene.worldX,
-      y: Math.random() * EnvironmentScene.worldHeight + EnvironmentScene.worldY,
-    });
-    food.addPredator(this.organisms);
+    // var food = new Food({
+    //   scene: this,
+    //   x: Math.random() * EnvironmentScene.worldWidth + EnvironmentScene.worldX,
+    //   y: Math.random() * EnvironmentScene.worldHeight + EnvironmentScene.worldY,
+    // });
+    // food.addPredator(this.organisms);
   }
 
   private addOrganismToGroup(organism: Organism): void {

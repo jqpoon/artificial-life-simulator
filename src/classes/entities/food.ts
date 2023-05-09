@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { EVENTS_NAME } from '../../consts';
 import { FoodConfigs } from '../../typedefs';
 import { Organism } from './organism';

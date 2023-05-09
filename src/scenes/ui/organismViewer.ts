@@ -69,7 +69,7 @@ export class OrganismViewer extends UIComponent {
 
     // Update text based on event
     scene.game.events.on(EVENTS_NAME.selectOrganism, (organism: Organism) => {
-      this.updateInformation(organism.generation, organism.velocity, organism.width, organism.energy, organism.energySplitParentRatio);
+      // this.updateInformation(organism.generation, organism.velocity, organism.width, organism.energy, organism.energySplitParentRatio);
     });
   }
 

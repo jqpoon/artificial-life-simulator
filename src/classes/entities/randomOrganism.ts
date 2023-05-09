@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { OrganismConfigs } from '../../typedefs';
 import { Mutation } from '../utils/mutation';
 import { Organism } from './organism';
