@@ -1,40 +1,53 @@
-import { OrganismConfigs } from '../../typedefs';
+import { EVENTS_NAME } from '../../consts';
+import { OrganismConfigs, OrganismInformation } from '../../typedefs';
+import { OrganismMath } from '../utils/organismMath';
 
 export abstract class Organism extends Phaser.GameObjects.Container {
   /**
    * A basic living thing in the simulator.
    */
 
+  /* Physical limits of some attributes */
+  private static readonly MIN_VELOCITY = 1;
+  private static readonly MAX_VELOCITY = 100;
+  private static readonly MIN_SIZE = 1;
+  private static readonly MAX_SIZE = 100;
+
   /* Defaults attribute values */
   private static readonly ORGANISM_DEFAULTS = {
-    velocity: 20,
+    alpha: 1,
+    color: 0xff0000,
+    generation: 0,
     size: 25,
+    species: -1,
+    startingEnergy: 100,
+    velocity: 20,
+    visionDistance: 50,
     x: 300,
     y: 300,
-    color: 0xff0000,
-    alpha: 1,
-    startingEnergy: 100,
-    energySplitParentRatio: 0.5,
-    generation: 0,
-    species: -1,
   };
 
   /* Physical attributes of an organism */
-  private basalEnergyLossPerUpdate: number;
-  private energy: number;
-  private energySplitParentRatio: number;
-  private generation: number;
-  private size: number;
-  private species: number;
+  protected basalEnergyLossPerUpdate: number;
+  protected color: number;
+  protected energy: number;
+  protected size: number;
+  protected species: number;
   protected velocity: number;
+  protected visionDistance: number;
+
+  /* Generic information of an organism */
+  protected generation: number;
 
   /* Meta-information about an organism */
+  private ID: string;
   private isSelected: boolean;
   private gameIsPaused: boolean;
   private timeCounter: number;
 
   /* Parts of this organism */
   private mainBody: Phaser.GameObjects.Ellipse;
+  private vision: Phaser.GameObjects.Ellipse;
 
   /* Abstract methods for different organism types to implement */
   protected abstract clone(): any;
@@ -46,26 +59,94 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     super(mergedConfigs.scene, mergedConfigs.x, mergedConfigs.y);
 
     /* Set physical attributes of organism */
-    this.size = mergedConfigs.size;
-    this.velocity = mergedConfigs.velocity;
+    this.color = mergedConfigs.color;
+    this.energy = mergedConfigs.startingEnergy;
+    this.size = OrganismMath.clamp(
+      mergedConfigs.size,
+      Organism.MIN_SIZE,
+      Organism.MAX_SIZE
+    );
+    this.velocity = OrganismMath.clamp(
+      mergedConfigs.velocity,
+      Organism.MIN_VELOCITY,
+      Organism.MAX_VELOCITY
+    );
+    this.visionDistance = mergedConfigs.visionDistance;
+    this.basalEnergyLossPerUpdate =
+      mergedConfigs.energyLoss ??
+      OrganismMath.calculateBasalEnergyLoss(this.size);
+
+    /* Set generic information of organism */
+    this.generation = mergedConfigs.generation;
+
+    /* Set meta-information of organism */
+    this.ID = Phaser.Math.RND.uuid();
+    this.isSelected = false;
+    this.gameIsPaused = false;
+    this.timeCounter = 0;
 
     /* Build visible body */
     this.scene.add.existing(this);
     this.mainBody = this.scene.add.ellipse(
-      this.size / 2,
-      this.size / 2,
+      this.size / 2, // Centers ellipse with container
+      this.size / 2, // Centers ellipse with container
       this.size,
       this.size,
-      0xff0000
+      this.color
     );
-    this.add(this.mainBody);
+    this.vision = this.scene.add.ellipse(
+      this.size / 2,
+      this.size / 2,
+      this.size + this.visionDistance,
+      this.size + this.visionDistance,
+      this.color,
+      0.5
+    );
+    this.add(this.mainBody).add(this.vision);
 
     /* Build physics body */
     this.scene.physics.add.existing(this);
     (this.body as Phaser.Physics.Arcade.Body).setCircle(this.size / 2); // Divide by two since size is defined in terms of diameter
+
+    /* Enable clicks to view more information */
+    this.setInteractive(new Phaser.Geom.Circle(this.size / 2, this.size / 2, this.size / 2), Phaser.Geom.Circle.Contains);
+    this.on('pointerdown', () => {
+      this.scene.game.events.emit(EVENTS_NAME.selectOrganism, {
+        ID: this.ID,
+        generation: this.generation,
+        velocity: this.velocity,
+        size: this.size,
+        energy: this.energy,
+      });
+      this.selectOrganism(true);
+    });
+
+    // Deselect this organism if another one has been selected
+    this.scene.game.events.on(EVENTS_NAME.selectOrganism, (info: OrganismInformation) => {
+      if (info.ID !== this.ID) {
+        this.selectOrganism(false);
+      }
+    });
+
+    /* Signal that this organism is done initialising */
+    // this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
   }
 
   public update(time: number, delta: number): void {
     this.onUpdate(time, delta); // Run update function in subclass
+  }
+
+  /**
+   * Updates visual style of the organism when it is selected
+   * @param isSelected - Whether this organism has been selected
+   */
+  private selectOrganism(isSelected: boolean) {
+    this.isSelected = isSelected;
+    if (isSelected) {
+      this.mainBody.strokeColor = 0x8f8f9c;
+      this.mainBody.setStrokeStyle(3); // Sets a border
+    } else {
+      this.mainBody.setStrokeStyle();
+    }
   }
 }

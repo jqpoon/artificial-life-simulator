@@ -9,7 +9,6 @@ export class ControllableOrganism extends Organism {
   };
 
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
-  private vision: any;
   private container: any;
 
   constructor(configs: OrganismConfigs) {

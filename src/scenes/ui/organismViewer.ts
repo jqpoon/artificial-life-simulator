@@ -6,13 +6,13 @@ import { GameObjects } from 'phaser';
 import { smallerText, textDefaults } from './UIConstants';
 import { EVENTS_NAME } from '../../consts';
 import { Organism } from '../../classes/entities/organism';
+import { OrganismInformation } from '../../typedefs';
 
 export class OrganismViewer extends UIComponent {
   private generationText: GameObjects.Text;
   private speedText: GameObjects.Text;
   private sizeText: GameObjects.Text;
   private energyText: GameObjects.Text;
-  private energySplitText: GameObjects.Text;
   private infoText: GameObjects.Text;
 
   constructor(scene: UIScene) {
@@ -37,7 +37,6 @@ export class OrganismViewer extends UIComponent {
     this.speedText = scene.add.text(0, 0, '0.0', smallerText);
     this.sizeText = scene.add.text(0, 0, '0.0', smallerText);
     this.energyText = scene.add.text(0, 0, '0.0', smallerText);
-    this.energySplitText = scene.add.text(0, 0, '0.0', smallerText);
     this.infoText = scene.add.text(0, 0, 'Click on an organism!', smallerText);
 
     this.add(scene.add.text(0, 0, 'Organism Information', textDefaults))
@@ -51,7 +50,6 @@ export class OrganismViewer extends UIComponent {
               .add(scene.add.text(0, 0, 'Speed: ', smallerText))
               .add(scene.add.text(0, 0, 'Size: ', smallerText))
               .add(scene.add.text(0, 0, 'Energy: ', smallerText))
-              .add(scene.add.text(0, 0, 'Energy split ratio: ', smallerText))
           )
           .add(
             scene.rexUI.add
@@ -60,7 +58,6 @@ export class OrganismViewer extends UIComponent {
               .add(this.speedText)
               .add(this.sizeText)
               .add(this.energyText)
-              .add(this.energySplitText)
           )
       )
       .add(this.infoText);
@@ -68,8 +65,8 @@ export class OrganismViewer extends UIComponent {
     this.addBackground(background).layout();
 
     // Update text based on event
-    scene.game.events.on(EVENTS_NAME.selectOrganism, (organism: Organism) => {
-      // this.updateInformation(organism.generation, organism.velocity, organism.width, organism.energy, organism.energySplitParentRatio);
+    scene.game.events.on(EVENTS_NAME.selectOrganism, (info: OrganismInformation) => {
+      this.updateInformation(info.generation, info.velocity, info.size, info.energy);
     });
   }
 
@@ -80,7 +77,7 @@ export class OrganismViewer extends UIComponent {
     this.infoText.setText('Click on an organism!');
   }
 
-  private updateInformation(generation: number, speed: number, size: number, energy: number, energySplitRatio: number): void {
+  private updateInformation(generation: number, speed: number, size: number, energy: number): void {
     this.generationText.setText(
       generation.toLocaleString('en-us', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
     );
@@ -92,9 +89,6 @@ export class OrganismViewer extends UIComponent {
     );
     this.energyText.setText(
       energy.toLocaleString('en-us', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-    );
-    this.energySplitText.setText(
-      energySplitRatio.toLocaleString('en-us', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
     );
 
     if (energy <= 0) {

@@ -20,6 +20,14 @@ export interface OrganismConfigs {
   generation?: number;
 };
 
+export interface OrganismInformation {
+  ID: string,
+  generation: number,
+  velocity: number,
+  size: number,
+  energy: number,
+};
+
 export interface FoodConfigs {
   scene: Phaser.Scene;
   x?: number;
