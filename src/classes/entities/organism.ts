@@ -98,7 +98,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       this.size + this.visionDistance,
       this.size + this.visionDistance,
       this.color,
-      0.5
+      0.2
     );
     this.add(this.mainBody).add(this.vision);
 
@@ -119,17 +119,19 @@ export abstract class Organism extends Phaser.GameObjects.Container {
         size: this.size,
         energy: this.energy,
       });
-      this.selectOrganism(true);
+      this.toggleOrganismSelected(true);
     });
     // Deselect this organism if another one has been selected
     this.scene.game.events.on(
       EVENTS_NAME.selectOrganism,
       (info: OrganismInformation) => {
         if (info.ID !== this.ID) {
-          this.selectOrganism(false);
+          this.toggleOrganismSelected(false);
         }
       }
     );
+    // Set as unselected by default
+    this.toggleOrganismSelected(false);
 
     /* Signal that this organism is done initialising */
     // this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
@@ -187,13 +189,26 @@ export abstract class Organism extends Phaser.GameObjects.Container {
    * Updates visual style of the organism when it is selected
    * @param isSelected - Whether this organism has been selected
    */
-  private selectOrganism(isSelected: boolean): void {
+  private toggleOrganismSelected(isSelected: boolean): void {
     this.isSelected = isSelected;
     if (isSelected) {
       this.mainBody.strokeColor = 0x8f8f9c;
       this.mainBody.setStrokeStyle(3); // Sets a border
+      this.toggleOrganismVision(true);
     } else {
-      this.mainBody.setStrokeStyle();
+      this.mainBody.setStrokeStyle(0);
+      this.toggleOrganismVision(false);
+    }
+  }
+
+  /**
+   * Updates whether an organism's vision can be 'seen'
+   */
+  private toggleOrganismVision(isVisible: boolean): void {
+    if (isVisible) {
+      this.vision.setAlpha(1);
+    } else {
+      this.vision.setAlpha(0);
     }
   }
 

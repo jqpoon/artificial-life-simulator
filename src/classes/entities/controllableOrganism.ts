@@ -77,6 +77,9 @@ export class ControllableOrganism extends Organism {
       scene: this.scene,
       x: this.x,
       y: this.y,
+      size: this.size,
+      color: this.color,
+      species: this.species,
       startingEnergy: this.energy / 4,
     });
   }
