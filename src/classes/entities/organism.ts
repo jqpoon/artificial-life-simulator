@@ -1,4 +1,4 @@
-import { EVENTS_NAME } from '../../consts';
+import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
 import { OrganismConfigs, OrganismInformation } from '../../typedefs';
 import { OrganismMath } from '../utils/organismMath';
 
@@ -42,7 +42,6 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   /* Meta-information about an organism */
   private ID: string;
   private isSelected: boolean;
-  private gameIsPaused: boolean;
   private timeCounter: number;
 
   /* Parts of this organism */
@@ -82,7 +81,6 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     /* Set meta-information of organism */
     this.ID = Phaser.Math.RND.uuid();
     this.isSelected = false;
-    this.gameIsPaused = false;
     this.timeCounter = 0;
 
     /* Build visible body */
@@ -109,7 +107,10 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     (this.body as Phaser.Physics.Arcade.Body).setCircle(this.size / 2); // Divide by two since size is defined in terms of diameter
 
     /* Enable clicks to view more information */
-    this.setInteractive(new Phaser.Geom.Circle(this.size / 2, this.size / 2, this.size / 2), Phaser.Geom.Circle.Contains);
+    this.setInteractive(
+      new Phaser.Geom.Circle(this.size / 2, this.size / 2, this.size / 2),
+      Phaser.Geom.Circle.Contains
+    );
     this.on('pointerdown', () => {
       this.scene.game.events.emit(EVENTS_NAME.selectOrganism, {
         ID: this.ID,
@@ -120,33 +121,98 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       });
       this.selectOrganism(true);
     });
-
     // Deselect this organism if another one has been selected
-    this.scene.game.events.on(EVENTS_NAME.selectOrganism, (info: OrganismInformation) => {
-      if (info.ID !== this.ID) {
-        this.selectOrganism(false);
+    this.scene.game.events.on(
+      EVENTS_NAME.selectOrganism,
+      (info: OrganismInformation) => {
+        if (info.ID !== this.ID) {
+          this.selectOrganism(false);
+        }
       }
-    });
+    );
 
     /* Signal that this organism is done initialising */
     // this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
   }
 
   public update(time: number, delta: number): void {
-    this.onUpdate(time, delta); // Run update function in subclass
+    /* Scale update frequency depending on timescale. Larger timescale = more frequent update */
+    this.timeCounter += delta;
+    if (
+      this.timeCounter <=
+      200 / this.scene.registry.get(REGISTRY_KEYS.timeScale)
+    )
+      return;
+    this.timeCounter = 0;
+
+    /* Run update function in subclass */
+    this.onUpdate(time, delta);
+
+    /* Apply physics effects */
+    let body = this.body as Phaser.Physics.Arcade.Body;
+    body.setCollideWorldBounds(true);
+
+    /* Apply energy loss to organism */
+    let totalEnergyLoss =
+      this.basalEnergyLossPerUpdate + body.velocity.length() * 0.001;
+    this.addEnergy(-totalEnergyLoss);
+
+    /* Send information about this organism if it is selected */
+    if (this.isSelected) {
+      this.scene.game.events.emit(EVENTS_NAME.selectOrganism, {
+        ID: this.ID,
+        generation: this.generation,
+        velocity: this.velocity,
+        size: this.size,
+        energy: this.energy,
+      });
+    }
+
+    /* Calculate energy effects (either clone or death). This has to be the
+     * last call in this function, since it could delete the whole organism.
+     */
+    this.calculateEnergyEffects();
+  }
+
+  /**
+   * Adds/removes energy to this organism
+   *
+   * @param amount - Amount of energy to add, can be negative
+   */
+  public addEnergy(amount: number): void {
+    this.energy += amount;
   }
 
   /**
    * Updates visual style of the organism when it is selected
    * @param isSelected - Whether this organism has been selected
    */
-  private selectOrganism(isSelected: boolean) {
+  private selectOrganism(isSelected: boolean): void {
     this.isSelected = isSelected;
     if (isSelected) {
       this.mainBody.strokeColor = 0x8f8f9c;
       this.mainBody.setStrokeStyle(3); // Sets a border
     } else {
       this.mainBody.setStrokeStyle();
+    }
+  }
+
+  /**
+   * Logic for deciding what to do depending on energy levels
+   */
+  private calculateEnergyEffects(): void {
+    /* Death */
+    if (this.energy <= 0) {
+      this.onDestroy();
+      this.scene.game.events.emit(EVENTS_NAME.changeCount, -1, this.species);
+      this.destroy();
+    }
+
+    /* Birth. Larger sizes need more energy to reproduce */
+    if (this.energy > this.size * 5) {
+      let child = this.clone();
+      this.scene.game.events.emit(EVENTS_NAME.reproduceOrganism, child);
+      this.energy = this.energy / 2;
     }
   }
 }

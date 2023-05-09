@@ -12,7 +12,8 @@ export enum REGISTRY_KEYS {
   organismSpeed = 'organism-speed',
   organismSize = 'organism-size',
   organismSpecies = 'organism-species',
-  worldAge = 'world-age',
   speciesCounts = 'species-counts',
+  timeScale = 'timescale',
   trendsDataset = 'trends-dataset',
+  worldAge = 'world-age',
 }

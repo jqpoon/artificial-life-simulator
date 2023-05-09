@@ -58,7 +58,6 @@ export class ControllableOrganism extends Organism {
   protected onUpdate(time: number, delta: number): void {
     let body = this.body as Phaser.Physics.Arcade.Body;
     body.setVelocity(0, 0);
-    body.setCollideWorldBounds(true);
 
     if (this.cursors.left.isDown) {
       body.setVelocityX(-this.velocity);
@@ -78,6 +77,7 @@ export class ControllableOrganism extends Organism {
       scene: this.scene,
       x: this.x,
       y: this.y,
+      startingEnergy: this.energy / 4,
     });
   }
 }

@@ -118,6 +118,7 @@ export class EnvironmentScene extends Scene {
     this.tweens.timeScale = timeScale;
     this.physics.world.timeScale = 1 / timeScale;
     this.time.timeScale = timeScale;
+    this.registry.set(REGISTRY_KEYS.timeScale, timeScale);
 
     if (timeScale == 0) {
       this.physics.world.pause();
@@ -127,12 +128,12 @@ export class EnvironmentScene extends Scene {
   }
 
   private generateNewFood(): void {
-    // var food = new Food({
-    //   scene: this,
-    //   x: Math.random() * EnvironmentScene.worldWidth + EnvironmentScene.worldX,
-    //   y: Math.random() * EnvironmentScene.worldHeight + EnvironmentScene.worldY,
-    // });
-    // food.addPredator(this.organisms);
+    var food = new Food({
+      scene: this,
+      x: Math.random() * EnvironmentScene.worldWidth + EnvironmentScene.worldX,
+      y: Math.random() * EnvironmentScene.worldHeight + EnvironmentScene.worldY,
+    });
+    food.addPredator(this.organisms);
   }
 
   private addOrganismToGroup(organism: Organism): void {
