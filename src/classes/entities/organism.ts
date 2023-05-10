@@ -61,12 +61,12 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     /* Set physical attributes of organism */
     this.color = mergedConfigs.color;
     this.energy = mergedConfigs.startingEnergy;
-    this.size = OrganismUtils.clamp(
+    this.size = Phaser.Math.Clamp(
       mergedConfigs.size,
       Organism.MIN_SIZE,
       Organism.MAX_SIZE
     );
-    this.velocity = OrganismUtils.clamp(
+    this.velocity = Phaser.Math.Clamp(
       mergedConfigs.velocity,
       Organism.MIN_VELOCITY,
       Organism.MAX_VELOCITY
