@@ -1,30 +1,22 @@
-import { OrganismConfigs } from '../../typedefs';
-import { OrganismUtils } from '../utils/organismUtils';
-import { Food } from './food';
 import { Organism } from './organism';
+import { OrganismConfigs } from '../../typedefs';
 
 export class RandomOrganism extends Organism {
-  private static readonly RANDOM_ORGANISM_DEFAULTS = {
-    size: 25,
-    velocity: 100,
-  };
+  /**
+   * Moves around randomly only
+   */
   private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 400;
   private changeDirectionCounter: number = 0;
 
   constructor(configs: OrganismConfigs) {
-    super({ ...RandomOrganism.RANDOM_ORGANISM_DEFAULTS, ...configs });
+    super(configs);
   }
 
   protected onUpdate(time: number, delta: number): void {
-    let food: Food | null = OrganismUtils.getNearestFood(this, this.scene.physics.overlapCirc(this.x + this.radius, this.y + this.radius, this.radius + this.visionDistance / 2, true, true));
-
-    if (food !== null) {
-      this.scene.physics.moveToObject(this, food, this.velocity);
-      return;
-    }
-
     this.changeDirectionCounter += delta;
-    if (this.changeDirectionCounter >= this.CHANGE_DIRECTION_DELAY_MILLISECONDS) {
+    if (
+      this.changeDirectionCounter >= this.CHANGE_DIRECTION_DELAY_MILLISECONDS
+    ) {
       this.changeDirection();
       this.changeDirectionCounter -= 200;
     }
