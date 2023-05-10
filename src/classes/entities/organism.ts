@@ -158,7 +158,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Apply energy loss to organism */
     let totalEnergyLoss =
-      this.basalEnergyLossPerUpdate + body.velocity.length() * 0.001;
+      this.basalEnergyLossPerUpdate + body.velocity.length() * 0.01;
     this.addEnergy(-totalEnergyLoss);
 
     /* Send information about this organism if it is selected */

@@ -6,6 +6,7 @@ import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 import { OrganismConfigs } from '../typedefs';
 import { ControllableOrganism } from '../classes/entities/controllableOrganism';
 import { Organism } from '../classes/entities/organism';
+import { VisionOrganism } from '../classes/entities/visionOrganism';
 
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
@@ -108,7 +109,7 @@ export class EnvironmentScene extends Scene {
   }
 
   private addToSpecies(configs: OrganismConfigs): void {
-    let newOrganism = new RandomOrganism(configs);
+    let newOrganism = new VisionOrganism(configs);
 
     this.addOrganismToGroup(newOrganism);
   }
