@@ -1,5 +1,3 @@
-// @ts-nocheck
-import { EVENTS_NAME } from '../../consts';
 import { FoodConfigs } from '../../typedefs';
 import { Organism } from './organism';
 
@@ -21,7 +19,9 @@ export class Food extends Phaser.GameObjects.Ellipse {
       mergedConfigs.color
     );
     mergedConfigs.scene.add.existing(this);
-    mergedConfigs.scene.physics.add.existing(this);
+    mergedConfigs.scene.physics.add.existing(this, true);
+
+    this.name = 'food';
   }
 
   public addPredator(group: Phaser.GameObjects.Group) {

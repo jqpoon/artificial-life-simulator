@@ -1,6 +1,6 @@
-// @ts-nocheck
 import { OrganismConfigs } from '../../typedefs';
-import { Mutation } from '../utils/mutation';
+import { OrganismUtils } from '../utils/organismUtils';
+import { Food } from './food';
 import { Organism } from './organism';
 
 export class RandomOrganism extends Organism {
@@ -8,7 +8,7 @@ export class RandomOrganism extends Organism {
     size: 25,
     velocity: 100,
   };
-  private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 1000;
+  private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 400;
   private changeDirectionCounter: number = 0;
 
   constructor(configs: OrganismConfigs) {
@@ -16,6 +16,13 @@ export class RandomOrganism extends Organism {
   }
 
   protected onUpdate(time: number, delta: number): void {
+    let food: Food | null = OrganismUtils.getNearestFood(this, this.scene.physics.overlapCirc(this.x + this.radius, this.y + this.radius, this.radius + this.visionDistance / 2, true, true));
+
+    if (food !== null) {
+      this.scene.physics.moveToObject(this, food, this.velocity);
+      return;
+    }
+
     this.changeDirectionCounter += delta;
     if (this.changeDirectionCounter >= this.CHANGE_DIRECTION_DELAY_MILLISECONDS) {
       this.changeDirection();
@@ -24,46 +31,29 @@ export class RandomOrganism extends Organism {
   }
 
   protected clone(): any {
-    let mutationRate = 0.5;
+    let mutationRate = 0.01;
 
-    let newColor = this.fillColor;
     let newVelocity = this.velocity;
-    let newSize = this.height;
-    let newEnergySplitParentRatio = this.energySplitParentRatio;
-    // Reduce energy by half first then divide between parent and child
-    let newEnergy = this.energy / 2 * (1 - this.energySplitParentRatio);
+    let newSize = this.size;
+    let newEnergy = this.energy / 2;
 
     // Do some mutation
     if (Math.random() < mutationRate) {
-      // newColor = Conversion.stringColorToNumberColour(
-      //   '#' +
-      //     Mutation.inversionMutation(
-      //       Conversion.numberColorToStringColour(this.fillColor).substring(1),
-      //       16
-      //     )
+      // newVelocity = parseInt(
+      //   Mutation.inversionMutation(this.velocity.toString(10), 10),
+      //   10
       // );
-
-      newVelocity = parseInt(
-        Mutation.inversionMutation(this.velocity.toString(10), 10),
-        10
-      );
-      newSize = parseInt(
-        Mutation.inversionMutation(this.height.toString(10), 10),
-        10
-      );
-
-      // TODO: Clean this up (Multiplied by 10 and divided by 10 here because it's a decimal)
-      newEnergySplitParentRatio = parseInt(
-        Mutation.inversionMutation((this.energySplitParentRatio * 10).toString(10), 10),
-        10
-      ) / 10;
+      // newSize = parseInt(
+      //   Mutation.inversionMutation(this.height.toString(10), 10),
+      //   10
+      // );
     }
 
     return new RandomOrganism({
       scene: this.scene,
       x: this.x,
       y: this.y,
-      color: newColor,
+      color: this.color,
       velocity: newVelocity,
       size: newSize,
       species: this.species,

@@ -4,7 +4,6 @@ import { Food } from '../classes/entities/food';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 import { OrganismConfigs } from '../typedefs';
-import { VisionOrganism } from '../classes/entities/visionOrganism';
 import { ControllableOrganism } from '../classes/entities/controllableOrganism';
 import { Organism } from '../classes/entities/organism';
 
@@ -109,7 +108,7 @@ export class EnvironmentScene extends Scene {
   }
 
   private addToSpecies(configs: OrganismConfigs): void {
-    let newOrganism = new ControllableOrganism(configs);
+    let newOrganism = new RandomOrganism(configs);
 
     this.addOrganismToGroup(newOrganism);
   }

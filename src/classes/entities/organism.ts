@@ -1,6 +1,6 @@
 import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
 import { OrganismConfigs, OrganismInformation } from '../../typedefs';
-import { OrganismMath } from '../utils/organismMath';
+import { OrganismUtils } from '../utils/organismUtils';
 
 export abstract class Organism extends Phaser.GameObjects.Container {
   /**
@@ -22,7 +22,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     species: -1,
     startingEnergy: 100,
     velocity: 20,
-    visionDistance: 50,
+    visionDistance: 100,
     x: 300,
     y: 300,
   };
@@ -33,6 +33,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   protected energy: number;
   protected size: number;
   protected species: number;
+  protected radius: number; // Half of size
   protected velocity: number;
   protected visionDistance: number;
 
@@ -60,12 +61,12 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     /* Set physical attributes of organism */
     this.color = mergedConfigs.color;
     this.energy = mergedConfigs.startingEnergy;
-    this.size = OrganismMath.clamp(
+    this.size = OrganismUtils.clamp(
       mergedConfigs.size,
       Organism.MIN_SIZE,
       Organism.MAX_SIZE
     );
-    this.velocity = OrganismMath.clamp(
+    this.velocity = OrganismUtils.clamp(
       mergedConfigs.velocity,
       Organism.MIN_VELOCITY,
       Organism.MAX_VELOCITY
@@ -73,7 +74,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     this.visionDistance = mergedConfigs.visionDistance;
     this.basalEnergyLossPerUpdate =
       mergedConfigs.energyLoss ??
-      OrganismMath.calculateBasalEnergyLoss(this.size);
+      OrganismUtils.calculateBasalEnergyLoss(this.size);
+    this.radius = this.size / 2;
 
     /* Set generic information of organism */
     this.generation = mergedConfigs.generation;
@@ -86,15 +88,15 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     /* Build visible body */
     this.scene.add.existing(this);
     this.mainBody = this.scene.add.ellipse(
-      this.size / 2, // Centers ellipse with container
-      this.size / 2, // Centers ellipse with container
+      this.radius, // Centers ellipse with container
+      this.radius, // Centers ellipse with container
       this.size,
       this.size,
       this.color
     );
     this.vision = this.scene.add.ellipse(
-      this.size / 2,
-      this.size / 2,
+      this.radius,
+      this.radius,
       this.size + this.visionDistance,
       this.size + this.visionDistance,
       this.color,
@@ -104,11 +106,11 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Build physics body */
     this.scene.physics.add.existing(this);
-    (this.body as Phaser.Physics.Arcade.Body).setCircle(this.size / 2); // Divide by two since size is defined in terms of diameter
+    (this.body as Phaser.Physics.Arcade.Body).setCircle(this.radius); // Divide by two since size is defined in terms of diameter
 
     /* Enable clicks to view more information */
     this.setInteractive(
-      new Phaser.Geom.Circle(this.size / 2, this.size / 2, this.size / 2),
+      new Phaser.Geom.Circle(this.radius, this.radius, this.radius),
       Phaser.Geom.Circle.Contains
     );
     this.on('pointerdown', () => {
