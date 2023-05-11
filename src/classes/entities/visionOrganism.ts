@@ -17,13 +17,7 @@ export class VisionOrganism extends Organism {
   protected onUpdate(time: number, delta: number): void {
     let food: Food | null = OrganismUtils.getNearestFood(
       this,
-      this.scene.physics.overlapCirc(
-        this.x + this.radius,
-        this.y + this.radius,
-        this.radius + this.visionDistance / 2,
-        true,
-        true
-      )
+      this.getEntitiesWithinVision()
     );
 
     if (food !== null) {

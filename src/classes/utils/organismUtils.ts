@@ -1,3 +1,4 @@
+import { Entity } from "../../typedefs";
 import { Food } from "../entities/food";
 import { Organism } from "../entities/organism";
 
@@ -19,7 +20,7 @@ export class OrganismUtils {
    * @param bodies - List of bodies / static bodies to look through
    * @returns Nearest food object, or null if there are none
    */
-  public static getNearestFood(organism: Organism, bodies: (Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody)[]): Food | null {
+  public static getNearestFood(organism: Organism, bodies: Entity[]): Food | null {
     let foods = bodies.filter(function (element, index, arr) {
       return element.gameObject.name === 'food';
     });

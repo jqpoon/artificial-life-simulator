@@ -1,5 +1,5 @@
 import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
-import { OrganismConfigs, OrganismInformation } from '../../typedefs';
+import { Entity, OrganismConfigs, OrganismInformation } from '../../typedefs';
 import { OrganismUtils } from '../utils/organismUtils';
 
 export abstract class Organism extends Phaser.GameObjects.Container {
@@ -82,7 +82,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     this.generation = mergedConfigs.generation;
 
     /* Set meta-information of organism */
-    this.ID = Phaser.Math.RND.uuid();
+    this.name = Phaser.Math.RND.uuid();
     this.isSelected = false;
     this.timeCounter = 0;
 
@@ -116,7 +116,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     );
     this.on('pointerdown', () => {
       this.scene.game.events.emit(EVENTS_NAME.selectOrganism, {
-        ID: this.ID,
+        name: this.name,
         generation: this.generation,
         velocity: this.velocity,
         size: this.size,
@@ -128,7 +128,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     this.scene.game.events.on(
       EVENTS_NAME.selectOrganism,
       (info: OrganismInformation) => {
-        if (info.ID !== this.ID) {
+        if (info.name !== this.name) {
           this.toggleOrganismSelected(false);
         }
       }
@@ -165,7 +165,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     /* Send information about this organism if it is selected */
     if (this.isSelected) {
       this.scene.game.events.emit(EVENTS_NAME.selectOrganism, {
-        ID: this.ID,
+        name: this.name,
         generation: this.generation,
         velocity: this.velocity,
         size: this.size,
@@ -189,7 +189,56 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Returns all entities within the organism's circular, except itself. Note
+   * that entities are physical bodies in the Phaser definition
+   *
+   * @returns List of entities within this organism's vision
+   */
+  protected getEntitiesWithinVision(): Entity[] {
+    let entities = this.scene.physics.overlapCirc(
+      this.x + this.radius,
+      this.y + this.radius,
+      this.radius + this.visionDistance / 2,
+      true,
+      true
+    ) as Entity[];
+
+    return entities.filter((entity) => {
+      return entity.gameObject.name !== this.name;
+    });
+  }
+
+  /**
+   * Finds the nearest entity to this organism and returns it. If there are none,
+   * null is returned
+   *
+   * @returns - nearest entity or null
+   */
+  protected getNearestEntity(): Entity | null {
+    let entities: Entity[] = this.getEntitiesWithinVision();
+    let closestEntity = null;
+    let closestDistance = Infinity;
+
+    entities.forEach((entity: Entity) => {
+      let distance = Phaser.Math.Distance.Squared(
+        this.body.center.x,
+        this.body.center.y,
+        entity.center.x,
+        entity.center.y
+      );
+
+      if (distance < closestDistance) {
+        closestEntity = entity;
+        closestDistance = distance;
+      }
+    });
+
+    return closestEntity;
+  }
+
+  /**
    * Updates visual style of the organism when it is selected
+   *
    * @param isSelected - Whether this organism has been selected
    */
   private toggleOrganismSelected(isSelected: boolean): void {
@@ -206,6 +255,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
   /**
    * Updates whether an organism's vision can be 'seen'
+   *
+   * @param - Set to true to view vision radius
    */
   private toggleOrganismVision(isVisible: boolean): void {
     if (isVisible) {

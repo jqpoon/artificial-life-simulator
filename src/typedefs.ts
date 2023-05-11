@@ -21,7 +21,7 @@ export interface OrganismConfigs {
 };
 
 export interface OrganismInformation {
-  ID: string,
+  name: string,
   generation: number,
   velocity: number,
   size: number,
@@ -45,3 +45,5 @@ export type ChartData = {
 export type SpeciesCounts = {
   [key: number]: number
 }
+
+export type Entity = Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody;

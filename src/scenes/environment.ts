@@ -5,6 +5,7 @@ import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 import { OrganismConfigs } from '../typedefs';
 import { Organism } from '../classes/entities/organism';
 import { VisionOrganism } from '../classes/entities/visionOrganism';
+import { NeuralNetworkOrganism } from '../classes/entities/neuralNetworkOrganism';
 
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
@@ -107,7 +108,7 @@ export class EnvironmentScene extends Scene {
   }
 
   private addToSpecies(configs: OrganismConfigs): void {
-    let newOrganism = new VisionOrganism(configs);
+    let newOrganism = new NeuralNetworkOrganism(configs);
 
     this.addOrganismToGroup(newOrganism);
   }

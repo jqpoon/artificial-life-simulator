@@ -2,6 +2,8 @@ import { FoodConfigs } from '../../typedefs';
 import { Organism } from './organism';
 
 export class Food extends Phaser.GameObjects.Ellipse {
+  private color: number;
+
   private static readonly FOOD_DEFAULTS = {
     size: 10,
     color: 0x6cbf65, // Green,
@@ -22,6 +24,7 @@ export class Food extends Phaser.GameObjects.Ellipse {
     mergedConfigs.scene.physics.add.existing(this, true);
 
     this.name = 'food';
+    this.color = mergedConfigs.color;
   }
 
   public addPredator(group: Phaser.GameObjects.Group) {
