@@ -21,6 +21,7 @@ export class TensorflowNetwork implements Network {
         inputShape: [input],
         units: output,
         useBias: false,
+        activation: 'tanh',
       })
     );
   }

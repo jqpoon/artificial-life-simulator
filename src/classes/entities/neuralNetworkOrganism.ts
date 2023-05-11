@@ -14,7 +14,14 @@ export class NeuralNetworkOrganism extends Organism {
   }
 
   protected clone() {
-
+    return new NeuralNetworkOrganism({
+      scene: this.scene,
+      x: this.x,
+      y: this.y,
+      generation: this.generation + 1,
+      size: this.size,
+      color: this.color,
+    });
   }
 
   protected onUpdate(time: number, delta: number): void {
@@ -27,6 +34,9 @@ export class NeuralNetworkOrganism extends Organism {
       color = (nearestEntity.gameObject as any).color;
     }
     let [r, g, b] = Conversion.numberColorToRGB(color);
+    r = r / 255 - 0.5;
+    g = g / 255 - 0.5;
+    b = b / 255 - 0.5;
 
     /* Find relative x and y to nearest entity */
     let x = 0,
@@ -38,7 +48,10 @@ export class NeuralNetworkOrganism extends Organism {
 
     /* Pass these values to neural network and let magic happen */
     let [xSpeed, ySpeed] = this.network.forward([r, g, b, x, y]);
-    this.body.setVelocity(Math.max(xSpeed, this.velocity), Math.max(ySpeed, this.velocity));
+    xSpeed = Phaser.Math.Clamp(xSpeed, -this.velocity, this.velocity);
+    ySpeed = Phaser.Math.Clamp(ySpeed, -this.velocity, this.velocity);
+
+    this.body.setVelocity(xSpeed * this.velocity, ySpeed * this.velocity);
   }
 
   protected onDestroy(): void {
