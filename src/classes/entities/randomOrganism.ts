@@ -57,15 +57,12 @@ export class RandomOrganism extends Organism {
   protected onDestroy() {}
 
   private changeDirection(): void {
-    // Casting required here because of types not properly defined in Phaser
-    // https://github.com/photonstorm/phaser/issues/6015
-    let body = this.body as Phaser.Physics.Arcade.Body;
-    body.setVelocity(0, 0);
+    this.body.setVelocity(0, 0);
 
     // Random speed from -1 to 1 inclusive
     let randomX = Phaser.Math.RND.realInRange(-1, 1);
     let randomY = Phaser.Math.RND.realInRange(-1, 1);
 
-    body.setVelocity(this.velocity * randomX, this.velocity * randomY);
+    this.body.setVelocity(this.velocity * randomX, this.velocity * randomY);
   }
 }

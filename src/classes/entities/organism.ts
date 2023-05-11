@@ -46,6 +46,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   private timeCounter: number;
 
   /* Parts of this organism */
+  public body: Phaser.Physics.Arcade.Body; // Body in physics engine
   private mainBody: Phaser.GameObjects.Ellipse;
   private vision: Phaser.GameObjects.Ellipse;
 

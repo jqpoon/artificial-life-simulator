@@ -1,10 +1,8 @@
 import { Scene } from 'phaser';
 
 import { Food } from '../classes/entities/food';
-import { RandomOrganism } from '../classes/entities/randomOrganism';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 import { OrganismConfigs } from '../typedefs';
-import { ControllableOrganism } from '../classes/entities/controllableOrganism';
 import { Organism } from '../classes/entities/organism';
 import { VisionOrganism } from '../classes/entities/visionOrganism';
 
