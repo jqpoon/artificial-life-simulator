@@ -21,6 +21,7 @@ export class NeuralNetworkOrganism extends Organism {
       generation: this.generation + 1,
       size: this.size,
       color: this.color,
+      startingEnergy: this.energy / 2,
     });
   }
 
@@ -34,9 +35,9 @@ export class NeuralNetworkOrganism extends Organism {
       color = (nearestEntity.gameObject as any).color;
     }
     let [r, g, b] = Conversion.numberColorToRGB(color);
-    r = r / 255 - 0.5;
-    g = g / 255 - 0.5;
-    b = b / 255 - 0.5;
+    r = r / 255;
+    g = g / 255;
+    b = b / 255;
 
     /* Find relative x and y to nearest entity */
     let x = 0,
@@ -45,6 +46,8 @@ export class NeuralNetworkOrganism extends Organism {
       x = this.body.center.x - nearestEntity.x;
       y = this.body.center.y - nearestEntity.y;
     }
+    x /= this.visionDistance / 2;
+    y /= this.visionDistance / 2;
 
     /* Pass these values to neural network and let magic happen */
     let [xSpeed, ySpeed] = this.network.forward([r, g, b, x, y]);

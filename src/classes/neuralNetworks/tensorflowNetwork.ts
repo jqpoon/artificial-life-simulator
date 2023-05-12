@@ -19,11 +19,22 @@ export class TensorflowNetwork implements Network {
         name: 'layer1',
         batchSize: 1,
         inputShape: [input],
-        units: output,
-        useBias: false,
+        units: 8,
+        useBias: true,
+        biasInitializer: 'glorotNormal',
         activation: 'tanh',
       })
     );
+
+    this.model.add(
+      tf.layers.dense({
+        name: 'layer2',
+        units: output,
+        useBias: true,
+      })
+    );
+
+    console.log(this.model.getWeights()[1].arraySync());
   }
 
   /**
