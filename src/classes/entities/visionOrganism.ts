@@ -2,6 +2,7 @@ import { Food } from './food';
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
 import { OrganismUtils } from '../utils/organismUtils';
+import { ORGANISM_TYPES } from '../../consts';
 
 export class VisionOrganism extends Organism {
   /**
@@ -47,6 +48,10 @@ export class VisionOrganism extends Organism {
   }
 
   protected onDestroy() {}
+
+  protected getType(): ORGANISM_TYPES {
+    return ORGANISM_TYPES.visionOrganism;
+  }
 
   private changeDirection(): void {
     this.body.setVelocity(0, 0);

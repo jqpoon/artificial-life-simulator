@@ -12,6 +12,8 @@ import { REGISTRY_KEYS } from '../../consts';
 import { TrendsChart } from './trendsChart';
 import { SpeedControls } from './speedControls';
 import { OrganismViewer } from './organismViewer';
+import { RandomOrganism } from '../../classes/entities/randomOrganism';
+import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrganism';
 
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;
@@ -59,7 +61,6 @@ export class UIScene extends Scene {
         space: { left: 20, right: 20, top: 20, bottom: 20, item: 30 },
       })
       .add(titleText)
-      // .add(this.speedControls)
       .add(this.scenarioControl)
       .add(
         this.rexUI.add
@@ -99,6 +100,7 @@ export class UIScene extends Scene {
     this.registry.set(REGISTRY_KEYS.organismColour, 0xe8000b);
     this.registry.set(REGISTRY_KEYS.organismSize, 50);
     this.registry.set(REGISTRY_KEYS.organismSpeed, 50);
+    this.registry.set(REGISTRY_KEYS.organismType, NeuralNetworkOrganism);
   }
 
   private initListeners(): void {

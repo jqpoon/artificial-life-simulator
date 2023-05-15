@@ -1,4 +1,4 @@
-import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
+import { EVENTS_NAME, ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 import { Entity, OrganismConfigs, OrganismInformation } from '../../typedefs';
 import { OrganismUtils } from '../utils/organismUtils';
 
@@ -52,6 +52,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
   /* Abstract methods for different organism types to implement */
   protected abstract clone(): any;
+  protected abstract getType(): ORGANISM_TYPES;
   protected abstract onUpdate(time: number, delta: number): void;
   protected abstract onDestroy(): void;
 
@@ -122,6 +123,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
         velocity: this.velocity,
         size: this.size,
         energy: this.energy,
+        type: this.getType(),
       });
       this.toggleOrganismSelected(true);
     });
@@ -171,6 +173,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
         velocity: this.velocity,
         size: this.size,
         energy: this.energy,
+        type: this.getType(),
       });
     }
 

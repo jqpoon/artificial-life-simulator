@@ -2,11 +2,10 @@ import { Scene } from 'phaser';
 
 import { Food } from '../classes/entities/food';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
-import { OrganismConfigs } from '../typedefs';
+import { IOrganism, OrganismConfigs } from '../typedefs';
 import { Organism } from '../classes/entities/organism';
-import { VisionOrganism } from '../classes/entities/visionOrganism';
-import { NeuralNetworkOrganism } from '../classes/entities/neuralNetworkOrganism';
 import { COLORS } from './ui/UIConstants';
+import { RandomOrganism } from '../classes/entities/randomOrganism';
 
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
@@ -96,21 +95,23 @@ export class EnvironmentScene extends Scene {
     visualBorder
       .setInteractive()
       .on('pointerdown', (_: any, localX: number, localY: number) => {
-        this.addToSpecies({
-          scene: this,
-          velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
-          size: this.registry.get(REGISTRY_KEYS.organismSize),
-          x: localX + EnvironmentScene.worldX,
-          y: localY + EnvironmentScene.worldY,
-          color: this.registry.get(REGISTRY_KEYS.organismColour),
-          species: this.registry.get(REGISTRY_KEYS.organismSpecies),
-        });
+        this.addToSpecies(
+          {
+            scene: this,
+            velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
+            size: this.registry.get(REGISTRY_KEYS.organismSize),
+            x: localX + EnvironmentScene.worldX,
+            y: localY + EnvironmentScene.worldY,
+            color: this.registry.get(REGISTRY_KEYS.organismColour),
+            species: this.registry.get(REGISTRY_KEYS.organismSpecies),
+          },
+          this.registry.get(REGISTRY_KEYS.organismType)
+        );
       });
   }
 
-  private addToSpecies(configs: OrganismConfigs): void {
-    let newOrganism = new NeuralNetworkOrganism(configs);
-
+  private addToSpecies(configs: OrganismConfigs, organism: IOrganism): void {
+    let newOrganism = new organism(configs);
     this.addOrganismToGroup(newOrganism);
   }
 
@@ -142,40 +143,49 @@ export class EnvironmentScene extends Scene {
 
   public loadScenario1(): void {
     this.registry.set(REGISTRY_KEYS.organismColour, 0x8b2be2);
-    this.addToSpecies({
-      scene: this,
-      velocity: 80,
-      size: 30,
-      x: 10,
-      y: 100,
-      color: 0x8b2be2,
-      energyLoss: 0.5,
-      species: 6,
-    });
+    this.addToSpecies(
+      {
+        scene: this,
+        velocity: 80,
+        size: 30,
+        x: 10,
+        y: 100,
+        color: 0x8b2be2,
+        energyLoss: 0.5,
+        species: 6,
+      },
+      RandomOrganism
+    );
 
     this.registry.set(REGISTRY_KEYS.organismColour, 0xffc400);
-    this.addToSpecies({
-      scene: this,
-      velocity: 35,
-      size: 80,
-      x: 10,
-      y: 10,
-      color: 0xffc400,
-      energyLoss: 0.1,
-      species: 2,
-    });
+    this.addToSpecies(
+      {
+        scene: this,
+        velocity: 35,
+        size: 80,
+        x: 10,
+        y: 10,
+        color: 0xffc400,
+        energyLoss: 0.1,
+        species: 2,
+      },
+      RandomOrganism
+    );
   }
 
   public loadScenario2(): void {
     this.registry.set(REGISTRY_KEYS.organismColour, 0x8b2be2);
-    this.addToSpecies({
-      scene: this,
-      velocity: 50,
-      size: 20,
-      x: 0,
-      y: 400,
-      color: 0x8b2be2,
-      species: 0,
-    });
+    this.addToSpecies(
+      {
+        scene: this,
+        velocity: 50,
+        size: 20,
+        x: 0,
+        y: 400,
+        color: 0x8b2be2,
+        species: 0,
+      },
+      RandomOrganism
+    );
   }
 }

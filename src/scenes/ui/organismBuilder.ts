@@ -1,14 +1,27 @@
-import { RoundRectangle, Slider } from 'phaser3-rex-plugins/templates/ui/ui-components';
+import {
+  DropDownList,
+  RoundRectangle,
+  Slider,
+} from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIComponent } from './UIComponent';
 import { UIScene } from './mainUI';
 import { GameObjects } from 'phaser';
-import { smallerTextDark, speciesInfo, textDefaultsDark } from './UIConstants';
+import {
+  COLORS,
+  smallerTextDark,
+  speciesInfo,
+  textDefaultsDark,
+} from './UIConstants';
 import { REGISTRY_KEYS } from '../../consts';
+import { RandomOrganism } from '../../classes/entities/randomOrganism';
+import { VisionOrganism } from '../../classes/entities/visionOrganism';
+import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrganism';
 
 export class OrganismBuilder extends UIComponent {
-  private speedSlider: Slider;
-  private sizeSlider: Slider;
   private builderPreview: GameObjects.Arc;
+  private sizeSlider: Slider;
+  private speedSlider: Slider;
+  private organismTypeChooser: DropDownList;
 
   constructor(scene: UIScene) {
     super(scene, {
@@ -29,8 +42,18 @@ export class OrganismBuilder extends UIComponent {
     }).setDepth(-1);
     scene.add.existing(background);
 
-    let sizeText: GameObjects.Text = scene.add.text(0, 0, '50', smallerTextDark);
-    let speedText: GameObjects.Text = scene.add.text(0, 0, '50', smallerTextDark);
+    let sizeText: GameObjects.Text = scene.add.text(
+      0,
+      0,
+      '50',
+      smallerTextDark
+    );
+    let speedText: GameObjects.Text = scene.add.text(
+      0,
+      0,
+      '50',
+      smallerTextDark
+    );
     this.builderPreview = scene.add.circle(0, 0, 12, 0xe8000b);
 
     // Color picker
@@ -53,7 +76,10 @@ export class OrganismBuilder extends UIComponent {
             'pointerdown',
             () => {
               this.setColour(species.color);
-              this.scene.registry.set(REGISTRY_KEYS.organismSpecies, species.id);
+              this.scene.registry.set(
+                REGISTRY_KEYS.organismSpecies,
+                species.id
+              );
             },
             this
           )
@@ -114,6 +140,46 @@ export class OrganismBuilder extends UIComponent {
       })
       .layout();
 
+    // Organism type
+    this.organismTypeChooser = scene.rexUI.add
+      .simpleDropDownList({
+        label: {
+          space: { left: 10, right: 10, top: 10, bottom: 10 },
+          background: {
+            color: COLORS.BUTTON_MAIN,
+          },
+        },
+
+        button: {
+          space: { left: 10, right: 10, top: 10, bottom: 10 },
+          background: {
+            color: COLORS.BUTTON_MAIN,
+            strokeWidth: 0,
+            'hover.strokeColor': 0xffffff,
+            'hover.strokeWidth': 2,
+          },
+        },
+
+        list: {
+          easeIn: 10,
+          easeOut: 10,
+          width: 50,
+        },
+      })
+      .resetDisplayContent('Neural Network')
+      .setOptions([
+        { text: 'Neural Network', value: NeuralNetworkOrganism },
+        { text: 'Random', value: RandomOrganism },
+        { text: 'Vision', value: VisionOrganism },
+      ])
+      .on(
+        'button.click',
+        function (dropDownList: DropDownList, _: any, button: any) {
+          dropDownList.setText(button.text);
+          scene.registry.set(REGISTRY_KEYS.organismType, button.value);
+        }
+      );
+
     this.add(scene.add.text(0, 0, 'Organism Preview', textDefaultsDark))
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(this.builderPreview)
@@ -146,6 +212,12 @@ export class OrganismBuilder extends UIComponent {
           .add(scene.add.text(0, 0, 'Colour', smallerTextDark))
           .add(colorPicker)
       )
+      .add(
+        scene.rexUI.add
+          .sizer({ orientation: 'x', space: { item: 30 } })
+          .add(scene.add.text(0, 0, 'Type', smallerTextDark))
+          .add(this.organismTypeChooser)
+      )
       .addBackground(background)
       .layout()
       .setDepth(-1);
@@ -155,10 +227,11 @@ export class OrganismBuilder extends UIComponent {
     this.speedSlider.setValue(0.5);
     this.sizeSlider.setValue(0.5);
     this.setColour(0xe8000b);
+    this.organismTypeChooser.setText('Neural Network');
   }
 
   private setColour(color: number): void {
     this.scene.registry.set(REGISTRY_KEYS.organismColour, color);
     this.builderPreview.fillColor = color;
-  };
+  }
 }

@@ -1,3 +1,4 @@
+import { ORGANISM_TYPES } from '../../consts';
 import { OrganismConfigs } from '../../typedefs';
 import { Organism } from './organism';
 
@@ -50,5 +51,9 @@ export class ControllableOrganism extends Organism {
       species: this.species,
       startingEnergy: this.energy / 4,
     });
+  }
+
+  protected getType(): ORGANISM_TYPES {
+    return ORGANISM_TYPES.controllableOrganism;
   }
 }

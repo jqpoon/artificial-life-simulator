@@ -12,8 +12,16 @@ export enum REGISTRY_KEYS {
   organismSpeed = 'organism-speed',
   organismSize = 'organism-size',
   organismSpecies = 'organism-species',
+  organismType = 'organism-type',
   speciesCounts = 'species-counts',
   timeScale = 'timescale',
   trendsDataset = 'trends-dataset',
   worldAge = 'world-age',
+}
+
+export enum ORGANISM_TYPES {
+  controllableOrganism = 'Controllable',
+  neuralNetworkOrganism = 'Neural Network',
+  randomOrganism = 'Random',
+  visionOrganism = 'Vision',
 }

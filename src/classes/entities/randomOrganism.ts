@@ -1,5 +1,6 @@
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
+import { ORGANISM_TYPES } from '../../consts';
 
 export class RandomOrganism extends Organism {
   /**
@@ -55,6 +56,10 @@ export class RandomOrganism extends Organism {
   }
 
   protected onDestroy() {}
+
+  protected getType(): ORGANISM_TYPES {
+    return ORGANISM_TYPES.randomOrganism;
+  }
 
   private changeDirection(): void {
     this.body.setVelocity(0, 0);

@@ -1,3 +1,6 @@
+import { Organism } from "./classes/entities/organism";
+import { ORGANISM_TYPES } from "./consts";
+
 export interface SliderConfigs {
   x1: number;
   y1: number;
@@ -26,7 +29,12 @@ export interface OrganismInformation {
   velocity: number,
   size: number,
   energy: number,
+  type: ORGANISM_TYPES,
 };
+
+export interface IOrganism {
+  new (configs: OrganismConfigs): Organism;
+}
 
 export interface FoodConfigs {
   scene: Phaser.Scene;

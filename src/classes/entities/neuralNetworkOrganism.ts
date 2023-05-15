@@ -3,6 +3,7 @@ import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
 import { TensorflowNetwork } from '../neuralNetworks/tensorflowNetwork';
 import { Conversion } from '../utils/conversion';
+import { ORGANISM_TYPES } from '../../consts';
 
 export class NeuralNetworkOrganism extends Organism {
   private network: Network;
@@ -58,7 +59,9 @@ export class NeuralNetworkOrganism extends Organism {
     this.body.setVelocity(xSpeed * this.velocity, ySpeed * this.velocity);
   }
 
-  protected onDestroy(): void {
+  protected onDestroy(): void {}
 
+  protected getType(): ORGANISM_TYPES {
+    return ORGANISM_TYPES.neuralNetworkOrganism;
   }
 }
