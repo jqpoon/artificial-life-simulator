@@ -77,6 +77,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       mergedConfigs.energyLoss ??
       OrganismUtils.calculateBasalEnergyLoss(this.size);
     this.radius = this.size / 2;
+    this.species = mergedConfigs.species;
 
     /* Set generic information of organism */
     this.generation = mergedConfigs.generation;
@@ -137,7 +138,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     this.toggleOrganismSelected(false);
 
     /* Signal that this organism is done initialising */
-    // this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
+    this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
   }
 
   public update(time: number, delta: number): void {

@@ -42,6 +42,7 @@ export class VisionOrganism extends Organism {
       size: this.size,
       color: this.color,
       generation: this.generation + 1,
+      species: this.species,
     });
   }
 

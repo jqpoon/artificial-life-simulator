@@ -22,6 +22,7 @@ export class NeuralNetworkOrganism extends Organism {
       size: this.size,
       color: this.color,
       startingEnergy: this.energy / 2,
+      species: this.species,
     });
   }
 

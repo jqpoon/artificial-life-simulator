@@ -87,12 +87,12 @@ export default class PopulationChart extends ChartComponent {
   }
 
   private initListeners(): void {
-    // this.scene.game.events.on(
-    //   EVENTS_NAME.changeCount,
-    //   (value: number, speciesID: number) => {
-    //     let speciesCounts: SpeciesCounts = this.scene.registry.get(REGISTRY_KEYS.speciesCounts)
-    //     speciesCounts[speciesID] += value;
-    //   }
-    // );
+    this.scene.game.events.on(
+      EVENTS_NAME.changeCount,
+      (value: number, speciesID: number) => {
+        let speciesCounts: SpeciesCounts = this.scene.registry.get(REGISTRY_KEYS.speciesCounts)
+        speciesCounts[speciesID] += value;
+      }
+    );
   }
 }
