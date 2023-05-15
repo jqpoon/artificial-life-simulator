@@ -27,8 +27,6 @@ export class UIScene extends Scene {
   }
 
   preload(): void {
-    this.load.script('chartjs', 'https://cdn.jsdelivr.net/npm/chart.js');
-    this.load.script('chartjs-plugin-annotation', 'https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.2.1/chartjs-plugin-annotation.min.js');
     this.load.image('pause', 'assets/pause.png');
     this.load.image('speed1', 'assets/speed1.png');
     this.load.image('speed2', 'assets/speed2.png');

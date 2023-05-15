@@ -33,8 +33,6 @@ export class TensorflowNetwork implements Network {
         useBias: true,
       })
     );
-
-    console.log(this.model.getWeights()[1].arraySync());
   }
 
   /**
