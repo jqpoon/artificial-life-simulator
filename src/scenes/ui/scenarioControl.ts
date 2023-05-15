@@ -1,6 +1,7 @@
 import { UIComponent } from './UIComponent';
 import { UIScene } from './mainUI';
 import { EVENTS_NAME } from '../../consts';
+import { COLORS, smallerTextDark } from './UIConstants';
 
 export class ScenarioControl extends UIComponent {
   constructor(scene: UIScene) {
@@ -17,8 +18,10 @@ export class ScenarioControl extends UIComponent {
           width: 100,
           height: 30,
           align: 'center',
-          background: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x333333),
-          text: this.scene.add.text(0, 0, 'Reset'),
+          background: scene.rexUI.add
+            .roundRectangle(0, 0, 0, 0, 10, COLORS.BUTTON_MAIN)
+            .setStrokeStyle(2, COLORS.BUTTON_BORDER),
+          text: this.scene.add.text(0, 0, 'Reset', smallerTextDark),
           space: { left: 20, right: 20, top: 20, bottom: 20 },
         })
         .setPosition(50, 260)
@@ -31,15 +34,10 @@ export class ScenarioControl extends UIComponent {
       .add(
         scene.rexUI.add
           .label({
-            background: scene.rexUI.add.roundRectangle(
-              0,
-              0,
-              0,
-              0,
-              10,
-              0x888888
-            ),
-            text: scene.add.text(0, 0, 'Scenario 1'),
+            background: scene.rexUI.add
+              .roundRectangle(0, 0, 0, 0, 10, COLORS.BUTTON_MAIN)
+              .setStrokeStyle(2, COLORS.BUTTON_BORDER),
+            text: scene.add.text(0, 0, 'Scenario 1', smallerTextDark),
             space: { left: 20, right: 20, top: 20, bottom: 20 },
           })
           .setPosition(50, 200)
@@ -58,15 +56,10 @@ export class ScenarioControl extends UIComponent {
       .add(
         scene.rexUI.add
           .label({
-            background: scene.rexUI.add.roundRectangle(
-              0,
-              0,
-              0,
-              0,
-              10,
-              0x888888
-            ),
-            text: scene.add.text(0, 0, 'Scenario 2'),
+            background: scene.rexUI.add
+              .roundRectangle(0, 0, 0, 0, 10, COLORS.BUTTON_MAIN)
+              .setStrokeStyle(2, COLORS.BUTTON_BORDER),
+            text: scene.add.text(0, 0, 'Scenario 2', smallerTextDark),
             space: { left: 20, right: 20, top: 20, bottom: 20 },
           })
           .setPosition(50, 200)

@@ -6,16 +6,17 @@ import { OrganismConfigs } from '../typedefs';
 import { Organism } from '../classes/entities/organism';
 import { VisionOrganism } from '../classes/entities/visionOrganism';
 import { NeuralNetworkOrganism } from '../classes/entities/neuralNetworkOrganism';
+import { COLORS } from './ui/UIConstants';
 
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
   private currentScenario: number;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 1500;
-  private static readonly worldX: number = 400;
-  private static readonly worldY: number = 50;
-  private static readonly worldWidth: number = 800;
-  private static readonly worldHeight: number = 800;
+  private static readonly worldX: number = 20;
+  private static readonly worldY: number = 40;
+  private static readonly worldWidth: number = 1200;
+  private static readonly worldHeight: number = 900;
 
   constructor() {
     super('environment-scene');
@@ -86,8 +87,8 @@ export class EnvironmentScene extends Scene {
       EnvironmentScene.worldHeight / 2 + EnvironmentScene.worldY, // y position (center)
       EnvironmentScene.worldWidth,
       EnvironmentScene.worldHeight,
-      0xffffff,
-      0
+      COLORS.OFF_WHITE,
+      1
     );
     visualBorder.setStrokeStyle(1, 0x000000);
 

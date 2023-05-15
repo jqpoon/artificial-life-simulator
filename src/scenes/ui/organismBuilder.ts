@@ -2,7 +2,7 @@ import { RoundRectangle, Slider } from 'phaser3-rex-plugins/templates/ui/ui-comp
 import { UIComponent } from './UIComponent';
 import { UIScene } from './mainUI';
 import { GameObjects } from 'phaser';
-import { smallerText, speciesInfo, textDefaults } from './UIConstants';
+import { smallerTextDark, speciesInfo, textDefaultsDark } from './UIConstants';
 import { REGISTRY_KEYS } from '../../consts';
 
 export class OrganismBuilder extends UIComponent {
@@ -14,7 +14,8 @@ export class OrganismBuilder extends UIComponent {
     super(scene, {
       x: 180,
       y: 700,
-      width: 270,
+      width: 300,
+      height: 400,
       orientation: 'y',
       space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
     });
@@ -28,8 +29,8 @@ export class OrganismBuilder extends UIComponent {
     }).setDepth(-1);
     scene.add.existing(background);
 
-    let sizeText: GameObjects.Text = scene.add.text(0, 0, '50', smallerText);
-    let speedText: GameObjects.Text = scene.add.text(0, 0, '50', smallerText);
+    let sizeText: GameObjects.Text = scene.add.text(0, 0, '50', smallerTextDark);
+    let speedText: GameObjects.Text = scene.add.text(0, 0, '50', smallerTextDark);
     this.builderPreview = scene.add.circle(0, 0, 12, 0xe8000b);
 
     // Color picker
@@ -113,11 +114,9 @@ export class OrganismBuilder extends UIComponent {
       })
       .layout();
 
-    this.add(scene.add.text(0, 0, 'Organism Preview', textDefaults))
-      .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
+    this.add(scene.add.text(0, 0, 'Organism Preview', textDefaultsDark))
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(this.builderPreview)
-      .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(
         scene.rexUI.add
@@ -125,8 +124,8 @@ export class OrganismBuilder extends UIComponent {
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 20 } })
-              .add(scene.add.text(0, 0, 'Size', smallerText))
-              .add(scene.add.text(0, 0, 'Speed', smallerText))
+              .add(scene.add.text(0, 0, 'Size', smallerTextDark))
+              .add(scene.add.text(0, 0, 'Speed', smallerTextDark))
           )
           .add(
             scene.rexUI.add
@@ -144,7 +143,7 @@ export class OrganismBuilder extends UIComponent {
       .add(
         scene.rexUI.add
           .sizer({ orientation: 'x', space: { item: 30 } })
-          .add(scene.add.text(0, 0, 'Colour', smallerText))
+          .add(scene.add.text(0, 0, 'Colour', smallerTextDark))
           .add(colorPicker)
       )
       .addBackground(background)

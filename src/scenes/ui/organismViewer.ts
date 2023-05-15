@@ -3,9 +3,8 @@ import RoundRectangle from 'phaser3-rex-plugins/plugins/roundrectangle';
 import { UIComponent } from './UIComponent';
 import { UIScene } from './mainUI';
 import { GameObjects } from 'phaser';
-import { smallerText, textDefaults } from './UIConstants';
+import { smallerTextDark, textDefaultsDark } from './UIConstants';
 import { EVENTS_NAME } from '../../consts';
-import { Organism } from '../../classes/entities/organism';
 import { OrganismInformation } from '../../typedefs';
 
 export class OrganismViewer extends UIComponent {
@@ -19,7 +18,8 @@ export class OrganismViewer extends UIComponent {
     super(scene, {
       x: 180,
       y: 320,
-      width: 270,
+      width: 300,
+      height: 400,
       orientation: 'y',
       space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
     });
@@ -33,23 +33,23 @@ export class OrganismViewer extends UIComponent {
     scene.add.existing(background);
 
     // Information to be updated
-    this.generationText = scene.add.text(0, 0, '0', smallerText);
-    this.speedText = scene.add.text(0, 0, '0.0', smallerText);
-    this.sizeText = scene.add.text(0, 0, '0.0', smallerText);
-    this.energyText = scene.add.text(0, 0, '0.0', smallerText);
-    this.infoText = scene.add.text(0, 0, 'Click on an organism!', smallerText);
+    this.generationText = scene.add.text(0, 0, '0', smallerTextDark);
+    this.speedText = scene.add.text(0, 0, '0.0', smallerTextDark);
+    this.sizeText = scene.add.text(0, 0, '0.0', smallerTextDark);
+    this.energyText = scene.add.text(0, 0, '0.0', smallerTextDark);
+    this.infoText = scene.add.text(0, 0, 'Click on an organism!', smallerTextDark);
 
-    this.add(scene.add.text(0, 0, 'Organism Information', textDefaults))
+    this.add(scene.add.text(0, 0, 'Organism Info', textDefaultsDark))
       .add(
         scene.rexUI.add
           .sizer({ orientation: 'x' })
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 10 } })
-              .add(scene.add.text(0, 0, 'Generation: ', smallerText))
-              .add(scene.add.text(0, 0, 'Speed: ', smallerText))
-              .add(scene.add.text(0, 0, 'Size: ', smallerText))
-              .add(scene.add.text(0, 0, 'Energy: ', smallerText))
+              .add(scene.add.text(0, 0, 'Generation: ', smallerTextDark))
+              .add(scene.add.text(0, 0, 'Speed: ', smallerTextDark))
+              .add(scene.add.text(0, 0, 'Size: ', smallerTextDark))
+              .add(scene.add.text(0, 0, 'Energy: ', smallerTextDark))
           )
           .add(
             scene.rexUI.add
