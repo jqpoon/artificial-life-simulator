@@ -56,10 +56,10 @@ export class UIScene extends Scene {
         height: 1220,
         width: 650,
         orientation: 'y',
-        space: { left: 20, right: 20, top: 20, bottom: 20, item: 20 },
+        space: { left: 20, right: 20, top: 20, bottom: 20, item: 30 },
       })
       .add(titleText)
-      .add(this.speedControls)
+      // .add(this.speedControls)
       .add(this.scenarioControl)
       .add(
         this.rexUI.add

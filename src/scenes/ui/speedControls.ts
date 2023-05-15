@@ -8,8 +8,8 @@ export class SpeedControls extends UIComponent {
 
   constructor(scene: UIScene) {
     super(scene, {
-      x: 150,
-      y: 150,
+      x: 615,
+      y: 1000,
     });
 
     this.buttons = scene.rexUI.add.buttons({
@@ -20,7 +20,6 @@ export class SpeedControls extends UIComponent {
         this.createButton(scene, 'speed2'),
         this.createButton(scene, 'speed3'),
       ],
-      space: { item: 8 },
       buttonsType: 'radio',
     });
 
@@ -55,7 +54,7 @@ export class SpeedControls extends UIComponent {
   ) {
     return scene.rexUI.add.label({
         background: scene.rexUI.add.statesRoundRectangle({
-          radius: 10,
+          radius: 5,
 
           color: 0xffffff,
           'active.color': 0xcfcfd1,
