@@ -1,9 +1,9 @@
 import { Chart } from "phaser3-rex-plugins/templates/ui/ui-components";
-import { UIScene } from "./mainUI";
-import { ChartComponent } from "./chartComponent";
-import { REGISTRY_KEYS } from "../../consts";
-import { EnvironmentScene } from "../environment";
-import { Organism } from "../../classes/entities/organism";
+import { ChartComponent } from "../chartComponent";
+import { UIScene } from "../mainUI";
+import { REGISTRY_KEYS } from "../../../consts";
+import { EnvironmentScene } from "../../environment";
+import { Organism } from "../../../classes/entities/organism";
 
 export class TrendsChart extends ChartComponent {
   private chartData: any;

@@ -1,24 +1,20 @@
-import { Scene } from 'phaser';
-
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import PopulationChart from './sideBar/populationChart';
 
-import { UIComponent } from './UIComponent';
-import PopulationChart from './populationChart';
-import { ScenarioControl } from './scenarioControl';
-import { OrganismBuilder } from './organismBuilder';
+import { Scene } from 'phaser';
+import { REGISTRY_KEYS } from '../../consts';
+import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrganism';
 
 import { COLORS, textDefaultsDark } from './UIConstants';
-import { REGISTRY_KEYS } from '../../consts';
-import { TrendsChart } from './trendsChart';
-import { SpeedControls } from './speedControls';
-import { OrganismViewer } from './organismViewer';
-import { RandomOrganism } from '../../classes/entities/randomOrganism';
-import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrganism';
+import { UIComponent } from './UIComponent';
+import { ScenarioControl } from './bottomBar/scenarioControl';
+import { SpeedControls } from './bottomBar/speedControls';
+import { OrganismBuilder } from './sideBar/organismBuilder';
+import { OrganismViewer } from './sideBar/organismViewer';
 
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;
   private populationChart: PopulationChart;
-  // private trendsChart: TrendsChart;
   private scenarioControl: UIComponent;
   private organismBuilder: OrganismBuilder;
   private organismViewer: OrganismViewer;

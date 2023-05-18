@@ -3,19 +3,19 @@ import {
   RoundRectangle,
   Slider,
 } from 'phaser3-rex-plugins/templates/ui/ui-components';
-import { UIComponent } from './UIComponent';
-import { UIScene } from './mainUI';
+import { UIComponent } from '../UIComponent';
+import { UIScene } from '../mainUI';
 import { GameObjects } from 'phaser';
 import {
   COLORS,
   smallerTextDark,
   speciesInfo,
   textDefaultsDark,
-} from './UIConstants';
-import { REGISTRY_KEYS } from '../../consts';
-import { RandomOrganism } from '../../classes/entities/randomOrganism';
-import { VisionOrganism } from '../../classes/entities/visionOrganism';
-import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrganism';
+} from '../UIConstants';
+import { REGISTRY_KEYS } from '../../../consts';
+import { RandomOrganism } from '../../../classes/entities/randomOrganism';
+import { VisionOrganism } from '../../../classes/entities/visionOrganism';
+import { NeuralNetworkOrganism } from '../../../classes/entities/neuralNetworkOrganism';
 
 export class OrganismBuilder extends UIComponent {
   private builderPreview: GameObjects.Arc;
