@@ -1,24 +1,17 @@
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
-import PopulationChart from './sideBar/populationChart';
 
 import { Scene } from 'phaser';
 import { REGISTRY_KEYS } from '../../consts';
 import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrganism';
 
 import { COLORS, textDefaultsDark } from './UIConstants';
-import { UIComponent } from './UIComponent';
-import { ScenarioControl } from './bottomBar/scenarioControl';
-import { SpeedControls } from './bottomBar/speedControls';
-import { OrganismBuilder } from './sideBar/organismBuilder';
-import { OrganismViewer } from './sideBar/organismViewer';
+import { SidePanel } from './sidePanel/sidePanel';
+import { BottomPanel } from './bottomPanel/bottomPanel';
 
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;
-  private populationChart: PopulationChart;
-  private scenarioControl: UIComponent;
-  private organismBuilder: OrganismBuilder;
-  private organismViewer: OrganismViewer;
-  private speedControls: SpeedControls;
+  private sidePanel: SidePanel;
+  private bottomPanel: BottomPanel;
 
   constructor() {
     super('ui-scene');
@@ -32,49 +25,10 @@ export class UIScene extends Scene {
   }
 
   create(): void {
-    this.populationChart = new PopulationChart(this);
-    // this.trendsChart = new TrendsChart(this);
-    this.scenarioControl = new ScenarioControl(this);
-    this.organismBuilder = new OrganismBuilder(this);
-    this.speedControls = new SpeedControls(this);
-    this.organismViewer = new OrganismViewer(this);
-
-    let titleText = this.add.text(
-      0,
-      0,
-      "Jia's Life Simulator",
-      textDefaultsDark
-    );
-
-    /* Organise UI elements */
-    this.rexUI.add
-      .sizer({
-        x: 1600,
-        y: 599,
-        height: 1220,
-        width: 650,
-        orientation: 'y',
-        space: { left: 20, right: 20, top: 20, bottom: 20, item: 30 },
-      })
-      .add(titleText)
-      .add(this.scenarioControl)
-      .add(
-        this.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 20 } })
-          .add(this.organismBuilder)
-          .add(this.organismViewer)
-      )
-      .add(this.populationChart)
-      .addBackground(
-        this.rexUI.add
-          .roundRectangle(0, 0, 0, 0, 0, COLORS.OFF_WHITE)
-          .setStrokeStyle(2, COLORS.BACKGROUND_BORDER)
-          .setDepth(-5)
-      )
-      .layout();
+    this.sidePanel = new SidePanel(this);
+    this.bottomPanel = new BottomPanel(this);
 
     this.resetScene();
-    this.initListeners();
     this.cameras.main.setBackgroundColor(COLORS.BACKGROUND_COLOR);
   }
 
@@ -84,12 +38,8 @@ export class UIScene extends Scene {
     let envScene = this.scene.get('environment-scene');
     envScene.scene.restart();
 
-    // this.trendsChart.reset();
-    this.populationChart.reset();
-    this.scenarioControl.reset();
-    this.organismBuilder.reset();
-    this.speedControls.reset();
-    this.organismViewer.reset();
+    this.sidePanel.reset();
+    this.bottomPanel.reset();
 
     this.registry.set(REGISTRY_KEYS.worldAge, 0);
     this.registry.set(REGISTRY_KEYS.organismSpecies, 0);
@@ -97,20 +47,5 @@ export class UIScene extends Scene {
     this.registry.set(REGISTRY_KEYS.organismSize, 50);
     this.registry.set(REGISTRY_KEYS.organismSpeed, 50);
     this.registry.set(REGISTRY_KEYS.organismType, NeuralNetworkOrganism);
-  }
-
-  private initListeners(): void {
-    this.time.addEvent({
-      delay: 500,
-      callback: this.populationChart.updateChart_,
-      callbackScope: this.populationChart,
-      loop: true,
-    });
-    // this.time.addEvent({
-    //   delay: 500,
-    //   callback: this.trendsChart.updateChart_,
-    //   callbackScope: this.trendsChart,
-    //   loop: true,
-    // });
   }
 }
