@@ -19,9 +19,10 @@ import { NeuralNetworkOrganism } from '../../../classes/entities/neuralNetworkOr
 
 export class OrganismBuilder extends UIComponent {
   private builderPreview: GameObjects.Arc;
+  private organismTypeChooser: DropDownList;
   private sizeSlider: Slider;
   private speedSlider: Slider;
-  private organismTypeChooser: DropDownList;
+  private startingEnergySlider: Slider;
 
   constructor(scene: UIScene) {
     super(scene, {
@@ -52,6 +53,12 @@ export class OrganismBuilder extends UIComponent {
       0,
       0,
       '50',
+      smallerTextDark
+    );
+    let startingEnergyText: GameObjects.Text = scene.add.text(
+      0,
+      0,
+      '100',
       smallerTextDark
     );
     this.builderPreview = scene.add.circle(0, 0, 12, 0xe8000b);
@@ -140,6 +147,25 @@ export class OrganismBuilder extends UIComponent {
       })
       .layout();
 
+    // Starting energy of organism
+    this.startingEnergySlider = scene.rexUI.add.slider({
+      width: 100,
+      height: 10,
+      valuechangeCallback: (value) => {
+        scene.registry.set(REGISTRY_KEYS.organismStartingEnergy, value * 200);
+        startingEnergyText.setText(
+          (value * 200).toLocaleString('en-us', {
+            maximumFractionDigits: 0,
+          })
+        );
+      },
+      input: 'click',
+      space: { top: 4, bottom: 4 },
+      value: 0.5,
+      track: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
+      thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
+    });
+
     // Organism type
     this.organismTypeChooser = scene.rexUI.add
       .simpleDropDownList({
@@ -192,18 +218,21 @@ export class OrganismBuilder extends UIComponent {
               .sizer({ orientation: 'y', space: { item: 20 } })
               .add(scene.add.text(0, 0, 'Size', smallerTextDark))
               .add(scene.add.text(0, 0, 'Speed', smallerTextDark))
+              .add(scene.add.text(0, 0, 'Energy', smallerTextDark))
           )
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 20 } })
               .add(this.sizeSlider)
               .add(this.speedSlider)
+              .add(this.startingEnergySlider)
           )
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 20 } })
               .add(sizeText)
               .add(speedText)
+              .add(startingEnergyText)
           )
       )
       .add(
@@ -226,6 +255,7 @@ export class OrganismBuilder extends UIComponent {
   reset(): void {
     this.speedSlider.setValue(0.5);
     this.sizeSlider.setValue(0.5);
+    this.startingEnergySlider.setValue(0.5);
     this.setColour(0xe8000b);
     this.organismTypeChooser.setText('Neural Network');
   }
