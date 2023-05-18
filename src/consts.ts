@@ -15,6 +15,7 @@ export enum REGISTRY_KEYS {
   organismSpecies = 'organism-species',
   organismStartingEnergy = "organism-starting-energy",
   organismType = 'organism-type',
+  mutationRate = 'mutation-rate',
   speciesCounts = 'species-counts',
   timeScale = 'timescale',
   trendsDataset = 'trends-dataset',

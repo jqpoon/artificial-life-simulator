@@ -1,6 +1,6 @@
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
-import { ORGANISM_TYPES } from '../../consts';
+import { ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 
 export class RandomOrganism extends Organism {
   /**
@@ -24,7 +24,7 @@ export class RandomOrganism extends Organism {
   }
 
   protected clone(): any {
-    let mutationRate = 0.01;
+    let mutationRate = this.scene.registry.get(REGISTRY_KEYS.mutationRate);
 
     let newVelocity = this.velocity;
     let newSize = this.size;
