@@ -21,6 +21,7 @@ export interface OrganismConfigs {
   startingEnergy?: number;
   energySplitParentRatio?: number;
   generation?: number;
+  visionDistance?: number;
 };
 
 export interface OrganismInformation {

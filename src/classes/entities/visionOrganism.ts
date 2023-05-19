@@ -2,7 +2,8 @@ import { Food } from './food';
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
 import { OrganismUtils } from '../utils/organismUtils';
-import { ORGANISM_TYPES } from '../../consts';
+import { ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
+import { Mutation } from '../utils/mutation';
 
 export class VisionOrganism extends Organism {
   /**
@@ -36,11 +37,36 @@ export class VisionOrganism extends Organism {
   }
 
   protected clone(): any {
+    let mutationRate = this.scene.registry.get(REGISTRY_KEYS.mutationRate);
+
+    let newVelocity = this.velocity;
+    let newSize = this.size;
+    let newVisionDistance = this.visionDistance / 2;
+
+    // Do some mutation
+    if (Math.random() < mutationRate) {
+      newVelocity = parseInt(
+        Mutation.inversionMutation(this.velocity.toString(10), 10),
+        10
+      );
+      newSize = parseInt(
+        Mutation.inversionMutation(this.size.toString(10), 10),
+        10
+      );
+      newVisionDistance = parseInt(
+        Mutation.inversionMutation(this.visionDistance.toString(10), 10),
+        10
+      );
+    }
+
+
     return new VisionOrganism({
       scene: this.scene,
       x: this.x,
       y: this.y,
-      size: this.size,
+      size: newSize,
+      velocity: newVelocity,
+      visionDistance: newVisionDistance,
       color: this.color,
       generation: this.generation + 1,
       species: this.species,

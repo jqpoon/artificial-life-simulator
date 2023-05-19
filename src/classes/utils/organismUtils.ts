@@ -9,8 +9,8 @@ export class OrganismUtils {
    * @param size - Size of organism
    * @returns Energy loss of organism
    */
-  public static calculateBasalEnergyLoss(size: number): number {
-    return 0.01 * Math.pow(size, 0.75);
+  public static calculateBasalEnergyLoss(size: number, visionDistance: number): number {
+    return 0.01 * Math.pow(size, 0.75) + visionDistance * 0.0005;
   }
 
   /**

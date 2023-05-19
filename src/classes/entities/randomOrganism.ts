@@ -1,6 +1,7 @@
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
 import { ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
+import { Mutation } from '../utils/mutation';
 
 export class RandomOrganism extends Organism {
   /**
@@ -32,14 +33,14 @@ export class RandomOrganism extends Organism {
 
     // Do some mutation
     if (Math.random() < mutationRate) {
-      // newVelocity = parseInt(
-      //   Mutation.inversionMutation(this.velocity.toString(10), 10),
-      //   10
-      // );
-      // newSize = parseInt(
-      //   Mutation.inversionMutation(this.height.toString(10), 10),
-      //   10
-      // );
+      newVelocity = parseInt(
+        Mutation.inversionMutation(this.velocity.toString(10), 10),
+        10
+      );
+      newSize = parseInt(
+        Mutation.inversionMutation(this.height.toString(10), 10),
+        10
+      );
     }
 
     return new RandomOrganism({

@@ -76,7 +76,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     this.visionDistance = mergedConfigs.visionDistance;
     this.basalEnergyLossPerUpdate =
       mergedConfigs.energyLoss ??
-      OrganismUtils.calculateBasalEnergyLoss(this.size);
+      OrganismUtils.calculateBasalEnergyLoss(this.size, this.visionDistance);
     this.radius = this.size / 2;
     this.species = mergedConfigs.species;
 
