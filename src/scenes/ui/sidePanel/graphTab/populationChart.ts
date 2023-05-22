@@ -1,10 +1,10 @@
 import { Chart } from 'phaser3-rex-plugins/templates/ui/ui-components';
-import { EVENTS_NAME, REGISTRY_KEYS } from '../../../consts';
-import { ChartData, SpeciesCounts } from '../../../typedefs';
-import { UIScene } from '../mainUI';
-import { Conversion } from '../../../classes/utils/conversion';
-import { ChartComponent } from '../chartComponent';
-import { speciesInfo } from '../UIConstants';
+import { EVENTS_NAME, REGISTRY_KEYS } from '../../../../consts';
+import { ChartData, SpeciesCounts } from '../../../../typedefs';
+import { UIScene } from '../../mainUI';
+import { Conversion } from '../../../../classes/utils/conversion';
+import { ChartComponent } from '../../chartComponent';
+import { speciesInfo } from '../../UIConstants';
 
 export default class PopulationChart extends ChartComponent {
   private chartData: ChartData;

@@ -6,6 +6,12 @@ export enum COLORS {
   OFF_WHITE = 0xfaf8f5,
 }
 
+export enum PAGE_KEYS {
+  GRAPHS = 'graphs',
+  SIMULATION = 'simulation',
+  ORGANISM = 'organism',
+}
+
 export const textDefaultsDark = {
   fontSize: '30px',
   color: '#000000',

@@ -1,14 +1,14 @@
+import { Label, Pages } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIComponent } from '../UIComponent';
-import { COLORS, textDefaultsDark } from '../UIConstants';
+import { COLORS, PAGE_KEYS, smallerTextDark, textDefaultsDark } from '../UIConstants';
 import { UIScene } from '../mainUI';
-import { OrganismBuilder } from './organismBuilder';
-import { OrganismViewer } from './organismViewer';
-import PopulationChart from './populationChart';
+import { GraphTab } from './graphTab/graphTab';
+import { OrganismTab } from './organismTab/organismTab';
 
 export class SidePanel extends UIComponent {
-  private populationChart: PopulationChart;
-  private organismBuilder: OrganismBuilder;
-  private organismViewer: OrganismViewer;
+  private graphTab: GraphTab;
+  private organismTab: OrganismTab;
+  private pages: Pages;
 
   constructor(scene: UIScene) {
     super(scene, {
@@ -17,29 +17,44 @@ export class SidePanel extends UIComponent {
       height: 1220,
       width: 650,
       orientation: 'y',
-      space: { left: 20, right: 20, top: 20, bottom: 20, item: 30 },
     });
 
-    this.populationChart = new PopulationChart(scene);
-    this.organismBuilder = new OrganismBuilder(scene);
-    this.organismViewer = new OrganismViewer(scene);
+    /* Title */
+    let titleText = scene.rexUI.add.label({
+      text: scene.add.text(0, 0, "Jia's Life Simulator", textDefaultsDark),
+      height: 80,
+    });
 
-    let titleText = scene.add.text(
-      0,
-      0,
-      "Jia's Life Simulator",
-      textDefaultsDark
-    );
+    /* Pages */
+    this.organismTab = new OrganismTab(scene);
+    this.graphTab = new GraphTab(scene);
+
+    this.pages = scene.rexUI.add
+      .pages({
+        width: 650,
+        height: 900,
+      })
+      .addBackground(
+        scene.rexUI.add
+          .roundRectangle(0, 0, 10, 10, 0, COLORS.BACKGROUND_COLOR)
+          .setStrokeStyle(2, COLORS.BACKGROUND_BORDER)
+      );
+
+    this.pages.addPage(this.graphTab, { key: PAGE_KEYS.GRAPHS, expand: true });
+    this.pages.addPage(this.organismTab, { key: PAGE_KEYS.ORGANISM, expand: true });
+    this.pages.swapPage(PAGE_KEYS.ORGANISM);
+
+    /* Navigation bar */
+    let navigationBar = scene.rexUI.add
+      .sizer()
+      .add(this.createButton(scene, 'Organism\n Controls', PAGE_KEYS.ORGANISM))
+      .add(this.createButton(scene, 'Simulation\n Controls', PAGE_KEYS.SIMULATION))
+      .add(this.createButton(scene, 'Graphs', PAGE_KEYS.GRAPHS));
 
     /* Organise UI elements */
     this.add(titleText)
-      .add(
-        scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 20 } })
-          .add(this.organismBuilder)
-          .add(this.organismViewer)
-      )
-      .add(this.populationChart)
+      .add(this.pages)
+      .add(navigationBar)
       .addBackground(
         scene.rexUI.add
           .roundRectangle(0, 0, 0, 0, 0, COLORS.OFF_WHITE)
@@ -47,22 +62,27 @@ export class SidePanel extends UIComponent {
           .setDepth(-5)
       )
       .layout();
-
-    this.initListeners();
   }
 
   reset(): void {
-    this.populationChart.reset();
-    this.organismBuilder.reset();
-    this.organismViewer.reset();
+    this.graphTab.reset();
+    this.organismTab.reset();
   }
 
-  private initListeners(): void {
-    this.scene.time.addEvent({
-      delay: 500,
-      callback: this.populationChart.updateChart_,
-      callbackScope: this.populationChart,
-      loop: true,
+  private createButton(scene: UIScene, text: string, key: PAGE_KEYS): Label {
+    return scene.rexUI.add.label({
+      width: 200,
+      height: 100,
+      align: 'center',
+      background: scene.rexUI.add
+        .roundRectangle(0, 0, 0, 0, 5, COLORS.BUTTON_MAIN)
+        .setStrokeStyle(2, COLORS.BUTTON_BORDER),
+      text: this.scene.add.text(0, 0, text, smallerTextDark),
+      space: { left: 20, right: 20, top: 20, bottom: 20 },
+    })
+    .setInteractive()
+    .on('pointerdown', () => {
+      this.pages.swapPage(key);
     });
   }
 }

@@ -1,11 +1,11 @@
 import RoundRectangle from 'phaser3-rex-plugins/plugins/roundrectangle';
 
-import { EVENTS_NAME } from '../../../consts';
+import { EVENTS_NAME } from '../../../../consts';
 import { GameObjects } from 'phaser';
-import { OrganismInformation } from '../../../typedefs';
-import { smallerTextDark, textDefaultsDark } from '../UIConstants';
-import { UIComponent } from '../UIComponent';
-import { UIScene } from '../mainUI';
+import { OrganismInformation } from '../../../../typedefs';
+import { smallerTextDark, textDefaultsDark } from '../../UIConstants';
+import { UIComponent } from '../../UIComponent';
+import { UIScene } from '../../mainUI';
 
 export class OrganismViewer extends UIComponent {
   private generationText: GameObjects.Text;
