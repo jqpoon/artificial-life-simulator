@@ -4,10 +4,12 @@ import { COLORS, PAGE_KEYS, smallerTextDark, textDefaultsDark } from '../UIConst
 import { UIScene } from '../mainUI';
 import { GraphTab } from './graphTab/graphTab';
 import { OrganismTab } from './organismTab/organismTab';
+import { SimulatorTab } from './simulatorTab/simulatorTab';
 
 export class SidePanel extends UIComponent {
   private graphTab: GraphTab;
   private organismTab: OrganismTab;
+  private scenarioTab: SimulatorTab;
   private pages: Pages;
 
   constructor(scene: UIScene) {
@@ -28,6 +30,7 @@ export class SidePanel extends UIComponent {
     /* Pages */
     this.organismTab = new OrganismTab(scene);
     this.graphTab = new GraphTab(scene);
+    this.scenarioTab = new SimulatorTab(scene);
 
     this.pages = scene.rexUI.add
       .pages({
@@ -42,6 +45,7 @@ export class SidePanel extends UIComponent {
 
     this.pages.addPage(this.graphTab, { key: PAGE_KEYS.GRAPHS, expand: true });
     this.pages.addPage(this.organismTab, { key: PAGE_KEYS.ORGANISM, expand: true });
+    this.pages.addPage(this.scenarioTab, { key: PAGE_KEYS.SIMULATION, expand: true });
     this.pages.swapPage(PAGE_KEYS.ORGANISM);
 
     /* Navigation bar */

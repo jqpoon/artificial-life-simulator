@@ -9,6 +9,7 @@ export enum EVENTS_NAME {
 
 
 export enum REGISTRY_KEYS {
+  energyLoss = 'energy-loss', // Global energy loss
   organismColour = 'organism-colour',
   organismSpeed = 'organism-speed',
   organismSize = 'organism-size',

@@ -78,10 +78,11 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       mergedConfigs.visionDistance,
       Organism.MIN_VISION,
       Organism.MAX_VISION
-    )
+    );
     this.basalEnergyLossPerUpdate =
       mergedConfigs.energyLoss ??
-      OrganismUtils.calculateBasalEnergyLoss(this.size, this.visionDistance);
+      OrganismUtils.calculateBasalEnergyLoss(this.size, this.visionDistance) *
+        this.scene.registry.get(REGISTRY_KEYS.energyLoss);
     this.radius = this.size / 2;
     this.species = mergedConfigs.species;
 
@@ -114,7 +115,11 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Build physics body */
     this.scene.physics.add.existing(this);
-    (this.body as Phaser.Physics.Arcade.Body).setCircle(this.radius, -this.radius, -this.radius);
+    (this.body as Phaser.Physics.Arcade.Body).setCircle(
+      this.radius,
+      -this.radius,
+      -this.radius
+    );
 
     /* Enable clicks to view more information */
     this.setInteractive(
