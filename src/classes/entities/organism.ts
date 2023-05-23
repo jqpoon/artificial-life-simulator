@@ -11,6 +11,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   private static readonly MAX_VELOCITY = 100;
   private static readonly MIN_SIZE = 1;
   private static readonly MAX_SIZE = 100;
+  private static readonly MIN_VISION = 10;
+  private static readonly MAX_VISION = 200;
 
   /* Defaults attribute values */
   private static readonly ORGANISM_DEFAULTS = {
@@ -72,7 +74,11 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       Organism.MIN_VELOCITY,
       Organism.MAX_VELOCITY
     );
-    this.visionDistance = mergedConfigs.visionDistance;
+    this.visionDistance = Phaser.Math.Clamp(
+      mergedConfigs.visionDistance,
+      Organism.MIN_VISION,
+      Organism.MAX_VISION
+    )
     this.basalEnergyLossPerUpdate =
       mergedConfigs.energyLoss ??
       OrganismUtils.calculateBasalEnergyLoss(this.size, this.visionDistance);
