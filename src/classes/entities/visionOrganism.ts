@@ -3,12 +3,13 @@ import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
 import { OrganismUtils } from '../utils/organismUtils';
 import { ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
-import { Mutation } from '../utils/mutation';
+import { Mutation } from '../genetic/mutation';
 
+/**
+ * Organism that noves around randomly, until it sees a food,
+ * then it starts moving towards it
+ */
 export class VisionOrganism extends Organism {
-  /**
-   * Moves around randomly, until it sees a food, then it starts moving towards it
-   */
   private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 400;
   private changeDirectionCounter: number = 0;
 
@@ -58,7 +59,6 @@ export class VisionOrganism extends Organism {
         10
       );
     }
-
 
     return new VisionOrganism({
       scene: this.scene,

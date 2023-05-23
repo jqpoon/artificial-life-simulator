@@ -1,12 +1,12 @@
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
 import { ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
-import { Mutation } from '../utils/mutation';
+import { Mutation } from '../genetic/mutation';
 
+/**
+ * Organism that noves around randomly
+ */
 export class RandomOrganism extends Organism {
-  /**
-   * Moves around randomly only
-   */
   private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 400;
   private changeDirectionCounter: number = 0;
 
