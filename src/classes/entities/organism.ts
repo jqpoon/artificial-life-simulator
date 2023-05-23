@@ -2,11 +2,10 @@ import { EVENTS_NAME, ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 import { Entity, OrganismConfigs, OrganismInformation } from '../../typedefs';
 import { OrganismUtils } from '../utils/organismUtils';
 
+/**
+ * A basic living thing in the simulator
+ */
 export abstract class Organism extends Phaser.GameObjects.Container {
-  /**
-   * A basic living thing in the simulator.
-   */
-
   /* Physical limits of some attributes */
   private static readonly MIN_VELOCITY = 1;
   private static readonly MAX_VELOCITY = 100;
@@ -91,15 +90,15 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     /* Build visible body */
     this.scene.add.existing(this);
     this.mainBody = this.scene.add.ellipse(
-      this.radius, // Centers ellipse with container
-      this.radius, // Centers ellipse with container
+      0, // Centers ellipse with container
+      0, // Centers ellipse with container
       this.size,
       this.size,
       this.color
     );
     this.vision = this.scene.add.ellipse(
-      this.radius,
-      this.radius,
+      0,
+      0,
       this.size + this.visionDistance,
       this.size + this.visionDistance,
       this.color,
@@ -109,11 +108,11 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Build physics body */
     this.scene.physics.add.existing(this);
-    (this.body as Phaser.Physics.Arcade.Body).setCircle(this.radius); // Divide by two since size is defined in terms of diameter
+    (this.body as Phaser.Physics.Arcade.Body).setCircle(this.radius, -this.radius, -this.radius);
 
     /* Enable clicks to view more information */
     this.setInteractive(
-      new Phaser.Geom.Circle(this.radius, this.radius, this.radius),
+      new Phaser.Geom.Circle(0, 0, this.radius),
       Phaser.Geom.Circle.Contains
     );
     this.on('pointerdown', () => {
@@ -158,7 +157,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Apply physics effects */
     let body = this.body as Phaser.Physics.Arcade.Body;
-    body.setCollideWorldBounds(true);
+    // body.setCollideWorldBounds(true);
+    this.scene.physics.world.wrap(this, -this.radius);
 
     /* Apply energy loss to organism */
     let totalEnergyLoss =
