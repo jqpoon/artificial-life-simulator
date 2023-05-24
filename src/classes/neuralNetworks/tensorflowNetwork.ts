@@ -19,7 +19,7 @@ export class TensorflowNetwork implements Network {
         name: 'layer1',
         batchSize: 1,
         inputShape: [input],
-        units: 8,
+        units: 4,
         useBias: true,
         biasInitializer: 'glorotNormal',
         activation: 'tanh',
@@ -51,19 +51,23 @@ export class TensorflowNetwork implements Network {
   /**
    * Sets the weights of this network
    *
-   * @param weights - A 2D array of weights
+   * @param weights - A 3D array of weights
    */
-  setWeights(weights: number[][]): void {
-    let w_tensor = tf.tensor(weights);
-    this.model.setWeights([w_tensor]);
+  setWeights(weights: number[][][]): void {
+    let w_tensor = weights.map((layerWeights) => {
+      return tf.tensor(layerWeights);
+    });
+
+    this.model.setWeights(w_tensor);
   }
 
   /**
    * Returns the weights of this neural network as a 2D array
+   * TODO: Update this description!
    *
    * @returns Weights of this neural network
    */
-  getWeights(): number[][] {
-    return this.model.getWeights()[0].arraySync() as number[][];
+  getWeights(): number[][][] {
+    return this.model.getWeights().map((arr) => { return arr.arraySync() }) as number[][][];
   }
 }

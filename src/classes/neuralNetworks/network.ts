@@ -3,6 +3,6 @@ export interface Network {
   forward(values: number[]): number[];
 
   /* Getters and setters for the internal weights matrices */
-  setWeights(weights: number[][]): void;
-  getWeights(): number[][];
+  setWeights(weights: number[][][]): void;
+  getWeights(): number[][][];
 }
