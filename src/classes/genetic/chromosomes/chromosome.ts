@@ -1,9 +1,4 @@
-import { Conversion } from '../utils/conversion';
-import { MutationFunctions } from './mutation';
-
-/* Used to restrict color type */
-const hexadecimalChars = '0123456789ABCDEF'.split('');
-type HexadecimalChars = (typeof hexadecimalChars)[number];
+import { MutationFunctions } from '../mutation';
 
 /**
  * Represents the genetic makeup of a specific aspect of an organism
@@ -48,41 +43,5 @@ export abstract class Chromosome<T> {
 
   public mutateWith(f: MutationFunctions, mutationRate: number): Chromosome<T> {
     return f(this, mutationRate);
-  }
-}
-
-export class ColorChromosome extends Chromosome<HexadecimalChars> {
-  constructor() {
-    /* Colors are represented with six hexadecimal digits */
-    super(6);
-  }
-
-  /**
-   * Picks a random hexadecimal value in [0-F]
-   * @returns A single hexadecimal string
-   */
-  public getRandomGene(): HexadecimalChars {
-    return hexadecimalChars[
-      Math.floor(Math.random() * hexadecimalChars.length)
-    ];
-  }
-
-  public toPhenotype(): number {
-    return Conversion.stringColorToNumberColour(
-      '#' + this.getGenes().join('').toLowerCase()
-    );
-  }
-
-  public fromPhenotype(phenotype: number): ColorChromosome {
-    /* Convert to a string before removing '#' and splitting into a list */
-    let stringColor = Conversion.numberColorToStringColor(phenotype);
-    let genes = stringColor.substring(1).split('');
-    return this.fromGenes(genes) as ColorChromosome;
-  }
-
-  protected getCopy(): ColorChromosome {
-    let copy = new ColorChromosome();
-    copy.setGenes(this.getGenes());
-    return copy;
   }
 }

@@ -1,5 +1,5 @@
 import { Organism } from './classes/entities/organism';
-import { Chromosome, ColorChromosome } from './classes/genetic/chromosomes';
+import { Chromosome } from './classes/genetic/chromosomes/chromosome';
 import { ORGANISM_TYPES } from './consts';
 
 /**

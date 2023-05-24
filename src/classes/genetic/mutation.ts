@@ -1,4 +1,4 @@
-import { Chromosome } from './chromosomes';
+import { Chromosome } from './chromosomes/chromosome';
 
 export class Mutation {
   /**

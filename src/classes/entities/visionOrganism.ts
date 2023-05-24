@@ -4,7 +4,7 @@ import { OrganismConfigs } from '../../typedefs';
 import { OrganismUtils } from '../utils/organismUtils';
 import { ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 import { Mutation, inversionWithMutationRate } from '../genetic/mutation';
-import { ColorChromosome } from '../genetic/chromosomes';
+import { ColorChromosome } from '../genetic/chromosomes/colorChromosome';
 
 /**
  * Organism that noves around randomly, until it sees a food,
