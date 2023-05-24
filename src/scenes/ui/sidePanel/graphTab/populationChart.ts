@@ -62,7 +62,7 @@ export default class PopulationChart extends ChartComponent {
       this.chartData.datasets.push({
         data: {},
         fill: false,
-        borderColor: Conversion.numberColorToStringColour(species.color),
+        borderColor: Conversion.numberColorToStringColor(species.color),
         pointRadius: 0,
       });
 

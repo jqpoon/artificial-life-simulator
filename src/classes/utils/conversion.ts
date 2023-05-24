@@ -5,7 +5,7 @@ export class Conversion {
    * @param color - The color to be converted as a number
    * @returns The color as a 6-digit hexadecimal string starting with a '#'
    */
-  public static numberColorToStringColour(color: number): string {
+  public static numberColorToStringColor(color: number): string {
     return '#' + color.toString(16).padStart(6, '0');
   }
 

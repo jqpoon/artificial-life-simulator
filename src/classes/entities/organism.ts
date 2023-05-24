@@ -57,7 +57,16 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   protected abstract onUpdate(time: number, delta: number): void;
   protected abstract onDestroy(): void;
 
+  /**
+   * Refer to type OrganismConfigs for more details
+   * @param configs
+   */
   constructor(configs: OrganismConfigs) {
+    /* Express chromosomes if they exist */
+    if (configs.colorChromosome) {
+      configs.color = configs.colorChromosome.toPhenotype();
+    }
+
     let mergedConfigs = { ...Organism.ORGANISM_DEFAULTS, ...configs };
     super(mergedConfigs.scene, mergedConfigs.x, mergedConfigs.y);
 

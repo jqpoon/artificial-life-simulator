@@ -19,24 +19,32 @@ export class Mutation {
       gene.substring(0, posToMutate) + newChar + gene.substring(posToMutate + 1)
     );
   }
+}
 
-  /**
-   * Performs inversion mutation on genes contained in this chromosome. Each
-   * gene has an independent and random chance of being changed.
-   *
-   * @param chromosomes - The chromosome to mutate
-   * @param mutationRate - Mutation rate of genes
-   * @returns A new chromosome after (possible) mutation
-   */
-  public static inversionWithMutationRate<T>(chromosomes: Chromosome<T>, mutationRate: number) {
-    let genes: T[] = chromosomes.getGenes();
+export type MutationFunctions = (
+  chromosomes: Chromosome<any>,
+  mutationRate: number
+) => Chromosome<any>;
 
-    for (const [index, _] of genes.entries()) {
-      if (Math.random() < mutationRate) {
-        genes[index] = chromosomes.getRandomGene();
-      }
+/**
+ * Performs inversion mutation on genes contained in this chromosome. Each
+ * gene has an independent and random chance of being changed.
+ *
+ * @param chromosomes - The chromosome to mutate
+ * @param mutationRate - Mutation rate of genes
+ * @returns A new chromosome after (possible) mutation
+ */
+export function inversionWithMutationRate<T>(
+  chromosomes: Chromosome<T>,
+  mutationRate: number
+): Chromosome<T> {
+  let genes: T[] = chromosomes.getGenes();
+
+  for (const [index, _] of genes.entries()) {
+    if (Math.random() < mutationRate) {
+      genes[index] = chromosomes.getRandomGene();
     }
-
-    return chromosomes.fromGenes(genes);
   }
+
+  return chromosomes.fromGenes(genes);
 }

@@ -1,43 +1,51 @@
-import { Organism } from "./classes/entities/organism";
-import { ORGANISM_TYPES } from "./consts";
+import { Organism } from './classes/entities/organism';
+import { Chromosome, ColorChromosome } from './classes/genetic/chromosomes';
+import { ORGANISM_TYPES } from './consts';
 
-export interface SliderConfigs {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-};
-
-export interface OrganismConfigs {
+/**
+ * Defines how to construct an organism. Chromosome fields need to be expressed
+ * as phenotypes, and take priority over optional fields. If none of these
+ * fields are present, defaults are set instead.
+ *
+ * For example, if both color and colorChromosome are defined, then the
+ * colorChromosome will be converted into a phenotype and be used as the
+ * organism's color.
+ */
+export type OrganismConfigs = {
+  /* Required fields */
   scene: Phaser.Scene;
+
+  /* Optional fields */
+  alpha?: number;
+  color?: number;
+  energyLoss?: number;
+  generation?: number;
+  species?: number;
+  startingEnergy?: number;
   velocity?: number;
+  visionDistance?: number;
   size?: number;
   x?: number;
   y?: number;
-  color?: number;
-  alpha?: number;
-  species?: number;
-  energyLoss?: number;
-  startingEnergy?: number;
-  energySplitParentRatio?: number;
-  generation?: number;
-  visionDistance?: number;
+
+  /* Chromosome fields */
+  colorChromosome?: Chromosome<string>;
 };
 
-export interface OrganismInformation {
-  name: string,
-  generation: number,
-  velocity: number,
-  size: number,
-  energy: number,
-  type: ORGANISM_TYPES,
+export type OrganismInformation = {
+  name: string;
+  generation: number;
+  velocity: number;
+  size: number;
+  energy: number;
+  type: ORGANISM_TYPES;
 };
 
-export interface IOrganism {
+export type IOrganism = {
   new (configs: OrganismConfigs): Organism;
-}
+};
 
-export interface FoodConfigs {
+export type FoodConfigs = {
   scene: Phaser.Scene;
   x?: number;
   y?: number;
@@ -45,14 +53,21 @@ export interface FoodConfigs {
 };
 
 type Datapoints = { [key: number]: number }; // x:y values
-type Dataset = { data: Datapoints, fill?: boolean, borderColor?: string, pointRadius?: number }; // Defines a single dataset
+type Dataset = {
+  data: Datapoints;
+  fill?: boolean;
+  borderColor?: string;
+  pointRadius?: number;
+}; // Defines a single dataset
 type Datasets = Dataset[];
 export type ChartData = {
-  datasets: Datasets,
+  datasets: Datasets;
 };
 
 export type SpeciesCounts = {
-  [key: number]: number
-}
+  [key: number]: number;
+};
 
-export type Entity = Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody;
+export type Entity =
+  | Phaser.Physics.Arcade.Body
+  | Phaser.Physics.Arcade.StaticBody;

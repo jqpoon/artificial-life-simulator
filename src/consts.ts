@@ -7,14 +7,13 @@ export enum EVENTS_NAME {
   selectOrganism = 'select-organism', // When user clicks on an organism
 }
 
-
 export enum REGISTRY_KEYS {
   energyLoss = 'energy-loss', // Global energy loss
   organismColour = 'organism-colour',
   organismSpeed = 'organism-speed',
   organismSize = 'organism-size',
   organismSpecies = 'organism-species',
-  organismStartingEnergy = "organism-starting-energy",
+  organismStartingEnergy = 'organism-starting-energy',
   organismType = 'organism-type',
   mutationRate = 'mutation-rate',
   speciesCounts = 'species-counts',
