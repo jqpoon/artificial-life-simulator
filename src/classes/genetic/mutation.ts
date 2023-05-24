@@ -1,3 +1,5 @@
+import { Chromosome } from './chromosomes';
+
 export class Mutation {
   /**
    * Mutates a single character of a genetic string.
@@ -13,6 +15,28 @@ export class Mutation {
     charToMutate = charToMutate + (Math.random() < 0.5 ? -1 : 1); // Either adds or subtracts one
     let newChar: string = ((charToMutate + base) % base).toString(base)[0]; // Ensure it stays within range
 
-    return gene.substring(0, posToMutate) + newChar + gene.substring(posToMutate + 1);
+    return (
+      gene.substring(0, posToMutate) + newChar + gene.substring(posToMutate + 1)
+    );
+  }
+
+  /**
+   * Performs inversion mutation on genes contained in this chromosome. Each
+   * gene has an independent and random chance of being changed.
+   *
+   * @param chromosomes - The chromosome to mutate
+   * @param mutationRate - Mutation rate of genes
+   * @returns A new chromosome after (possible) mutation
+   */
+  public static inversionWithMutationRate<T>(chromosomes: Chromosome<T>, mutationRate: number) {
+    let genes: T[] = chromosomes.getGenes();
+
+    for (const [index, _] of genes.entries()) {
+      if (Math.random() < mutationRate) {
+        genes[index] = chromosomes.getRandomGene();
+      }
+    }
+
+    return chromosomes.fromGenes(genes);
   }
 }
