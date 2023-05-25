@@ -9,7 +9,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   /* Physical limits of some attributes */
   private static readonly MIN_VELOCITY = 1;
   private static readonly MAX_VELOCITY = 100;
-  private static readonly MIN_SIZE = 1;
+  private static readonly MIN_SIZE = 20;
   private static readonly MAX_SIZE = 100;
   private static readonly MIN_VISION = 10;
   private static readonly MAX_VISION = 200;
