@@ -69,16 +69,14 @@ function matrixMultiply(a: number[], b: number[][]): number[] {
   const result: number[] = [];
 
   for (let i = 0; i < rowsA; i++) {
-    const row: number[] = [];
+    const row: number[] = new Array(colsB).fill(0);
 
-    for (let j = 0; j < colsB; j++) {
-      let sum = 0;
+    for (let j = 0; j < colsA; j++) {
+      const scalar = a[j];
 
-      for (let k = 0; k < colsA; k++) {
-        sum += a[k] * b[k][j];
+      for (let k = 0; k < colsB; k++) {
+        row[k] += scalar * b[j][k];
       }
-
-      row.push(sum);
     }
 
     result.push(...row);
