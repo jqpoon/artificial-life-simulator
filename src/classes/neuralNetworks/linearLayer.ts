@@ -1,4 +1,12 @@
 import { LayerBias, LayerParams, LayerWeights } from './network';
+import {
+  ActivationFunction,
+  glorotUniform,
+  Initialiser,
+  matrixElementWiseAdd,
+  matrixMultiply,
+  tanh,
+} from './networkMath';
 
 /**
  * A single linear layer
@@ -38,7 +46,7 @@ export class LinearLayer {
    *          biases and activation function
    */
   public forward(x: number[]): number[] {
-    x = matrixMultiply(x, this.weights);
+    x = matrixMultiply([x], this.weights)[0]; // 0th element since x is a 1D array
     x = matrixElementWiseAdd(x, this.bias);
     return this.activationFunction(x);
   }
@@ -89,15 +97,23 @@ export class LinearLayer {
 
   /* Checks shape of weights matrix */
   private assertWeightsValidShape(weights: LayerWeights) {
-    if (weights.length != this.weights.length)
-      throw new Error('Different weights shape passed to layer');
-    if (weights[0].length != this.weights[0].length)
-      throw new Error('Different weights shape passed to layer');
+    if (weights.length != this.weights.length) {
+      throw new Error(
+        `Different weights shape passed to layer. Expected ${this.weights.length}, got ${weights.length}`
+      );
+    }
+    if (weights[0].length != this.weights[0].length) {
+      throw new Error(
+        `Different weights shape passed to layer. Expected ${this.weights[0].length}, got ${weights[0].length}`
+      );
+    }
   }
 
   /* Checks shape of bias matrix */
   private assertBiasValidShape(bias: LayerBias) {
-    if (bias.length == this.bias.length)
-      throw new Error('Different bias shape passed to layer');
+    if (bias.length != this.bias.length)
+      throw new Error(
+        `Different bias shape passed to layer. Expected ${this.bias.length}, got ${bias.length}`
+      );
   }
 }

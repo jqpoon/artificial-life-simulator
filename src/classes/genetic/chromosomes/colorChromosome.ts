@@ -35,8 +35,6 @@ export class ColorChromosome extends Chromosome<HexadecimalChars> {
   }
 
   protected getCopy(): ColorChromosome {
-    let copy = new ColorChromosome();
-    copy.setGenes(this.getGenes());
-    return copy;
+    return new ColorChromosome();
   }
 }

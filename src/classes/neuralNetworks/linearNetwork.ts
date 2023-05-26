@@ -5,6 +5,7 @@ export class LinearNetwork implements Network {
   private layers: LinearLayer[];
 
   constructor(input: number, output: number) {
+    this.layers = [];
     this.layers.push(new LinearLayer(input, output));
   }
 

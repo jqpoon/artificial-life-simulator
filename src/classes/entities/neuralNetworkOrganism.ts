@@ -2,23 +2,38 @@ import { Network } from '../neuralNetworks/network';
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
 import { Conversion } from '../utils/conversion';
-import { ORGANISM_TYPES } from '../../consts';
+import { ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 import { LinearNetwork } from '../neuralNetworks/linearNetwork';
+import { NeuralNetChromosome } from '../genetic/chromosomes/neuralNetChromosome';
+import { inversionWithMutationRate } from '../genetic/mutation';
 
 export class NeuralNetworkOrganism extends Organism {
   private network: Network;
+  private networkChromosome: NeuralNetChromosome;
 
   constructor(configs: OrganismConfigs) {
     super(configs);
 
-    this.network = new LinearNetwork(5, 2); // RGB input and relative x/y
-  }
-
-  public setWeights(weights: number[][][]): void {
-    // this.network.setParams(weights);
+    if (configs.neuralNetChromosome) {
+      this.network = configs.neuralNetChromosome.toPhenotype();
+      this.networkChromosome =
+        configs.neuralNetChromosome as NeuralNetChromosome;
+    } else {
+      this.network = new LinearNetwork(5, 2); // RGB input and relative x/y
+      this.networkChromosome = new NeuralNetChromosome(5, 2).fromPhenotype(
+        this.network
+      );
+    }
   }
 
   protected clone() {
+    /* Mutate neural network */
+    let mutationRate = this.scene.registry.get(REGISTRY_KEYS.mutationRate);
+    let childNetworkChromosome = this.networkChromosome.mutateWith(
+      inversionWithMutationRate,
+      mutationRate
+    );
+
     let child = new NeuralNetworkOrganism({
       scene: this.scene,
       x: this.x,
@@ -28,33 +43,8 @@ export class NeuralNetworkOrganism extends Organism {
       color: this.color,
       startingEnergy: this.energy / 2,
       species: this.species,
+      neuralNetChromosome: childNetworkChromosome,
     });
-
-    // /* Mutate neural network */
-    // let mutationRate = this.scene.registry.get(REGISTRY_KEYS.mutationRate);
-    // if (Math.random() < mutationRate) {
-    //   let weights = this.network.getParams();
-    //   let layer = Phaser.Math.RND.integerInRange(0, weights.length - 1);
-
-    //   /* Bias layers */
-    //   if (layer === 1 || layer === 3) {
-    //     let n1 = Phaser.Math.RND.integerInRange(0, weights[layer].length - 1);
-    //     let m = weights[layer].length;
-
-    //     let newValue = Phaser.Math.RND.realInRange(-(1.0 / Math.sqrt(m)), (1.0 / Math.sqrt(m)));
-
-    //     (weights[layer] as unknown as number[])[n1] = newValue;
-    //   } else {
-    //     let n1 = Phaser.Math.RND.integerInRange(0, weights[layer].length - 1);
-    //     let n2 = Phaser.Math.RND.integerInRange(0, weights[layer][n1].length - 1);
-    //     let m = weights[layer].length;
-
-    //     let newValue = Phaser.Math.RND.realInRange(-(1.0 / Math.sqrt(m)), (1.0 / Math.sqrt(m)));
-    //     weights[layer][n1][n2] = newValue;
-    //   }
-
-    //   child.setWeights(weights);
-    // }
 
     return child;
   }

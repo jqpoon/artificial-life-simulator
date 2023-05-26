@@ -30,6 +30,7 @@ export type OrganismConfigs = {
 
   /* Chromosome fields */
   colorChromosome?: Chromosome<string>;
+  neuralNetChromosome?: Chromosome<number>;
 };
 
 export type OrganismInformation = {
