@@ -1,7 +1,7 @@
 import { Slider } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIScene } from '../../mainUI';
 import { TabComponent } from '../tabComponent';
-import { ScenarioControl } from '../../bottomPanel/scenarioControl';
+import { ScenarioControl } from './scenarioControl';
 import { smallerTextDark } from '../../UIConstants';
 import { REGISTRY_KEYS } from '../../../../consts';
 

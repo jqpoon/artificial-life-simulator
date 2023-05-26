@@ -1,7 +1,7 @@
-import { COLORS, smallerTextDark } from '../UIConstants';
-import { EVENTS_NAME } from '../../../consts';
-import { UIComponent } from '../UIComponent';
-import { UIScene } from '../mainUI';
+import { COLORS, smallerTextDark } from '../../UIConstants';
+import { EVENTS_NAME } from '../../../../consts';
+import { UIComponent } from '../../UIComponent';
+import { UIScene } from '../../mainUI';
 
 export class ScenarioControl extends UIComponent {
   constructor(scene: UIScene) {

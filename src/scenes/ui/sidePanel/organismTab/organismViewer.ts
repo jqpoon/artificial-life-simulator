@@ -3,7 +3,7 @@ import RoundRectangle from 'phaser3-rex-plugins/plugins/roundrectangle';
 import { EVENTS_NAME } from '../../../../consts';
 import { GameObjects } from 'phaser';
 import { OrganismInformation } from '../../../../typedefs';
-import { smallerTextDark, textDefaultsDark } from '../../UIConstants';
+import { COLORS, smallerTextDark, textDefaultsDark } from '../../UIConstants';
 import { UIComponent } from '../../UIComponent';
 import { UIScene } from '../../mainUI';
 
@@ -39,7 +39,31 @@ export class OrganismViewer extends UIComponent {
     this.sizeText = scene.add.text(0, 0, '0.0', smallerTextDark);
     this.energyText = scene.add.text(0, 0, '0.0', smallerTextDark);
     this.typeText = scene.add.text(0, 0, 'Undefined', smallerTextDark);
-    this.infoText = scene.add.text(0, 0, 'Click on an organism!', smallerTextDark);
+    this.infoText = scene.add.text(
+      0,
+      0,
+      'Click on an organism!',
+      smallerTextDark
+    );
+
+    // Unselect organism button
+    let unselectButton = scene.rexUI.add
+      .label({
+        width: 100,
+        height: 30,
+        align: 'center',
+        background: scene.rexUI.add
+          .roundRectangle(0, 0, 0, 0, 10, COLORS.BUTTON_MAIN)
+          .setStrokeStyle(2, COLORS.BUTTON_BORDER),
+        text: this.scene.add.text(0, 0, 'Unselect', smallerTextDark),
+        space: { left: 20, right: 20, top: 20, bottom: 20 },
+      })
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.scene.game.events.emit(EVENTS_NAME.selectOrganism, {
+          name: 'unselect',
+        });
+      });
 
     this.add(scene.add.text(0, 0, 'Organism Info', textDefaultsDark))
       .add(
@@ -48,11 +72,21 @@ export class OrganismViewer extends UIComponent {
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 10 } })
-              .add(scene.add.text(0, 0, 'Generation: ', smallerTextDark), {align: 'left'})
-              .add(scene.add.text(0, 0, 'Speed: ', smallerTextDark), {align: 'left'})
-              .add(scene.add.text(0, 0, 'Size: ', smallerTextDark), {align: 'left'})
-              .add(scene.add.text(0, 0, 'Energy: ', smallerTextDark), {align: 'left'})
-              .add(scene.add.text(0, 0, 'Type: ', smallerTextDark), {align: 'left'})
+              .add(scene.add.text(0, 0, 'Generation: ', smallerTextDark), {
+                align: 'left',
+              })
+              .add(scene.add.text(0, 0, 'Speed: ', smallerTextDark), {
+                align: 'left',
+              })
+              .add(scene.add.text(0, 0, 'Size: ', smallerTextDark), {
+                align: 'left',
+              })
+              .add(scene.add.text(0, 0, 'Energy: ', smallerTextDark), {
+                align: 'left',
+              })
+              .add(scene.add.text(0, 0, 'Type: ', smallerTextDark), {
+                align: 'left',
+              })
           )
           .add(
             scene.rexUI.add
@@ -64,14 +98,29 @@ export class OrganismViewer extends UIComponent {
               .add(this.typeText)
           )
       )
-      .add(this.infoText);
+      .add(this.infoText)
+      .add(unselectButton);
 
     this.addBackground(background).layout();
 
     // Update text based on event
-    scene.game.events.on(EVENTS_NAME.selectOrganism, (info: OrganismInformation) => {
-      this.updateInformation(info.generation, info.velocity, info.size, info.energy, info.type);
-    });
+    scene.game.events.on(
+      EVENTS_NAME.selectOrganism,
+      (info: OrganismInformation) => {
+        if (info.name == 'unselect') {
+          // If no info is available, then just reset
+          this.reset();
+        } else {
+          this.updateInformation(
+            info.generation,
+            info.velocity,
+            info.size,
+            info.energy,
+            info.type
+          );
+        }
+      }
+    );
   }
 
   reset(): void {
@@ -81,18 +130,36 @@ export class OrganismViewer extends UIComponent {
     this.infoText.setText('Click on an organism!');
   }
 
-  private updateInformation(generation: number, speed: number, size: number, energy: number, type: string): void {
+  private updateInformation(
+    generation: number,
+    speed: number,
+    size: number,
+    energy: number,
+    type: string
+  ): void {
     this.generationText.setText(
-      generation.toLocaleString('en-us', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+      generation.toLocaleString('en-us', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
     );
     this.speedText.setText(
-      speed.toLocaleString('en-us', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+      speed.toLocaleString('en-us', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })
     );
     this.sizeText.setText(
-      size.toLocaleString('en-us', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+      size.toLocaleString('en-us', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })
     );
     this.energyText.setText(
-      energy.toLocaleString('en-us', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+      energy.toLocaleString('en-us', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })
     );
     this.typeText.setText(type);
 
