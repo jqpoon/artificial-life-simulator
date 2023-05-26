@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: {
@@ -27,6 +28,9 @@ module.exports = {
   // list of extensions to resolve, in resolve order
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      process: 'process/browser',
+    },
   },
 
   // loader to handle TypeScript file type
@@ -39,4 +43,10 @@ module.exports = {
       },
     ],
   },
+
+  plugins: [
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+  ],
 };
