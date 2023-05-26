@@ -1,8 +1,9 @@
+import assert from 'assert';
 import { LayerBias, LayerParams, LayerWeights } from './network';
 import {
   ActivationFunction,
-  glorotUniform,
   Initialiser,
+  glorotUniform,
   matrixElementWiseAdd,
   matrixMultiply,
   tanh,
@@ -90,30 +91,29 @@ export class LinearLayer {
    * be the same as the existing bias.
    * @param bias
    */
-  public setbBias(bias: LayerBias) {
+  public setBias(bias: LayerBias) {
     this.assertBiasValidShape(bias);
     this.bias = bias;
   }
 
   /* Checks shape of weights matrix */
   private assertWeightsValidShape(weights: LayerWeights) {
-    if (weights.length != this.weights.length) {
-      throw new Error(
-        `Different weights shape passed to layer. Expected ${this.weights.length}, got ${weights.length}`
-      );
-    }
-    if (weights[0].length != this.weights[0].length) {
-      throw new Error(
-        `Different weights shape passed to layer. Expected ${this.weights[0].length}, got ${weights[0].length}`
-      );
-    }
+    assert(
+      weights.length != this.weights.length,
+      `Different weights shape passed to layer. Expected ${this.weights.length}, got ${weights.length}`
+    );
+
+    assert(
+      weights[0].length != this.weights[0].length,
+      `Different weights shape passed to layer. Expected ${this.weights[0].length}, got ${weights[0].length}`
+    );
   }
 
   /* Checks shape of bias matrix */
   private assertBiasValidShape(bias: LayerBias) {
-    if (bias.length != this.bias.length)
-      throw new Error(
-        `Different bias shape passed to layer. Expected ${this.bias.length}, got ${bias.length}`
-      );
+    assert(
+      bias.length != this.bias.length,
+      `Different bias shape passed to layer. Expected ${this.bias.length}, got ${bias.length}`
+    );
   }
 }
