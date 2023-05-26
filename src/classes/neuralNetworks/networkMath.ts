@@ -1,14 +1,5 @@
-export type ActivationFunction = typeof tanh;
+export type ActivationFunction = typeof Math.tanh;
 export type Initialiser = typeof glorotUniform;
-
-/**
- * Applies tanh function to each element in this 1D matrix
- * @param a - Input 1D matrix
- * @returns
- */
-export function tanh(a: number[]): number[] {
-  return a.map(Math.tanh);
-}
 
 /**
  * Generates a random number using the GlorotUniform distribution.

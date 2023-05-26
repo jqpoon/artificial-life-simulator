@@ -17,7 +17,7 @@ export class NeuralNetChromosome extends Chromosome<number> {
   }
 
   public toPhenotype(): Network {
-    let network = new LinearNetwork(this.input, this.output);
+    let network = new LinearNetwork([this.input, this.output]);
     let genes = this.getGenes();
 
     /* Assume that there are no hidden layers, then look at how genes was initialised */

@@ -6,7 +6,6 @@ import {
   glorotUniform,
   matrixElementWiseAdd,
   matrixMultiply,
-  tanh,
 } from './networkMath';
 
 /**
@@ -20,7 +19,7 @@ export class LinearLayer {
   constructor(
     input: number,
     output: number,
-    activationFunction: ActivationFunction = tanh,
+    activationFunction: ActivationFunction = Math.tanh,
     initFunction: Initialiser = glorotUniform
   ) {
     /* Initialise weights and bias */
@@ -49,7 +48,9 @@ export class LinearLayer {
   public forward(x: number[]): number[] {
     x = matrixMultiply([x], this.weights)[0]; // 0th element since x is a 1D array
     x = matrixElementWiseAdd(x, this.bias);
-    return this.activationFunction(x);
+    x = x.map(this.activationFunction);
+
+    return x;
   }
 
   /**
@@ -99,12 +100,12 @@ export class LinearLayer {
   /* Checks shape of weights matrix */
   private assertWeightsValidShape(weights: LayerWeights) {
     assert(
-      weights.length != this.weights.length,
+      weights.length == this.weights.length,
       `Different weights shape passed to layer. Expected ${this.weights.length}, got ${weights.length}`
     );
 
     assert(
-      weights[0].length != this.weights[0].length,
+      weights[0].length == this.weights[0].length,
       `Different weights shape passed to layer. Expected ${this.weights[0].length}, got ${weights[0].length}`
     );
   }
@@ -112,7 +113,7 @@ export class LinearLayer {
   /* Checks shape of bias matrix */
   private assertBiasValidShape(bias: LayerBias) {
     assert(
-      bias.length != this.bias.length,
+      bias.length == this.bias.length,
       `Different bias shape passed to layer. Expected ${this.bias.length}, got ${bias.length}`
     );
   }
