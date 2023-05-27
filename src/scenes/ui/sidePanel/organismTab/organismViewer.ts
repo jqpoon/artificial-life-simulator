@@ -3,8 +3,8 @@ import RoundRectangle from 'phaser3-rex-plugins/plugins/roundrectangle';
 import { EVENTS_NAME } from '../../../../consts';
 import { GameObjects } from 'phaser';
 import { OrganismInformation } from '../../../../typedefs';
-import { COLORS, smallerTextDark, textDefaultsDark } from '../../UIConstants';
-import { UIComponent } from '../../UIComponent';
+import { COLORS, smallerTextDark, textDefaultsDark } from '../../common/UIConstants';
+import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
 
 export class OrganismViewer extends UIComponent {

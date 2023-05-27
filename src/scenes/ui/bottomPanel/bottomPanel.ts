@@ -1,4 +1,4 @@
-import { UIComponent } from '../UIComponent';
+import { UIComponent } from '../common/UIComponent';
 import { UIScene } from '../mainUI';
 import { SpeedControls } from './speedControls';
 

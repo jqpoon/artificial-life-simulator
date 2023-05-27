@@ -4,7 +4,7 @@ import { Scene } from 'phaser';
 import { REGISTRY_KEYS } from '../../consts';
 import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrganism';
 
-import { COLORS, textDefaultsDark } from './UIConstants';
+import { COLORS } from './common/UIConstants';
 import { SidePanel } from './sidePanel/sidePanel';
 import { BottomPanel } from './bottomPanel/bottomPanel';
 

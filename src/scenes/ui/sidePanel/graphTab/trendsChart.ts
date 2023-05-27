@@ -1,5 +1,5 @@
 import { Chart } from "phaser3-rex-plugins/templates/ui/ui-components";
-import { ChartComponent } from "../../chartComponent";
+import { ChartComponent } from "../../common/chartComponent";
 import { UIScene } from "../../mainUI";
 import { REGISTRY_KEYS } from "../../../../consts";
 import { EnvironmentScene } from "../../../environment";

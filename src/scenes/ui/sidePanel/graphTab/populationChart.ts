@@ -3,8 +3,8 @@ import { EVENTS_NAME, REGISTRY_KEYS } from '../../../../consts';
 import { ChartData, SpeciesCounts } from '../../../../typedefs';
 import { UIScene } from '../../mainUI';
 import { Conversion } from '../../../../classes/utils/conversion';
-import { ChartComponent } from '../../chartComponent';
-import { speciesInfo } from '../../UIConstants';
+import { ChartComponent } from '../../common/chartComponent';
+import { speciesInfo } from '../../common/UIConstants';
 
 export default class PopulationChart extends ChartComponent {
   private chartData: ChartData;

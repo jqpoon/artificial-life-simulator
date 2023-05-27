@@ -3,7 +3,7 @@ import {
   RoundRectangle,
   Slider,
 } from 'phaser3-rex-plugins/templates/ui/ui-components';
-import { UIComponent } from '../../UIComponent';
+import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
 import { GameObjects } from 'phaser';
 import {
@@ -11,7 +11,7 @@ import {
   smallerTextDark,
   speciesInfo,
   textDefaultsDark,
-} from '../../UIConstants';
+} from '../../common/UIConstants';
 import { REGISTRY_KEYS } from '../../../../consts';
 import { RandomOrganism } from '../../../../classes/entities/randomOrganism';
 import { VisionOrganism } from '../../../../classes/entities/visionOrganism';

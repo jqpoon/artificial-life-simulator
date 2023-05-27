@@ -1,6 +1,6 @@
 import { Buttons } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { EVENTS_NAME } from '../../../consts';
-import { UIComponent } from '../UIComponent';
+import { UIComponent } from '../common/UIComponent';
 import { UIScene } from '../mainUI';
 
 export class SpeedControls extends UIComponent {

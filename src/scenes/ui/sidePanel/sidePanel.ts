@@ -1,6 +1,6 @@
 import { Label, Pages } from 'phaser3-rex-plugins/templates/ui/ui-components';
-import { UIComponent } from '../UIComponent';
-import { COLORS, PAGE_KEYS, smallerTextDark, textDefaultsDark } from '../UIConstants';
+import { UIComponent } from '../common/UIComponent';
+import { COLORS, PAGE_KEYS, smallerTextDark, textDefaultsDark } from '../common/UIConstants';
 import { UIScene } from '../mainUI';
 import { GraphTab } from './graphTab/graphTab';
 import { OrganismTab } from './organismTab/organismTab';

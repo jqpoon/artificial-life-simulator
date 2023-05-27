@@ -4,7 +4,7 @@ import { Food } from '../classes/entities/food';
 import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
 import { IOrganism, OrganismConfigs } from '../typedefs';
 import { Organism } from '../classes/entities/organism';
-import { COLORS } from './ui/UIConstants';
+import { COLORS } from './ui/common/UIConstants';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
 
 export class EnvironmentScene extends Scene {
