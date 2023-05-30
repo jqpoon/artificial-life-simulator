@@ -7,7 +7,6 @@ import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
 import { GameObjects } from 'phaser';
 import {
-  COLORS,
   smallerTextDark,
   speciesInfo,
   textDefaultsDark,
@@ -16,13 +15,18 @@ import { REGISTRY_KEYS } from '../../../../consts';
 import { RandomOrganism } from '../../../../classes/entities/randomOrganism';
 import { VisionOrganism } from '../../../../classes/entities/visionOrganism';
 import { NeuralNetworkOrganism } from '../../../../classes/entities/neuralNetworkOrganism';
+import { BootstrapFactory } from '../../common/bootstrap/bootstrapFactory';
 
 export class OrganismBuilder extends UIComponent {
   private builderPreview: GameObjects.Arc;
-  private organismTypeChooser: DropDownList;
-  private sizeSlider: Slider;
-  private speedSlider: Slider;
-  private startingEnergySlider: Slider;
+  private organismTypeChooser: any;
+  private sizeSlider: any;
+  private speedSlider: any;
+  private startingEnergySlider: any;
+
+  private sizeText: GameObjects.Text;
+  private speedText: GameObjects.Text;
+  private startingEnergyText: GameObjects.Text;
 
   constructor(scene: UIScene) {
     super(scene, {
@@ -43,24 +47,9 @@ export class OrganismBuilder extends UIComponent {
     }).setDepth(-1);
     scene.add.existing(background);
 
-    let sizeText: GameObjects.Text = scene.add.text(
-      0,
-      0,
-      '50',
-      smallerTextDark
-    );
-    let speedText: GameObjects.Text = scene.add.text(
-      0,
-      0,
-      '50',
-      smallerTextDark
-    );
-    let startingEnergyText: GameObjects.Text = scene.add.text(
-      0,
-      0,
-      '100',
-      smallerTextDark
-    );
+    this.sizeText = scene.add.text(0, 0, '50', smallerTextDark);
+    this.speedText = scene.add.text(0, 0, '50', smallerTextDark);
+    this.startingEnergyText = scene.add.text(0, 0, '100', smallerTextDark);
     this.builderPreview = scene.add.circle(0, 0, 12, 0xe8000b);
 
     // Color picker
@@ -103,108 +92,66 @@ export class OrganismBuilder extends UIComponent {
       .layout();
 
     // Size of organism
-    this.sizeSlider = scene.rexUI.add
-      .slider({
-        width: 100,
-        height: 10,
-        valuechangeCallback: (value) => {
-          scene.registry.set(REGISTRY_KEYS.organismSize, value * 100);
-          this.builderPreview.setScale(value * 5);
-          sizeText.setText(
-            (value * 100).toLocaleString('en-us', {
-              maximumFractionDigits: 0,
-            })
-          );
-        },
-        input: 'click',
-        space: { top: 4, bottom: 4 },
-        value: 0.5,
-
-        track: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
-        thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
-      })
-      .layout();
+    this.sizeSlider = BootstrapFactory.createSlider(
+      scene,
+      (e: any) => {
+        this.setOrganismSize(parseInt(e.target.value));
+        console.log(e.target.value);
+      },
+      this,
+      20, // min
+      100.3 // max - a bit more over 100 so that our display texts displays '100' (some truncation issues..)
+    );
 
     // Speed of organism
-    this.speedSlider = scene.rexUI.add
-      .slider({
-        width: 100,
-        height: 10,
-        valuechangeCallback: (value) => {
-          scene.registry.set(REGISTRY_KEYS.organismSpeed, value * 100);
-          speedText.setText(
-            (value * 100).toLocaleString('en-us', {
-              maximumFractionDigits: 0,
-            })
-          );
-        },
-        input: 'click',
-        space: { top: 4, bottom: 4 },
-        value: 0.5,
-
-        track: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
-        thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
-      })
-      .layout();
+    this.speedSlider = BootstrapFactory.createSlider(
+      scene,
+      (e: any) => {
+        this.setOrganismSpeed(parseInt(e.target.value));
+      },
+      this,
+      1, // Min
+      100.1 // Max
+    );
 
     // Starting energy of organism
-    this.startingEnergySlider = scene.rexUI.add.slider({
-      width: 100,
-      height: 10,
-      valuechangeCallback: (value) => {
-        scene.registry.set(REGISTRY_KEYS.organismStartingEnergy, value * 200);
-        startingEnergyText.setText(
-          (value * 200).toLocaleString('en-us', {
-            maximumFractionDigits: 0,
-          })
-        );
+    this.startingEnergySlider = BootstrapFactory.createSlider(
+      scene,
+      (e: any) => {
+        this.setStartingEnergy(parseInt(e.target.value));
       },
-      input: 'click',
-      space: { top: 4, bottom: 4 },
-      value: 0.5,
-      track: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
-      thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
-    });
+      this,
+      1, // Minimum
+      200.1 // Maximum
+    );
 
     // Organism type
-    this.organismTypeChooser = scene.rexUI.add
-      .simpleDropDownList({
-        label: {
-          space: { left: 10, right: 10, top: 10, bottom: 10 },
-          background: {
-            color: COLORS.BUTTON_MAIN,
-          },
-        },
+    this.organismTypeChooser = BootstrapFactory.createDropdown(
+      scene,
+      (e: any) => {
+        let organism = null;
 
-        button: {
-          space: { left: 10, right: 10, top: 10, bottom: 10 },
-          background: {
-            color: COLORS.BUTTON_MAIN,
-            strokeWidth: 0,
-            'hover.strokeColor': 0xffffff,
-            'hover.strokeWidth': 2,
-          },
-        },
-
-        list: {
-          easeIn: 10,
-          easeOut: 10,
-          width: 50,
-        },
-      })
-      .resetDisplayContent('Neural Network')
-      .setOptions([
-        { text: 'Neural Network', value: NeuralNetworkOrganism },
-        { text: 'Random', value: RandomOrganism },
-        { text: 'Vision', value: VisionOrganism },
-      ])
-      .on(
-        'button.click',
-        function (dropDownList: DropDownList, _: any, button: any) {
-          dropDownList.setText(button.text);
-          scene.registry.set(REGISTRY_KEYS.organismType, button.value);
+        switch (e.target.value) {
+          case 'NeuralNetworkOrganism':
+            organism = NeuralNetworkOrganism;
+            break;
+          case 'RandomOrganism':
+            organism = RandomOrganism;
+            break;
+          case 'VisionOrganism':
+            organism = VisionOrganism;
+            break;
         }
-      );
+
+        scene.registry.set(REGISTRY_KEYS.organismType, organism);
+      },
+      this,
+      [
+        { displayText: 'Neural Network', value: 'NeuralNetworkOrganism' },
+        { displayText: 'Random', value: 'RandomOrganism' },
+        { displayText: 'Vision', value: 'VisionOrganism' },
+      ]
+    );
 
     this.add(scene.add.text(0, 0, 'Organism Preview', textDefaultsDark))
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
@@ -212,13 +159,13 @@ export class OrganismBuilder extends UIComponent {
       .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
       .add(
         scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 30 } })
+          .sizer({ orientation: 'x', space: { item: 10 } })
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 20 } })
-              .add(scene.add.text(0, 0, 'Size', smallerTextDark))
-              .add(scene.add.text(0, 0, 'Speed', smallerTextDark))
-              .add(scene.add.text(0, 0, 'Energy', smallerTextDark))
+              .add(scene.add.text(0, 0, 'Size', smallerTextDark), { align: 'right' })
+              .add(scene.add.text(0, 0, 'Speed', smallerTextDark), { align: 'right' })
+              .add(scene.add.text(0, 0, 'Energy', smallerTextDark), { align: 'right' })
           )
           .add(
             scene.rexUI.add
@@ -230,9 +177,9 @@ export class OrganismBuilder extends UIComponent {
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 20 } })
-              .add(sizeText)
-              .add(speedText)
-              .add(startingEnergyText)
+              .add(this.sizeText, { align: 'left' })
+              .add(this.speedText, { align: 'left' })
+              .add(this.startingEnergyText, { align: 'left' })
           )
       )
       .add(
@@ -243,7 +190,7 @@ export class OrganismBuilder extends UIComponent {
       )
       .add(
         scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 30 } })
+          .sizer({ orientation: 'x', space: { item: 50 } })
           .add(scene.add.text(0, 0, 'Type', smallerTextDark))
           .add(this.organismTypeChooser)
       )
@@ -253,15 +200,55 @@ export class OrganismBuilder extends UIComponent {
   }
 
   reset(): void {
-    this.speedSlider.setValue(0.5);
-    this.sizeSlider.setValue(0.5);
-    this.startingEnergySlider.setValue(0.5);
+    // Manually set bootstrap value and the phaser side of things
+    this.startingEnergySlider.node.children[0].value = 100;
+    this.setOrganismSpeed(50);
+
+    this.speedSlider.node.children[0].value = 50;
+    this.setStartingEnergy(100);
+
+    this.sizeSlider.node.children[0].value = 60;
+    this.setOrganismSize(60);
+
     this.setColour(0xe8000b);
-    this.organismTypeChooser.setText('Neural Network');
+
+    this.organismTypeChooser.node.children[0].value = 'NeuralNetworkOrganism';
   }
+
+  /* Functions to set variables on the Phaser side of things, by taking input
+   * from the input fields
+   */
 
   private setColour(color: number): void {
     this.scene.registry.set(REGISTRY_KEYS.organismColour, color);
     this.builderPreview.fillColor = color;
+  }
+
+  private setStartingEnergy(value: number): void {
+    this.scene.registry.set(REGISTRY_KEYS.organismStartingEnergy, value);
+    this.startingEnergyText.setText(
+      value.toLocaleString('en-us', {
+        maximumFractionDigits: 0,
+      })
+    );
+  }
+
+  private setOrganismSize(value: number): void {
+    this.scene.registry.set(REGISTRY_KEYS.organismSize, value);
+    this.builderPreview.setScale(value * 0.04);
+    this.sizeText.setText(
+      value.toLocaleString('en-us', {
+        maximumFractionDigits: 0,
+      })
+    );
+  }
+
+  private setOrganismSpeed(value: number): void {
+    this.scene.registry.set(REGISTRY_KEYS.organismSpeed, value);
+    this.speedText.setText(
+      value.toLocaleString('en-us', {
+        maximumFractionDigits: 0,
+      })
+    );
   }
 }

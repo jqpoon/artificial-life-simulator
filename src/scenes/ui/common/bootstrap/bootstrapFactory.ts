@@ -77,7 +77,7 @@ export class BootstrapFactory {
     max: number = 100
   ) {
     let htmlString = `<input type="range" style="margin: auto; display: block;" class="form-range w-50" min="${min}" max="${max}" step="${
-      (max + min) / 100
+      (max + min + 1) / 200
     }"
     form-range-track-bg="$gray-500"
     >`;
@@ -114,7 +114,7 @@ export class BootstrapFactory {
   }
 
   /**
-   * Creates a boostrap button
+   * Creates a bootstrap button
    *
    * @param scene Phaser scene to add this component to
    * @param buttonText Text to display on the button
