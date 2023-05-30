@@ -42,6 +42,7 @@ export class UIScene extends Scene {
     this.bottomPanel.reset();
 
     this.registry.set(REGISTRY_KEYS.worldAge, 0);
+    this.registry.set(REGISTRY_KEYS.energyLoss, 1);
     this.registry.set(REGISTRY_KEYS.organismSpecies, 0);
     this.registry.set(REGISTRY_KEYS.organismColour, 0xe8000b);
     this.registry.set(REGISTRY_KEYS.organismSize, 50);
