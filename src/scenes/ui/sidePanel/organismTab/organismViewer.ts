@@ -3,9 +3,13 @@ import RoundRectangle from 'phaser3-rex-plugins/plugins/roundrectangle';
 import { EVENTS_NAME } from '../../../../consts';
 import { GameObjects } from 'phaser';
 import { OrganismInformation } from '../../../../typedefs';
-import { COLORS, smallerTextDark, textDefaultsDark } from '../../common/UIConstants';
+import {
+  smallerTextDark,
+  textDefaultsDark,
+} from '../../common/UIConstants';
 import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
+import { BootstrapFactory } from '../../common/bootstrap/bootstrapFactory';
 
 export class OrganismViewer extends UIComponent {
   private generationText: GameObjects.Text;
@@ -47,23 +51,16 @@ export class OrganismViewer extends UIComponent {
     );
 
     // Unselect organism button
-    let unselectButton = scene.rexUI.add
-      .label({
-        width: 100,
-        height: 30,
-        align: 'center',
-        background: scene.rexUI.add
-          .roundRectangle(0, 0, 0, 0, 10, COLORS.BUTTON_MAIN)
-          .setStrokeStyle(2, COLORS.BUTTON_BORDER),
-        text: this.scene.add.text(0, 0, 'Unselect', smallerTextDark),
-        space: { left: 20, right: 20, top: 20, bottom: 20 },
-      })
-      .setInteractive()
-      .on('pointerdown', () => {
+    let unselectButton = BootstrapFactory.createButton(
+      scene,
+      'Unselect',
+      (e: any) => {
         this.scene.game.events.emit(EVENTS_NAME.selectOrganism, {
           name: 'unselect',
         });
-      });
+      },
+      this
+    );
 
     this.add(scene.add.text(0, 0, 'Organism Info', textDefaultsDark))
       .add(

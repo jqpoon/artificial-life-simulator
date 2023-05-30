@@ -1,8 +1,4 @@
-import {
-  DropDownList,
-  RoundRectangle,
-  Slider,
-} from 'phaser3-rex-plugins/templates/ui/ui-components';
+import { RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
 import { GameObjects } from 'phaser';
@@ -96,7 +92,6 @@ export class OrganismBuilder extends UIComponent {
       scene,
       (e: any) => {
         this.setOrganismSize(parseInt(e.target.value));
-        console.log(e.target.value);
       },
       this,
       20, // min
@@ -163,9 +158,15 @@ export class OrganismBuilder extends UIComponent {
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 20 } })
-              .add(scene.add.text(0, 0, 'Size', smallerTextDark), { align: 'right' })
-              .add(scene.add.text(0, 0, 'Speed', smallerTextDark), { align: 'right' })
-              .add(scene.add.text(0, 0, 'Energy', smallerTextDark), { align: 'right' })
+              .add(scene.add.text(0, 0, 'Size', smallerTextDark), {
+                align: 'right',
+              })
+              .add(scene.add.text(0, 0, 'Speed', smallerTextDark), {
+                align: 'right',
+              })
+              .add(scene.add.text(0, 0, 'Energy', smallerTextDark), {
+                align: 'right',
+              })
           )
           .add(
             scene.rexUI.add
