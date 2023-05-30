@@ -1,0 +1,17 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+// Tabs CSS
+$nav-link-font-size: 24px;
+$nav-link-hover-color:black;
+$nav-tabs-link-active-bg: #fdf0d5;
+$nav-tabs-link-active-color: black;
+$nav-tabs-link-active-border-color: #565657;
+$nav-tabs-link-hover-border-color: #555555;
+$nav-tabs-border-color: #565657;
+$nav-tabs-border-width: 2px;
+
+$form-range-track-bg: #adb5bd;
+
+// Set changes
+@import "../node_modules/bootstrap";

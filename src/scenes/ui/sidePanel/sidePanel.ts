@@ -10,6 +10,7 @@ import { UIScene } from '../mainUI';
 import { GraphTab } from './graphTab/graphTab';
 import { OrganismTab } from './organismTab/organismTab';
 import { SimulatorTab } from './simulatorTab/simulatorTab';
+import { BootstrapFactory } from '../common/bootstrap/bootstrapFactory';
 declare var bootstrap: any; // Used to enable tooltips in bootstrap
 
 export class SidePanel extends UIComponent {
@@ -21,9 +22,9 @@ export class SidePanel extends UIComponent {
   constructor(scene: UIScene) {
     super(scene, {
       x: 1600,
-      y: 599,
-      height: 1220,
-      width: 650,
+      y: 1080 / 2,
+      height: 1080,
+      width: 500,
       orientation: 'y',
     });
 
@@ -62,18 +63,29 @@ export class SidePanel extends UIComponent {
     this.enableTooltips();
 
     /* Navigation bar */
-    let navigationBar = scene.rexUI.add
-      .sizer()
-      .add(this.createButton(scene, 'Organism\n Controls', PAGE_KEYS.ORGANISM))
-      .add(
-        this.createButton(scene, 'Simulation\n Controls', PAGE_KEYS.SIMULATION)
-      )
-      .add(this.createButton(scene, 'Graphs', PAGE_KEYS.GRAPHS));
+    let navigationBar = BootstrapFactory.createTabs(
+      scene,
+      [
+        { displayText: 'Organism Controls', value: PAGE_KEYS.ORGANISM },
+        { displayText: 'Simulation Controls', value: PAGE_KEYS.SIMULATION },
+        { displayText: 'Graphs', value: PAGE_KEYS.GRAPHS },
+      ],
+      (e: any) => {
+        // Oh god this is really hacky but I'm tired of doing UI
+        e.target.parentElement.children[0].classList.remove('active');
+        e.target.parentElement.children[1].classList.remove('active');
+        e.target.parentElement.children[2].classList.remove('active');
+        e.target.classList.add('active');
+
+        this.pages.swapPage(e.target.value);
+      },
+      this
+    );
 
     /* Organise UI elements */
-    this.add(titleText)
-      .add(this.pages)
-      .add(navigationBar)
+    this.add(titleText, { proportion: 1 })
+      .add(this.pages, { proportion: 9 })
+      .add(navigationBar, { proportion: 0.9, align: 'top', expand: true })
       .addBackground(
         scene.rexUI.add
           .roundRectangle(0, 0, 0, 0, 0, COLORS.OFF_WHITE)

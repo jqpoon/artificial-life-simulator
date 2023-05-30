@@ -137,4 +137,30 @@ export class BootstrapFactory {
       htmlString
     );
   }
+
+  public static createTabs(
+    scene: Phaser.Scene,
+    options: DropdownOptions,
+    callbackFn: (e: any) => void,
+    context: any
+  ) {
+    let htmlString = `<nav class="nav nav-tabs nav-justified" style="width:650px;">`;
+    for (let [idx, option] of Object.entries(options)) {
+      // Set first one to active
+      let isActive = '';
+      if (parseInt(idx) == 0) {
+        isActive = 'active';
+      }
+      htmlString += `<button class="nav-link ${isActive}" href="#" value="${option.value}">${option.displayText}</option>`;
+    }
+
+    htmlString += `</nav>`;
+
+    return BootstrapFactory.createDOMElement(
+      scene,
+      callbackFn,
+      context,
+      htmlString
+    );
+  }
 }

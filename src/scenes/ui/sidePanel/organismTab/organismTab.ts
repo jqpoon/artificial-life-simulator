@@ -12,7 +12,7 @@ export class OrganismTab extends TabComponent {
       height: 500,
       width: 650,
       orientation: 'y',
-      space: { left: 20, right: 20, top: 20, bottom: 20, item: 30 },
+      space: { top: 20, bottom: 20, item: 30 },
     });
 
     this.organismBuilder = new OrganismBuilder(scene);
