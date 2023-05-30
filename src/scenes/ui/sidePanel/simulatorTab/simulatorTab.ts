@@ -1,14 +1,14 @@
-import { Slider } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIScene } from '../../mainUI';
 import { TabComponent } from '../tabComponent';
 import { ScenarioControl } from './scenarioControl';
 import { smallerTextDark } from '../../common/UIConstants';
 import { REGISTRY_KEYS } from '../../../../consts';
+import { BootstrapFactory } from '../../common/bootstrap/bootstrapFactory';
 
 export class SimulatorTab extends TabComponent {
   private scenarioControl: ScenarioControl;
-  private mutationRateSlider: Slider;
-  private energyLossSlider: Slider;
+  private mutationRateSlider: Phaser.GameObjects.DOMElement;
+  private energyLossSlider: Phaser.GameObjects.DOMElement;
 
   constructor(scene: UIScene) {
     super(scene, {
@@ -20,10 +20,10 @@ export class SimulatorTab extends TabComponent {
 
     /* Controls global mutation rate */
     let mutationText = scene.add.text(0, 0, '0.5', smallerTextDark);
-    this.mutationRateSlider = scene.rexUI.add.slider({
-      width: 100,
-      height: 10,
-      valuechangeCallback: (value) => {
+    this.mutationRateSlider = BootstrapFactory.createSlider(
+      scene,
+      (e: any) => {
+        let value = e.target.value;
         scene.registry.set(REGISTRY_KEYS.mutationRate, value);
         mutationText.setText(
           value.toLocaleString('en-us', {
@@ -32,33 +32,29 @@ export class SimulatorTab extends TabComponent {
           })
         );
       },
-      input: 'click',
-      space: { top: 4, bottom: 4 },
-      value: 0.5,
-      track: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
-      thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
-    });
+      this,
+      0, // Min
+      1 // Max
+    );
 
     /* Controls global energy loss rate */
     let energyLossText = scene.add.text(0, 0, '0.5', smallerTextDark);
-    this.energyLossSlider = scene.rexUI.add.slider({
-      width: 100,
-      height: 10,
-      valuechangeCallback: (value) => {
-        scene.registry.set(REGISTRY_KEYS.energyLoss, (value * 2));
+    this.energyLossSlider = BootstrapFactory.createSlider(
+      scene,
+      (e: any) => {
+        let value = e.target.value;
+        scene.registry.set(REGISTRY_KEYS.energyLoss, value);
         energyLossText.setText(
-          (value * 2).toLocaleString('en-us', {
+          value.toLocaleString('en-us', {
             maximumFractionDigits: 2,
             minimumFractionDigits: 2,
           })
         );
       },
-      input: 'click',
-      space: { top: 4, bottom: 4 },
-      value: 0.5,
-      track: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 6, 0x000000),
-      thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 10, 0x8f8f9c),
-    });
+      this,
+      0, // Min
+      2 // Max
+    );
 
     this.add(this.scenarioControl)
       .add(
