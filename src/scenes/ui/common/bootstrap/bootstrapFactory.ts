@@ -1,4 +1,5 @@
-type DropdownOption = { [key: string]: string }; // key: 'display text'
+type DropdownOption = { displayText: string; value: any };
+type DropdownOptions = DropdownOption[];
 
 /**
  * Generates a random UUID that IS NOT cryptographically sound but good enough
@@ -28,23 +29,23 @@ export class BootstrapFactory {
    * Creates a new dropdown menu using bootstrap
    *
    * @param scene Phaser scene to add this component to
-   * @param callbackFn - Function to call when this element is clicked
-   * @param context - Context of callback function
-   * @param options - Dictionary with format {key: displayText} to be added to
-   *                  this dropdown menu
+   * @param callbackFn Function to call when this element is clicked
+   * @param context Context of callback function
+   * @param options List containing dictionaries with displayText and value properties
+   *                e.g. [ { displayText: 'Text', value: 1234 } ]
    * @returns A dropdown menu DOM object
    */
   public static createDropdown(
     scene: Phaser.Scene,
     callbackFn: (e: any) => void,
     context: any,
-    options: DropdownOption
+    options: DropdownOptions
   ) {
     let htmlString = `<select class="form-select form-select-lg mb-3">
     `;
 
-    for (const [key, displayText] of Object.entries(options)) {
-      htmlString += `<option value="${key}">${displayText}</option>`;
+    for (let option of options) {
+      htmlString += `<option value="${option.value}">${option.displayText}</option>`;
     }
 
     htmlString += `</select>`;
@@ -62,10 +63,10 @@ export class BootstrapFactory {
    * steps between min and max, which default to 0 and 100 respectively
    *
    * @param scene Phaser scene to add this component to
-   * @param callbackFn - Function to call when this element is clicked
-   * @param context - Context of callback function
-   * @param min - Optional, sets the minimum of this slider
-   * @param max - Optional, sets the maximum of this slider
+   * @param callbackFn Function to call when this element is clicked
+   * @param context Context of callback function
+   * @param min Optional, sets the minimum of this slider
+   * @param max Optional, sets the maximum of this slider
    * @returns A slider DOM object
    */
   public static createSlider(
@@ -98,8 +99,8 @@ export class BootstrapFactory {
   /**
    * Creates an (i) icon that displays text when it is moused-over
    *
-   * @param scene - Phaser scene to add this component to
-   * @param helpText - Help text to display
+   * @param scene Phaser scene to add this component to
+   * @param helpText Help text to display
    * @returns An icon DOM object
    */
   public static createHelpIcon(scene: Phaser.Scene, helpText: string) {
@@ -115,10 +116,10 @@ export class BootstrapFactory {
   /**
    * Creates a boostrap button
    *
-   * @param scene - Phaser scene to add this component to
-   * @param buttonText - Text to display on the button
-   * @param callbackFn - Function to call when this element is clicked
-   * @param context - Context of callback function
+   * @param scene Phaser scene to add this component to
+   * @param buttonText Text to display on the button
+   * @param callbackFn Function to call when this element is clicked
+   * @param context Context of callback function
    * @returns A buttom DOM element
    */
   public static createButton(
