@@ -30,6 +30,9 @@ let configObject: Phaser.Types.Core.GameConfig = {
   },
   backgroundColor: '#FFFFFF',
   scene: [LoadingScene, UIScene, EnvironmentScene],
+  dom: {
+    createContainer: true,
+  },
 };
 
 new Phaser.Game(configObject);

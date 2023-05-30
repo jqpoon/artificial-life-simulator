@@ -1,10 +1,16 @@
 import { Label, Pages } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIComponent } from '../common/UIComponent';
-import { COLORS, PAGE_KEYS, smallerTextDark, textDefaultsDark } from '../common/UIConstants';
+import {
+  COLORS,
+  PAGE_KEYS,
+  smallerTextDark,
+  textDefaultsDark,
+} from '../common/UIConstants';
 import { UIScene } from '../mainUI';
 import { GraphTab } from './graphTab/graphTab';
 import { OrganismTab } from './organismTab/organismTab';
 import { SimulatorTab } from './simulatorTab/simulatorTab';
+declare var bootstrap: any; // Used to enable tooltips in bootstrap
 
 export class SidePanel extends UIComponent {
   private graphTab: GraphTab;
@@ -44,15 +50,24 @@ export class SidePanel extends UIComponent {
       );
 
     this.pages.addPage(this.graphTab, { key: PAGE_KEYS.GRAPHS, expand: true });
-    this.pages.addPage(this.organismTab, { key: PAGE_KEYS.ORGANISM, expand: true });
-    this.pages.addPage(this.scenarioTab, { key: PAGE_KEYS.SIMULATION, expand: true });
+    this.pages.addPage(this.organismTab, {
+      key: PAGE_KEYS.ORGANISM,
+      expand: true,
+    });
+    this.pages.addPage(this.scenarioTab, {
+      key: PAGE_KEYS.SIMULATION,
+      expand: true,
+    });
     this.pages.swapPage(PAGE_KEYS.ORGANISM);
+    this.enableTooltips();
 
     /* Navigation bar */
     let navigationBar = scene.rexUI.add
       .sizer()
       .add(this.createButton(scene, 'Organism\n Controls', PAGE_KEYS.ORGANISM))
-      .add(this.createButton(scene, 'Simulation\n Controls', PAGE_KEYS.SIMULATION))
+      .add(
+        this.createButton(scene, 'Simulation\n Controls', PAGE_KEYS.SIMULATION)
+      )
       .add(this.createButton(scene, 'Graphs', PAGE_KEYS.GRAPHS));
 
     /* Organise UI elements */
@@ -74,19 +89,31 @@ export class SidePanel extends UIComponent {
   }
 
   private createButton(scene: UIScene, text: string, key: PAGE_KEYS): Label {
-    return scene.rexUI.add.label({
-      width: 200,
-      height: 100,
-      align: 'center',
-      background: scene.rexUI.add
-        .roundRectangle(0, 0, 0, 0, 5, COLORS.BUTTON_MAIN)
-        .setStrokeStyle(2, COLORS.BUTTON_BORDER),
-      text: this.scene.add.text(0, 0, text, smallerTextDark),
-      space: { left: 20, right: 20, top: 20, bottom: 20 },
-    })
-    .setInteractive()
-    .on('pointerdown', () => {
-      this.pages.swapPage(key);
+    return scene.rexUI.add
+      .label({
+        width: 200,
+        height: 100,
+        align: 'center',
+        background: scene.rexUI.add
+          .roundRectangle(0, 0, 0, 0, 5, COLORS.BUTTON_MAIN)
+          .setStrokeStyle(2, COLORS.BUTTON_BORDER),
+        text: this.scene.add.text(0, 0, text, smallerTextDark),
+        space: { left: 20, right: 20, top: 20, bottom: 20 },
+      })
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.pages.swapPage(key);
+        this.enableTooltips();
+      });
+  }
+
+  /* Enables tooltips as created by bootstrap */
+  private enableTooltips(): void {
+    var tooltipTriggerList = [].slice.call(
+      document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    );
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      new bootstrap.Tooltip(tooltipTriggerEl);
     });
   }
 }
