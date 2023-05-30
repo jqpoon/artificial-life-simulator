@@ -158,6 +158,13 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     // Set as unselected by default
     this.toggleOrganismSelected(false);
 
+    /* Kill (delete) this organism if a user wants to */
+    this.scene.game.events.on(EVENTS_NAME.killSelectedOrganism, () => {
+      if (this.isSelected) {
+        this.killOrganism();
+      }
+    });
+
     /* Signal that this organism is done initialising */
     this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
   }
@@ -296,9 +303,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   private calculateEnergyEffects(): void {
     /* Death */
     if (this.energy <= 0) {
-      this.onDestroy();
-      this.scene.game.events.emit(EVENTS_NAME.changeCount, -1, this.species);
-      this.destroy();
+      this.killOrganism();
     }
 
     /* Birth. Larger sizes need more energy to reproduce */
@@ -307,5 +312,12 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       this.scene.game.events.emit(EVENTS_NAME.reproduceOrganism, child);
       this.energy = this.energy / 2;
     }
+  }
+
+  /* Kills and removes and organism */
+  private killOrganism(): void {
+    this.onDestroy();
+    this.scene.game.events.emit(EVENTS_NAME.changeCount, -1, this.species);
+    this.destroy();
   }
 }

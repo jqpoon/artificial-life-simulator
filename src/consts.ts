@@ -5,6 +5,7 @@ export enum EVENTS_NAME {
   loadScenario = 'load-scenario', // Load a pre-defined scenario
   updateTimeScale = 'update-timescale', // Used to pause and start the simulation
   selectOrganism = 'select-organism', // When user clicks on an organism
+  killSelectedOrganism ='kill-selected-organism', // To kill a selected organism
 }
 
 export enum REGISTRY_KEYS {

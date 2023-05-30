@@ -62,6 +62,18 @@ export class OrganismViewer extends UIComponent {
       this
     );
 
+    let killButton = BootstrapFactory.createButton(
+      scene,
+      'Kill',
+      (e: any) => {
+        this.scene.game.events.emit(EVENTS_NAME.killSelectedOrganism);
+        this.scene.game.events.emit(EVENTS_NAME.selectOrganism, {
+          name: 'unselect',
+        });
+      },
+      this
+    )
+
     this.add(scene.add.text(0, 0, 'Organism Info', textDefaultsDark))
       .add(
         scene.rexUI.add
@@ -96,7 +108,8 @@ export class OrganismViewer extends UIComponent {
           )
       )
       .add(this.infoText)
-      .add(unselectButton);
+      .add(unselectButton)
+      .add(killButton);
 
     this.addBackground(background).layout();
 
