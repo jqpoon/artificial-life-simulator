@@ -9,7 +9,12 @@ import {
 } from './networkMath';
 
 /**
- * A single linear layer
+ * A single linear layer. The weight matrix has number of rows equal to the
+ * number of input nodes. For example, if a layer has input of size 2 and output of
+ * size 3, then the weight matrix will look like:
+ *
+ * [[1, 2, 3],
+ *  [4, 5, 6]]
  */
 export class LinearLayer {
   private weights: LayerWeights;
@@ -30,7 +35,7 @@ export class LinearLayer {
       }
     }
 
-    let bias = Array.from(Array(input), () => {
+    let bias = Array.from(Array(output), () => {
       return Math.random() - 0.5;
     });
 
