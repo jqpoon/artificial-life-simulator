@@ -19,8 +19,8 @@ export class NeuralNetworkOrganism extends Organism {
       this.networkChromosome =
         configs.neuralNetChromosome as NeuralNetChromosome;
     } else {
-      this.network = new LinearNetwork([5, 2]); // RGB input and relative x/y
-      this.networkChromosome = new NeuralNetChromosome(5, 2).fromPhenotype(
+      this.network = new LinearNetwork([5, 2]); // RGB input, relative x/y and absolute x/y
+      this.networkChromosome = new NeuralNetChromosome([5, 2]).fromPhenotype(
         this.network
       );
     }
