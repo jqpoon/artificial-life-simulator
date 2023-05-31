@@ -34,7 +34,7 @@ export class SpeedControls extends UIComponent {
         button.getElement('background').setHoverState(false);
       })
       .on('button.click', function(button: any, index: any, pointer: any, event: any) {
-        let timeScales = [0, 3, 5, 8];
+        let timeScales = [0, 3, 10, 20];
         scene.game.events.emit(EVENTS_NAME.updateTimeScale, timeScales[index]);
       }
     );
