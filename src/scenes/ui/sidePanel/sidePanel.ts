@@ -10,8 +10,9 @@ import { UIScene } from '../mainUI';
 import { GraphTab } from './graphTab/graphTab';
 import { OrganismTab } from './organismTab/organismTab';
 import { SimulatorTab } from './simulatorTab/simulatorTab';
-import { BootstrapFactory } from '../common/bootstrap/bootstrapFactory';
-declare var bootstrap: any; // Used to enable tooltips in bootstrap
+import { BootstrapFactory } from '../common/bootstrapFactory';
+let bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
+
 
 export class SidePanel extends UIComponent {
   private graphTab: GraphTab;

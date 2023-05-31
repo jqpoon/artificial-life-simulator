@@ -11,7 +11,7 @@ import { REGISTRY_KEYS } from '../../../../consts';
 import { RandomOrganism } from '../../../../classes/entities/randomOrganism';
 import { VisionOrganism } from '../../../../classes/entities/visionOrganism';
 import { NeuralNetworkOrganism } from '../../../../classes/entities/neuralNetworkOrganism';
-import { BootstrapFactory } from '../../common/bootstrap/bootstrapFactory';
+import { BootstrapFactory } from '../../common/bootstrapFactory';
 
 export class OrganismBuilder extends UIComponent {
   private builderPreview: GameObjects.Arc;

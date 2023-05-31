@@ -3,7 +3,7 @@ import { TabComponent } from '../tabComponent';
 import { ScenarioControl } from './scenarioControl';
 import { smallerTextDark } from '../../common/UIConstants';
 import { REGISTRY_KEYS } from '../../../../consts';
-import { BootstrapFactory } from '../../common/bootstrap/bootstrapFactory';
+import { BootstrapFactory } from '../../common/bootstrapFactory';
 
 export class SimulatorTab extends TabComponent {
   private scenarioControl: ScenarioControl;

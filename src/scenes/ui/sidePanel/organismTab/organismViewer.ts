@@ -9,7 +9,7 @@ import {
 } from '../../common/UIConstants';
 import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
-import { BootstrapFactory } from '../../common/bootstrap/bootstrapFactory';
+import { BootstrapFactory } from '../../common/bootstrapFactory';
 
 export class OrganismViewer extends UIComponent {
   private generationText: GameObjects.Text;

@@ -2,7 +2,7 @@ import { COLORS, smallerTextDark } from '../../common/UIConstants';
 import { EVENTS_NAME } from '../../../../consts';
 import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
-import { BootstrapFactory } from '../../common/bootstrap/bootstrapFactory';
+import { BootstrapFactory } from '../../common/bootstrapFactory';
 
 export class ScenarioControl extends UIComponent {
   constructor(scene: UIScene) {
