@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 
 import { Food } from '../classes/entities/food';
-import { EVENTS_NAME, REGISTRY_KEYS } from '../consts';
+import { EVENTS_NAME, REGISTRY_KEYS, GAME_CONSTANTS } from '../consts';
 import { IOrganism, OrganismConfigs } from '../typedefs';
 import { Organism } from '../classes/entities/organism';
 import { COLORS } from './ui/common/UIConstants';
@@ -11,11 +11,7 @@ export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
   private currentScenario: number;
 
-  private static readonly foodSpawnDelayInMilliseconds: number = 1500;
-  private static readonly worldX: number = 20;
-  private static readonly worldY: number = 40;
-  private static readonly worldWidth: number = 1200;
-  private static readonly worldHeight: number = 900;
+  private static readonly foodSpawnDelayInMilliseconds: number = 3000;
 
   constructor() {
     super('environment-scene');
@@ -75,17 +71,17 @@ export class EnvironmentScene extends Scene {
 
   private initCanvas(): void {
     this.physics.world.setBounds(
-      EnvironmentScene.worldX,
-      EnvironmentScene.worldY,
-      EnvironmentScene.worldWidth,
-      EnvironmentScene.worldHeight
+      GAME_CONSTANTS.worldX,
+      GAME_CONSTANTS.worldY,
+      GAME_CONSTANTS.worldWidth,
+      GAME_CONSTANTS.worldHeight
     );
 
     let visualBorder = this.add.rectangle(
-      EnvironmentScene.worldWidth / 2 + EnvironmentScene.worldX, // x position (center)
-      EnvironmentScene.worldHeight / 2 + EnvironmentScene.worldY, // y position (center)
-      EnvironmentScene.worldWidth,
-      EnvironmentScene.worldHeight,
+      GAME_CONSTANTS.worldWidth / 2 + GAME_CONSTANTS.worldX, // x position (center)
+      GAME_CONSTANTS.worldHeight / 2 + GAME_CONSTANTS.worldY, // y position (center)
+      GAME_CONSTANTS.worldWidth,
+      GAME_CONSTANTS.worldHeight,
       COLORS.OFF_WHITE,
       1
     );
@@ -100,11 +96,13 @@ export class EnvironmentScene extends Scene {
             scene: this,
             velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
             size: this.registry.get(REGISTRY_KEYS.organismSize),
-            x: localX + EnvironmentScene.worldX,
-            y: localY + EnvironmentScene.worldY,
+            x: localX + GAME_CONSTANTS.worldX,
+            y: localY + GAME_CONSTANTS.worldY,
             color: this.registry.get(REGISTRY_KEYS.organismColour),
             species: this.registry.get(REGISTRY_KEYS.organismSpecies),
-            startingEnergy: this.registry.get(REGISTRY_KEYS.organismStartingEnergy),
+            startingEnergy: this.registry.get(
+              REGISTRY_KEYS.organismStartingEnergy
+            ),
           },
           this.registry.get(REGISTRY_KEYS.organismType)
         );
@@ -132,8 +130,8 @@ export class EnvironmentScene extends Scene {
   private generateNewFood(): void {
     var food = new Food({
       scene: this,
-      x: Math.random() * EnvironmentScene.worldWidth + EnvironmentScene.worldX,
-      y: Math.random() * EnvironmentScene.worldHeight + EnvironmentScene.worldY,
+      x: Math.random() * GAME_CONSTANTS.worldWidth + GAME_CONSTANTS.worldX,
+      y: Math.random() * GAME_CONSTANTS.worldHeight + GAME_CONSTANTS.worldY,
     });
     food.addPredator(this.organisms);
   }

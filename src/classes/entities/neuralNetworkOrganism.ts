@@ -2,7 +2,7 @@ import { Network } from '../neuralNetworks/network';
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
 import { Conversion } from '../utils/conversion';
-import { ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
+import { GAME_CONSTANTS, ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 import { LinearNetwork } from '../neuralNetworks/linearNetwork';
 import { NeuralNetChromosome } from '../genetic/chromosomes/neuralNetChromosome';
 import { inversionWithMutationRate } from '../genetic/mutation';
@@ -19,8 +19,8 @@ export class NeuralNetworkOrganism extends Organism {
       this.networkChromosome =
         configs.neuralNetChromosome as NeuralNetChromosome;
     } else {
-      this.network = new LinearNetwork([5, 2]); // RGB input, relative x/y and absolute x/y
-      this.networkChromosome = new NeuralNetChromosome([5, 2]).fromPhenotype(
+      this.network = new LinearNetwork([8, 4, 4, 2]); // RGB input, relative x/y, absolute x/y, energy
+      this.networkChromosome = new NeuralNetChromosome([8, 4, 4, 2]).fromPhenotype(
         this.network
       );
     }
@@ -73,12 +73,21 @@ export class NeuralNetworkOrganism extends Organism {
     x /= this.visionDistance / 2;
     y /= this.visionDistance / 2;
 
-    /* Pass these values to neural network and let magic happen */
-    let [xSpeed, ySpeed] = this.network.forward([r, g, b, x, y]);
-    xSpeed = Phaser.Math.Clamp(xSpeed, -this.velocity, this.velocity);
-    ySpeed = Phaser.Math.Clamp(ySpeed, -this.velocity, this.velocity);
+    /* Get relative position of this organism to the world, scaled to -0.5 to 0.5 */
+    let pos_x = (this.x - GAME_CONSTANTS.worldX) / GAME_CONSTANTS.worldWidth - 0.5;
+    let pos_y = (this.y - GAME_CONSTANTS.worldY) / GAME_CONSTANTS.worldHeight - 0.5;
 
-    this.body.setVelocity(xSpeed * this.velocity, ySpeed * this.velocity);
+    /* Pass these values to neural network and let magic happen */
+    let inputs = [r, g, b, x, y, pos_x, pos_y, (this.energy / 100 - 0.5)]
+    let outputs = this.network.forward(inputs);
+
+    /* Execute output of neural network */
+    let xSpeed = Phaser.Math.Clamp(outputs[0] * this.velocity, -this.velocity, this.velocity);
+    let ySpeed = Phaser.Math.Clamp(outputs[1] * this.velocity, -this.velocity, this.velocity);
+    this.body.setVelocity(xSpeed, ySpeed);
+
+    console.log(inputs);
+    console.log(xSpeed, ySpeed)
   }
 
   protected onDestroy(): void {}

@@ -38,7 +38,7 @@ export class SimulatorTab extends TabComponent {
     );
 
     /* Controls global energy loss rate */
-    let energyLossText = scene.add.text(0, 0, '0.5', smallerTextDark);
+    let energyLossText = scene.add.text(0, 0, '1', smallerTextDark);
     this.energyLossSlider = BootstrapFactory.createSlider(
       scene,
       (e: any) => {
@@ -53,7 +53,7 @@ export class SimulatorTab extends TabComponent {
       },
       this,
       0, // Min
-      2 // Max
+      5 // Max
     );
 
     this.add(this.scenarioControl)
@@ -77,5 +77,6 @@ export class SimulatorTab extends TabComponent {
 
   reset(): void {
     this.scenarioControl.reset();
+    (this.energyLossSlider.node.children[0] as any).value = 1;
   }
 }

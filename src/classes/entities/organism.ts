@@ -184,8 +184,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Apply physics effects */
     let body = this.body as Phaser.Physics.Arcade.Body;
-    // body.setCollideWorldBounds(true);
-    this.scene.physics.world.wrap(this, -this.radius);
+    body.setCollideWorldBounds(true); // Enable this to make the border a hard wall
+    // this.scene.physics.world.wrap(this, -this.radius); // Enable this to make organisms warp across borders
 
     /* Apply energy loss to organism */
     let totalEnergyLoss =

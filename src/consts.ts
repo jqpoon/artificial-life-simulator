@@ -1,3 +1,10 @@
+export enum GAME_CONSTANTS {
+  worldX = 20,
+  worldY = 40,
+  worldWidth = 1200,
+  worldHeight = 900,
+}
+
 export enum EVENTS_NAME {
   createNewSpecies = 'create-new-species', // Adds a new species
   reproduceOrganism = 'reproduce-organism', // Adds a new organism

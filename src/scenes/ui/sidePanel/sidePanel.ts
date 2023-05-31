@@ -97,6 +97,7 @@ export class SidePanel extends UIComponent {
   reset(): void {
     this.graphTab.reset();
     this.organismTab.reset();
+    this.scenarioTab.reset();
   }
 
   /* Enables tooltips as created by bootstrap */
