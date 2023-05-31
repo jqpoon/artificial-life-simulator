@@ -11,8 +11,6 @@ import { GraphTab } from './graphTab/graphTab';
 import { OrganismTab } from './organismTab/organismTab';
 import { SimulatorTab } from './simulatorTab/simulatorTab';
 import { BootstrapFactory } from '../common/bootstrapFactory';
-let bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
-
 
 export class SidePanel extends UIComponent {
   private graphTab: GraphTab;
@@ -101,27 +99,9 @@ export class SidePanel extends UIComponent {
     this.organismTab.reset();
   }
 
-  private createButton(scene: UIScene, text: string, key: PAGE_KEYS): Label {
-    return scene.rexUI.add
-      .label({
-        width: 200,
-        height: 100,
-        align: 'center',
-        background: scene.rexUI.add
-          .roundRectangle(0, 0, 0, 0, 5, COLORS.BUTTON_MAIN)
-          .setStrokeStyle(2, COLORS.BUTTON_BORDER),
-        text: this.scene.add.text(0, 0, text, smallerTextDark),
-        space: { left: 20, right: 20, top: 20, bottom: 20 },
-      })
-      .setInteractive()
-      .on('pointerdown', () => {
-        this.pages.swapPage(key);
-        this.enableTooltips();
-      });
-  }
-
   /* Enables tooltips as created by bootstrap */
   private enableTooltips(): void {
+    let bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
     var tooltipTriggerList = [].slice.call(
       document.querySelectorAll('[data-bs-toggle="tooltip"]')
     );
