@@ -94,11 +94,14 @@ export class Tutorial {
       You can also exit the tutorial at any time by pressing escape.`);
 
     /* Register keystrokes */
-    scene.input.keyboard?.on('keydown-' + 'SPACE', () => {
+    let space = scene.input.keyboard?.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE
+    );
+    let esc = scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+    space?.on('down', () => {
       this.next();
     });
-
-    scene.input.keyboard?.on('keydown-' + 'ESC', () => {
+    esc?.on('down', () => {
       this.exit();
     });
 
@@ -201,8 +204,8 @@ export class Tutorial {
     this.nextButton.destroy();
 
     /* Destroy keyboard inputs */
-    this.scene.input.keyboard?.off('keydown-SPACE');
-    this.scene.input.keyboard?.off('keydown-ESCAPE');
+    this.scene.input.keyboard?.removeKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.scene.input.keyboard?.removeKey(Phaser.Input.Keyboard.KeyCodes.ESC);
   }
 
   /* Progresses the tutorial */
@@ -211,6 +214,7 @@ export class Tutorial {
 
     /* End of tutorial */
     if (this.currentStep > this.steps.length) {
+      this.currentStep = 0;
       this.exit();
       return;
     }
