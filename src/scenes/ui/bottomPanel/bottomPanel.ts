@@ -1,4 +1,6 @@
 import { UIComponent } from '../common/UIComponent';
+import { BootstrapFactory } from '../common/bootstrapFactory';
+import { Tutorial } from '../common/tutorial';
 import { UIScene } from '../mainUI';
 import { SpeedControls } from './speedControls';
 
@@ -14,8 +16,17 @@ export class BottomPanel extends UIComponent {
     });
 
     this.speedControls = new SpeedControls(scene);
+    let tutorialButton = BootstrapFactory.createButton(
+      scene,
+      'Start tutorial',
+      () => {
+        let tutorial = new Tutorial(scene);
+        tutorial.start();
+      },
+      this
+    );
 
-    this.add(this.speedControls).layout();
+    this.add(this.speedControls).add(tutorialButton).layout();
   }
 
   reset(): void {
