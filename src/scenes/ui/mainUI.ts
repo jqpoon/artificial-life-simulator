@@ -26,8 +26,15 @@ export class UIScene extends Scene {
   }
 
   create(): void {
-    // let tutorial = new Tutorial(this);
-    // tutorial.start();
+    let tutorial = new Tutorial(this);
+    tutorial.start();
+    tutorial.next()
+    tutorial.next()
+    tutorial.next()
+    tutorial.next()
+    tutorial.next()
+    tutorial.next()
+    tutorial.next()
 
     this.sidePanel = new SidePanel(this);
     this.bottomPanel = new BottomPanel(this);

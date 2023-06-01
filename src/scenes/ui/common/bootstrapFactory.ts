@@ -15,10 +15,12 @@ export class BootstrapFactory {
     scene: Phaser.Scene,
     callbackFn: (e: any) => void,
     context: any,
-    htmlString: string
+    htmlString: string,
+    x = 0,
+    y = 0
   ) {
     /* Add functionality */
-    let element = scene.add.dom(0, 0).createFromHTML(htmlString);
+    let element = scene.add.dom(x, y).createFromHTML(htmlString);
     element.addListener('click');
     element.on('click', callbackFn, context);
 
@@ -120,13 +122,17 @@ export class BootstrapFactory {
    * @param buttonText Text to display on the button
    * @param callbackFn Function to call when this element is clicked
    * @param context Context of callback function
+   * @param x x coordinate of this button
+   * @param y y coordinate of this button
    * @returns A buttom DOM element
    */
   public static createButton(
     scene: Phaser.Scene,
     buttonText: string,
     callbackFn: (e: any) => void,
-    context: any
+    context: any,
+    x = 0,
+    y = 0
   ) {
     let htmlString = `<button type="button" class="btn btn-primary btn-lg">${buttonText}</button>`;
 
@@ -134,7 +140,9 @@ export class BootstrapFactory {
       scene,
       callbackFn,
       context,
-      htmlString
+      htmlString,
+      x,
+      y
     );
   }
 
