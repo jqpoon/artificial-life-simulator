@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -35,11 +36,17 @@ module.exports = {
         },
       ],
     }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
   ],
 
   // list of extensions to resolve, in resolve order
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      process: 'process/browser',
+    },
   },
 
   // loader to handle TypeScript file type
