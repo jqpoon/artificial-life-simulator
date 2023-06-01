@@ -9,9 +9,11 @@ import { RandomOrganism } from '../classes/entities/randomOrganism';
 
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
+  private foods: Phaser.GameObjects.Group;
   private currentScenario: number;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 3000;
+  private static readonly maxFoodCount: number = 100;
 
   constructor() {
     super('environment-scene');
@@ -20,6 +22,7 @@ export class EnvironmentScene extends Scene {
   create(): void {
     this.currentScenario = 0; // Default, empty canvas
     this.organisms = this.add.group();
+    this.foods = this.add.group();
     this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
 
@@ -63,7 +66,11 @@ export class EnvironmentScene extends Scene {
   private initEvents(): void {
     this.time.addEvent({
       delay: EnvironmentScene.foodSpawnDelayInMilliseconds,
-      callback: this.generateNewFood,
+      callback: () => {
+        if (this.foods.countActive() <= EnvironmentScene.maxFoodCount) {
+          this.generateNewFood();
+        }
+      },
       callbackScope: this,
       loop: true,
     });
@@ -134,6 +141,7 @@ export class EnvironmentScene extends Scene {
       y: Math.random() * GAME_CONSTANTS.worldHeight + GAME_CONSTANTS.worldY,
     });
     food.addPredator(this.organisms);
+    this.foods.add(food);
   }
 
   private addOrganismToGroup(organism: Organism): void {
