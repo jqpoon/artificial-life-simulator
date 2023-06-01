@@ -227,8 +227,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
    */
   protected getEntitiesWithinVision(): Entity[] {
     let entities = this.scene.physics.overlapCirc(
-      this.x + this.radius,
-      this.y + this.radius,
+      this.x,
+      this.y,
       this.radius + this.visionDistance / 2,
       true,
       true
