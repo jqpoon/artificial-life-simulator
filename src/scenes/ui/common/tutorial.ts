@@ -166,7 +166,7 @@ export class Tutorial {
       {
         helpText: `Here you can see information about this organism.
                    Click on an organism to see this information.
-                   Remember, you can spawn organisms by clicking on the main canvas.`,
+                   (Remember, you can spawn organisms by clicking on the main canvas.)`,
         tooltipDirection: 'left',
         top: 115,
         bottom: 505,
@@ -223,7 +223,8 @@ export class Tutorial {
     if (this.currentStep == this.steps.length) {
       this.hideOverlay();
       this.showInstructionText();
-      this.setInstructions(`Thanks for going through the tutorial!`);
+      this.setInstructions(`Now that you've learned how to use the simulator,
+        enjoy playing around with it!`);
       this.currentStep += 1;
       return;
     }
