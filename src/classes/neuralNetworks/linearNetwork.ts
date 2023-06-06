@@ -27,6 +27,19 @@ export class LinearNetwork implements Network {
     return x;
   }
 
+  public backprop(loss: number[]): void {
+    let layerLoss = loss.slice();
+    for (let layer of this.layers.slice().reverse()) {
+      layerLoss = layer.backprop(layerLoss);
+    }
+  }
+
+  public updateWeights(): void {
+    this.layers.map((layer: LinearLayer) => {
+      layer.updateWeights();
+    });
+  }
+
   public setParams(params: LinearModelParams): void {
     for (const [index, param] of params.entries()) {
       this.layers[index].setParams(param);

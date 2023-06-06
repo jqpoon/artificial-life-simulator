@@ -10,6 +10,10 @@ export interface Network {
   /* Performs a forward pass through the neural network */
   forward(values: number[]): number[];
 
+  /* Performs backpropogation */
+  backprop(loss: number[]): void;
+  updateWeights(): void;
+
   /* Getters and setters for the internal matrices */
   setParams(params: LinearModelParams): void;
   getParams(): LinearModelParams;
