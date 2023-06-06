@@ -122,7 +122,7 @@ export class LinearLayer {
    * Returns the loss with reference to its inputs.
    *
    * @param loss Loss from the layer above. Must be the same size as the number
-   *             of output neurons
+   *             of output neurons. Must also be target - output!!
    * @returns    Loss with reference to its inputs
    */
   public backprop(loss: number[]): number[] {
@@ -178,13 +178,13 @@ export class LinearLayer {
     /* Update weights matrix */
     for (let i = 0; i < rowsW; i++) {
       for (let j = 0; j < colsW; j++) {
-        this.weights[i][j] -= this.learningRate * this.weightLoss[i][j];
+        this.weights[i][j] += this.learningRate * this.weightLoss[i][j];
       }
     }
 
     /* Update bias */
     for (let i = 0; i < colsW; i++) {
-      this.bias[i] -= this.learningRate * this.biasLoss[i];
+      this.bias[i] += this.learningRate * this.biasLoss[i];
     }
   }
 
