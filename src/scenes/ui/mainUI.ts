@@ -7,7 +7,6 @@ import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrgan
 import { COLORS } from './common/UIConstants';
 import { SidePanel } from './sidePanel/sidePanel';
 import { BottomPanel } from './bottomPanel/bottomPanel';
-import { Tutorial } from './common/tutorial';
 
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;

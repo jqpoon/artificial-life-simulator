@@ -12,7 +12,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   private static readonly MIN_SIZE = 20;
   private static readonly MAX_SIZE = 100;
   private static readonly MIN_VISION = 10;
-  private static readonly MAX_VISION = 200;
+  private static readonly MAX_VISION = 800;
 
   /* Defaults attribute values */
   private static readonly ORGANISM_DEFAULTS = {
@@ -23,7 +23,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     species: -1,
     startingEnergy: 100,
     velocity: 20,
-    visionDistance: 100,
+    visionDistance: 800,
     x: 300,
     y: 300,
   };
