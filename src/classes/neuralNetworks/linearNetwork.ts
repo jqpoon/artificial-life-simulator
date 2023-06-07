@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { LinearLayer } from './linearLayer';
 import { Network, LinearModelParams } from './network';
-import { ActivationFunction } from './networkMath';
+import { ActivationFunction, ActivationFunctionDerivatives } from './networkMath';
 
 export class LinearNetwork implements Network {
   private layers: LinearLayer[];
@@ -10,12 +10,12 @@ export class LinearNetwork implements Network {
    * Initialises a neural network with any number of
    * @param nodes
    */
-  constructor(nodes: number[], activation?: ActivationFunction) {
+  constructor(nodes: number[], activation?: ActivationFunction, activationDerivative?: ActivationFunctionDerivatives) {
     assert(nodes.length >= 2, 'Network should contain at least one layer');
 
     this.layers = [];
     for (let i = 0; i < nodes.length - 1; i++) {
-      this.layers.push(new LinearLayer(nodes[i], nodes[i + 1], activation));
+      this.layers.push(new LinearLayer(nodes[i], nodes[i + 1], activation, activationDerivative));
     }
   }
 
@@ -29,8 +29,8 @@ export class LinearNetwork implements Network {
 
   public backprop(loss: number[]): void {
     let layerLoss = loss.slice();
-    for (let layer of this.layers.slice().reverse()) {
-      layerLoss = layer.backprop(layerLoss);
+    for (let i = this.layers.length - 1; i >= 0; i--) {
+      layerLoss = this.layers[i].backprop(layerLoss);
     }
   }
 

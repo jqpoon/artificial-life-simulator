@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-export type ActivationFunction = typeof Math.tanh;
+export type ActivationFunction = typeof Math.tanh | typeof sigmoid;
 export type ActivationFunctionDerivatives = typeof tanhDerivative;
 export type Initialiser = typeof glorotUniform;
 
@@ -17,8 +17,17 @@ export function glorotUniform(n: number): number {
   return Math.random() * (max - min) + min;
 }
 
+// TODO: Quick note: might be wrong, need to check!
 export function tanhDerivative(x: number): number {
-  return 1 - Math.tanh(x) ** 2;
+  return 1 - x ** 2;
+}
+
+export function sigmoid(x: number) {
+  return 1 / (1 + Math.exp(-x));
+}
+
+export function sigmoidDerivative(x: number): number {
+  return x * (1 - x);
 }
 
 /**

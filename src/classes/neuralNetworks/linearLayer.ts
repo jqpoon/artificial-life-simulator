@@ -8,7 +8,8 @@ import {
   matrixElementWiseAdd,
   matrixMultiply,
   matrixTranspose2D,
-  tanhDerivative,
+  sigmoid,
+  sigmoidDerivative,
 } from './networkMath';
 
 /**
@@ -33,8 +34,8 @@ export class LinearLayer {
   constructor(
     input: number,
     output: number,
-    activationFunction: ActivationFunction = Math.tanh,
-    activationFunctionDerivative: ActivationFunctionDerivatives = tanhDerivative,
+    activationFunction: ActivationFunction = sigmoid,
+    activationFunctionDerivative: ActivationFunctionDerivatives = sigmoidDerivative,
     initFunction: Initialiser = glorotUniform,
     learningRate: number = 0.05
   ) {
@@ -174,6 +175,7 @@ export class LinearLayer {
 
     let rowsW = this.weights.length;
     let colsW = this.weights[0].length;
+    this.learningRate *= 0.999;
 
     /* Update weights matrix */
     for (let i = 0; i < rowsW; i++) {
