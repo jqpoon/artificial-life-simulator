@@ -35,4 +35,5 @@ export enum ORGANISM_TYPES {
   neuralNetworkOrganism = 'Neural Network',
   randomOrganism = 'Random',
   visionOrganism = 'Vision',
+  reinforcementLearningOrganism = 'reinforcement-learning',
 }
