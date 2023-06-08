@@ -36,6 +36,7 @@ export class Tutorial {
           justify-content: center;
           align-content: center;
           flex-direction: column;
+          pointer-events: none;
         ">
           <p
             id="instruction-text"
@@ -57,6 +58,7 @@ export class Tutorial {
           position: absolute;
           box-sizing: border-box;
           visibility: hidden;
+          pointer-events: none;
         "
       >
         <div
