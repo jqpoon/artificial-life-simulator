@@ -17,9 +17,8 @@ export function glorotUniform(n: number): number {
   return Math.random() * (max - min) + min;
 }
 
-// TODO: Quick note: might be wrong, need to check!
 export function tanhDerivative(x: number): number {
-  return 1 - x ** 2;
+  return 1 - x * x;
 }
 
 export function sigmoid(x: number) {

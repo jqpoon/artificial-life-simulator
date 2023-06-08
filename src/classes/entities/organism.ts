@@ -90,8 +90,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     );
     this.basalEnergyLossPerUpdate =
       mergedConfigs.energyLoss ??
-      OrganismUtils.calculateBasalEnergyLoss(this.size, this.visionDistance) *
-        this.scene.registry.get(REGISTRY_KEYS.energyLoss);
+      OrganismUtils.calculateBasalEnergyLoss(this.size, this.visionDistance);
     this.radius = this.size / 2;
     this.species = mergedConfigs.species;
 
@@ -129,6 +128,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       -this.radius,
       -this.radius
     );
+    this.body.setBounce(1, 1);
 
     /* Enable clicks to view more information */
     this.setInteractive(
@@ -189,7 +189,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Apply energy loss to organism */
     let totalEnergyLoss =
-      this.basalEnergyLossPerUpdate + body.velocity.length() * 0.01;
+      (this.basalEnergyLossPerUpdate + body.velocity.length() * 0.01) *
+      this.scene.registry.get(REGISTRY_KEYS.energyLoss);
     this.addEnergy(-totalEnergyLoss);
 
     /* Send information about this organism if it is selected */

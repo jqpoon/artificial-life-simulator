@@ -52,7 +52,7 @@ export class SimulatorTab extends TabComponent {
         );
       },
       this,
-      0, // Min
+      0.1, // Min
       5 // Max
     );
 

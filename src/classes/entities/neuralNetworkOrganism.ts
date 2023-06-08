@@ -1,11 +1,11 @@
 import { Network } from '../neuralNetworks/network';
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
-import { Conversion } from '../utils/conversion';
 import { GAME_CONSTANTS, ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 import { LinearNetwork } from '../neuralNetworks/linearNetwork';
 import { NeuralNetChromosome } from '../genetic/chromosomes/neuralNetChromosome';
 import { inversionWithMutationRate } from '../genetic/mutation';
+import { OrganismUtils } from '../utils/organismUtils';
 
 export class NeuralNetworkOrganism extends Organism {
   private network: Network;
@@ -19,11 +19,26 @@ export class NeuralNetworkOrganism extends Organism {
       this.networkChromosome =
         configs.neuralNetChromosome as NeuralNetChromosome;
     } else {
-      this.network = new LinearNetwork([8, 4, 4, 2]); // RGB input, relative x/y, absolute x/y, energy
-      this.networkChromosome = new NeuralNetChromosome([8, 4, 4, 2]).fromPhenotype(
+      // inputs = 6 = isFood, relative x/y, absolute x/y, energy
+      // outputs = 8 = direction to move in
+      let id = (x: any) => {
+        return x;
+      };
+      this.network = new LinearNetwork([2, 4, 2]);
+      this.networkChromosome = new NeuralNetChromosome([2, 4, 2]).fromPhenotype(
         this.network
       );
     }
+
+    // console.log(this.network.getParams()[0]);
+    // console.log(this.network.forward([0, -1]));
+    // console.log(this.network.forward([1, -1]));
+    // console.log(this.network.forward([1, 0]));
+    // console.log(this.network.forward([1, 1]));
+    // console.log(this.network.forward([0, 1]));
+    // console.log(this.network.forward([-1, 1]));
+    // console.log(this.network.forward([-1, 0]));
+    // console.log(this.network.forward([-1, -1]));
   }
 
   protected clone() {
@@ -50,44 +65,40 @@ export class NeuralNetworkOrganism extends Organism {
   }
 
   protected onUpdate(time: number, delta: number): void {
-    let nearestEntity = this.getNearestEntity();
-    let color = 0;
+    let entities = this.getEntitiesWithinVision();
 
-    // TODO: refactor this instead of casting to any!
-    /* Find rgb colour of nearest entity */
-    if (nearestEntity) {
-      color = (nearestEntity.gameObject as any).color;
-    }
-    let [r, g, b] = Conversion.numberColorToRGB(color);
-    r = r / 255;
-    g = g / 255;
-    b = b / 255;
+    let nearestFood = OrganismUtils.getNearestFood(this, entities);
 
     /* Find relative x and y to nearest entity */
     let x = 0,
       y = 0;
-    if (nearestEntity) {
-      x = this.body.center.x - nearestEntity.x;
-      y = this.body.center.y - nearestEntity.y;
+    if (nearestFood) {
+      x = this.body.center.x - nearestFood.x;
+      y = this.body.center.y - nearestFood.y;
     }
     x /= this.visionDistance / 2;
     y /= this.visionDistance / 2;
 
     /* Get relative position of this organism to the world, scaled to -0.5 to 0.5 */
-    let pos_x = (this.x - GAME_CONSTANTS.worldX) / GAME_CONSTANTS.worldWidth - 0.5;
-    let pos_y = (this.y - GAME_CONSTANTS.worldY) / GAME_CONSTANTS.worldHeight - 0.5;
+    let pos_x = (this.x - GAME_CONSTANTS.worldX) / GAME_CONSTANTS.worldWidth;
+    let pos_y = (this.y - GAME_CONSTANTS.worldY) / GAME_CONSTANTS.worldHeight;
 
     /* Pass these values to neural network and let magic happen */
-    let inputs = [r, g, b, x, y, pos_x, pos_y, (this.energy / 100 - 0.5)]
+    let inputs = [x, y];
     let outputs = this.network.forward(inputs);
 
     /* Execute output of neural network */
-    let xSpeed = Phaser.Math.Clamp(outputs[0] * this.velocity, -this.velocity, this.velocity);
-    let ySpeed = Phaser.Math.Clamp(outputs[1] * this.velocity, -this.velocity, this.velocity);
+    let xSpeed = Phaser.Math.Clamp(
+      outputs[0] * this.velocity,
+      -this.velocity,
+      this.velocity
+    );
+    let ySpeed = Phaser.Math.Clamp(
+      outputs[1] * this.velocity,
+      -this.velocity,
+      this.velocity
+    );
     this.body.setVelocity(xSpeed, ySpeed);
-
-    console.log(inputs);
-    console.log(xSpeed, ySpeed)
   }
 
   protected onDestroy(): void {}
