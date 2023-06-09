@@ -1,4 +1,3 @@
-import { COLORS, smallerTextDark } from '../../common/UIConstants';
 import { EVENTS_NAME } from '../../../../consts';
 import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';

@@ -13,7 +13,6 @@ export class EnvironmentScene extends Scene {
   private currentScenario: number;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 3000;
-  private static readonly maxFoodCount: number = 100;
 
   constructor() {
     super('environment-scene');
@@ -67,7 +66,7 @@ export class EnvironmentScene extends Scene {
     this.time.addEvent({
       delay: EnvironmentScene.foodSpawnDelayInMilliseconds,
       callback: () => {
-        if (this.foods.countActive() <= EnvironmentScene.maxFoodCount) {
+        if (this.foods.countActive() <= this.registry.get(REGISTRY_KEYS.foodSpawnLimit)) {
           this.generateNewFood();
         }
       },

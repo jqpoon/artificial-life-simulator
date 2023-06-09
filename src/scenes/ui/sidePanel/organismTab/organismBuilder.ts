@@ -95,7 +95,7 @@ export class OrganismBuilder extends UIComponent {
       },
       this,
       20, // min
-      100.3 // max - a bit more over 100 so that our display texts displays '100' (some truncation issues..)
+      60.3 // max - a bit more over 100 so that our display texts displays '100' (some truncation issues..)
     );
 
     // Speed of organism
@@ -203,13 +203,13 @@ export class OrganismBuilder extends UIComponent {
   reset(): void {
     // Manually set bootstrap value and the phaser side of things
     this.startingEnergySlider.node.children[0].value = 100;
-    this.setOrganismSpeed(50);
-
-    this.speedSlider.node.children[0].value = 50;
     this.setStartingEnergy(100);
 
-    this.sizeSlider.node.children[0].value = 60;
-    this.setOrganismSize(60);
+    this.speedSlider.node.children[0].value = 50;
+    this.setOrganismSpeed(50);
+
+    this.sizeSlider.node.children[0].value = 30;
+    this.setOrganismSize(30);
 
     this.setColour(0xe8000b);
 
