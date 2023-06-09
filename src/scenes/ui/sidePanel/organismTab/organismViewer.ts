@@ -3,13 +3,11 @@ import RoundRectangle from 'phaser3-rex-plugins/plugins/roundrectangle';
 import { EVENTS_NAME } from '../../../../consts';
 import { GameObjects } from 'phaser';
 import { OrganismInformation } from '../../../../typedefs';
-import {
-  smallerTextDark,
-  textDefaultsDark,
-} from '../../common/UIConstants';
+import { smallerTextDark, textDefaultsDark } from '../../common/UIConstants';
 import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
 import { BootstrapFactory } from '../../common/bootstrapFactory';
+import { OrganismBrain } from './organismBrain';
 
 export class OrganismViewer extends UIComponent {
   private generationText: GameObjects.Text;
@@ -17,7 +15,7 @@ export class OrganismViewer extends UIComponent {
   private sizeText: GameObjects.Text;
   private energyText: GameObjects.Text;
   private infoText: GameObjects.Text;
-  private typeText: GameObjects.Text;
+  private organismBrain: OrganismBrain;
 
   constructor(scene: UIScene) {
     super(scene, {
@@ -42,7 +40,6 @@ export class OrganismViewer extends UIComponent {
     this.speedText = scene.add.text(0, 0, '0.0', smallerTextDark);
     this.sizeText = scene.add.text(0, 0, '0.0', smallerTextDark);
     this.energyText = scene.add.text(0, 0, '0.0', smallerTextDark);
-    this.typeText = scene.add.text(0, 0, 'Undefined', smallerTextDark);
     this.infoText = scene.add.text(
       0,
       0,
@@ -72,7 +69,10 @@ export class OrganismViewer extends UIComponent {
         });
       },
       this
-    )
+    );
+
+    // Organism brain, i.e. what it is thinking
+    this.organismBrain = new OrganismBrain(scene);
 
     this.add(scene.add.text(0, 0, 'Organism Info', textDefaultsDark))
       .add(
@@ -93,9 +93,6 @@ export class OrganismViewer extends UIComponent {
               .add(scene.add.text(0, 0, 'Energy: ', smallerTextDark), {
                 align: 'left',
               })
-              .add(scene.add.text(0, 0, 'Type: ', smallerTextDark), {
-                align: 'left',
-              })
           )
           .add(
             scene.rexUI.add
@@ -104,12 +101,12 @@ export class OrganismViewer extends UIComponent {
               .add(this.speedText)
               .add(this.sizeText)
               .add(this.energyText)
-              .add(this.typeText)
           )
       )
       .add(this.infoText)
       .add(unselectButton)
-      .add(killButton);
+      .add(killButton)
+      .add(this.organismBrain);
 
     this.addBackground(background).layout();
 
@@ -121,13 +118,7 @@ export class OrganismViewer extends UIComponent {
           // If no info is available, then just reset
           this.reset();
         } else {
-          this.updateInformation(
-            info.generation,
-            info.velocity,
-            info.size,
-            info.energy,
-            info.type
-          );
+          this.updateInformation(info);
         }
       }
     );
@@ -138,43 +129,41 @@ export class OrganismViewer extends UIComponent {
     this.sizeText.setText('0.0');
     this.energyText.setText('0.0');
     this.infoText.setText('Click on an organism!');
+    this.organismBrain.reset();
   }
 
-  private updateInformation(
-    generation: number,
-    speed: number,
-    size: number,
-    energy: number,
-    type: string
-  ): void {
+  private updateInformation(info: OrganismInformation): void {
     this.generationText.setText(
-      generation.toLocaleString('en-us', {
+      info.generation.toLocaleString('en-us', {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       })
     );
     this.speedText.setText(
-      speed.toLocaleString('en-us', {
+      info.velocity.toLocaleString('en-us', {
         minimumFractionDigits: 1,
         maximumFractionDigits: 1,
       })
     );
     this.sizeText.setText(
-      size.toLocaleString('en-us', {
+      info.size.toLocaleString('en-us', {
         minimumFractionDigits: 1,
         maximumFractionDigits: 1,
       })
     );
     this.energyText.setText(
-      energy.toLocaleString('en-us', {
+      info.energy.toLocaleString('en-us', {
         minimumFractionDigits: 1,
         maximumFractionDigits: 1,
       })
     );
-    this.typeText.setText(type);
 
-    if (energy <= 0) {
-      this.infoText.setText('Click on an organism!');
+    this.organismBrain.setOrganismColor(info.color);
+    this.organismBrain.setCenterText(info.type);
+    this.organismBrain.setArrowDirection(info.brainDirectionInfo ?? [0, 0, 0, 0, 0, 0, 0, 0,]);
+
+    if (info.energy <= 0) {
+      this.reset();
     } else {
       this.infoText.setText('Tracking organism...');
     }
