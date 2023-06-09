@@ -42,8 +42,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   protected generation: number;
 
   /* Meta-information about an organism */
-  private ID: string;
-  private isSelected: boolean;
+  protected isSelected: boolean;
   private timeCounter: number;
 
   /* Parts of this organism */
@@ -54,6 +53,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   /* Abstract methods for different organism types to implement */
   protected abstract clone(): any;
   protected abstract getType(): ORGANISM_TYPES;
+  protected abstract getBrainDirectionInfo(): number[];
   protected abstract onUpdate(time: number, delta: number): void;
   protected abstract onDestroy(): void;
 
@@ -143,6 +143,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
         size: this.size,
         energy: this.energy,
         type: this.getType(),
+        color: this.color,
+        brainDirectionInfo: this.getBrainDirectionInfo(),
       });
       this.toggleOrganismSelected(true);
     });
@@ -179,9 +181,6 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       return;
     this.timeCounter = 0;
 
-    /* Run update function in subclass */
-    this.onUpdate(time, delta);
-
     /* Apply physics effects */
     let body = this.body as Phaser.Physics.Arcade.Body;
     body.setCollideWorldBounds(true); // Enable this to make the border a hard wall
@@ -202,8 +201,13 @@ export abstract class Organism extends Phaser.GameObjects.Container {
         size: this.size,
         energy: this.energy,
         type: this.getType(),
+        color: this.color,
+        brainDirectionInfo: this.getBrainDirectionInfo(),
       });
     }
+
+    /* Run update function in subclass */
+    this.onUpdate(time, delta);
 
     /* Calculate energy effects (either clone or death). This has to be the
      * last call in this function, since it could delete the whole organism.

@@ -56,6 +56,10 @@ export class RandomOrganism extends Organism {
     });
   }
 
+  protected getBrainDirectionInfo(): number[] {
+    return [];
+  }
+
   protected onDestroy() {}
 
   protected getType(): ORGANISM_TYPES {

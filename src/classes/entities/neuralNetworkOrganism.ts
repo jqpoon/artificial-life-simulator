@@ -1,7 +1,12 @@
 import { Network } from '../neuralNetworks/network';
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
-import { GAME_CONSTANTS, ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
+import {
+  EVENTS_NAME,
+  GAME_CONSTANTS,
+  ORGANISM_TYPES,
+  REGISTRY_KEYS,
+} from '../../consts';
 import { LinearNetwork } from '../neuralNetworks/linearNetwork';
 import { NeuralNetChromosome } from '../genetic/chromosomes/neuralNetChromosome';
 import { inversionWithMutationRate } from '../genetic/mutation';
@@ -73,11 +78,9 @@ export class NeuralNetworkOrganism extends Organism {
     let x = 0,
       y = 0;
     if (nearestFood) {
-      x = this.body.center.x - nearestFood.x;
-      y = this.body.center.y - nearestFood.y;
+      x = nearestFood.x - this.body.center.x;
+      y = nearestFood.y - this.body.center.y;
     }
-    x /= this.visionDistance / 2;
-    y /= this.visionDistance / 2;
 
     /* Get relative position of this organism to the world, scaled to -0.5 to 0.5 */
     let pos_x = (this.x - GAME_CONSTANTS.worldX) / GAME_CONSTANTS.worldWidth;
@@ -99,6 +102,28 @@ export class NeuralNetworkOrganism extends Organism {
       this.velocity
     );
     this.body.setVelocity(xSpeed, ySpeed);
+  }
+
+  protected getBrainDirectionInfo(): number[] {
+    /* Gather information about the neural network */
+    let foodDirections = [
+      [0, -1],
+      [1, -1],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+      [-1, 1],
+      [-1, 0],
+      [-1, -1],
+    ];
+
+    let movementDirection = [];
+    for (const direction of foodDirections) {
+      let [x, y] = this.network.forward(direction);
+      let rad = Math.atan2(y, x);
+      movementDirection.push(Phaser.Math.RadToDeg(rad) + 90);
+    }
+    return movementDirection;
   }
 
   protected onDestroy(): void {}

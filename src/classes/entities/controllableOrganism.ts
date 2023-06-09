@@ -53,6 +53,10 @@ export class ControllableOrganism extends Organism {
     });
   }
 
+  protected getBrainDirectionInfo(): number[] {
+    return [];
+  }
+
   protected getType(): ORGANISM_TYPES {
     return ORGANISM_TYPES.controllableOrganism;
   }

@@ -18,7 +18,7 @@ export class VisionOrganism extends Organism {
   constructor(configs: OrganismConfigs) {
     super(configs);
 
-    this.colorChromosome = (new ColorChromosome()).fromPhenotype(this.color);
+    this.colorChromosome = new ColorChromosome().fromPhenotype(this.color);
   }
 
   protected onUpdate(time: number, delta: number): void {
@@ -74,7 +74,10 @@ export class VisionOrganism extends Organism {
       color: this.color,
       generation: this.generation + 1,
       species: this.species,
-      colorChromosome: this.colorChromosome.mutateWith(inversionWithMutationRate, mutationRate)
+      colorChromosome: this.colorChromosome.mutateWith(
+        inversionWithMutationRate,
+        mutationRate
+      ),
     });
   }
 
@@ -82,6 +85,10 @@ export class VisionOrganism extends Organism {
 
   protected getType(): ORGANISM_TYPES {
     return ORGANISM_TYPES.visionOrganism;
+  }
+
+  protected getBrainDirectionInfo(): number[] {
+    return [0, 45, 90, 135, 180, 225, 270, 315];
   }
 
   private changeDirection(): void {

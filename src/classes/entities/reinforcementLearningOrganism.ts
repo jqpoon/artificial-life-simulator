@@ -185,4 +185,8 @@ export class ReinforcementLearningOrganism extends Organism {
 
     return reward;
   }
+
+  protected getBrainDirectionInfo(): number[] {
+    throw new Error('Method not implemented.');
+  }
 }

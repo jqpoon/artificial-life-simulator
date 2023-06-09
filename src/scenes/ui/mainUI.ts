@@ -22,6 +22,7 @@ export class UIScene extends Scene {
     this.load.image('speed1', 'assets/speed1.png');
     this.load.image('speed2', 'assets/speed2.png');
     this.load.image('speed3', 'assets/speed3.png');
+    this.load.image('arrow', 'assets/arrow.png');
   }
 
   create(): void {

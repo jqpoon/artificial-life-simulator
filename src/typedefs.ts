@@ -40,6 +40,8 @@ export type OrganismInformation = {
   size: number;
   energy: number;
   type: ORGANISM_TYPES;
+  color: number;
+  brainDirectionInfo: number[]; // 8 values, corresponding to where this organism will move if it encounters food in the 8 directions
 };
 
 export type IOrganism = {

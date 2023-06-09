@@ -32,7 +32,7 @@ export enum REGISTRY_KEYS {
 
 export enum ORGANISM_TYPES {
   controllableOrganism = 'Controllable',
-  neuralNetworkOrganism = 'Neural Network',
+  neuralNetworkOrganism = 'Neural\nNetwork',
   randomOrganism = 'Random',
   visionOrganism = 'Vision',
   reinforcementLearningOrganism = 'reinforcement-learning',
