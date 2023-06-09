@@ -29,8 +29,8 @@ export class NeuralNetworkOrganism extends Organism {
       let id = (x: any) => {
         return x;
       };
-      this.network = new LinearNetwork([2, 4, 2]);
-      this.networkChromosome = new NeuralNetChromosome([2, 4, 2]).fromPhenotype(
+      this.network = new LinearNetwork([4, 4, 2]);
+      this.networkChromosome = new NeuralNetChromosome([4, 4, 2]).fromPhenotype(
         this.network
       );
     }
@@ -83,11 +83,11 @@ export class NeuralNetworkOrganism extends Organism {
     }
 
     /* Get relative position of this organism to the world, scaled to -0.5 to 0.5 */
-    let pos_x = (this.x - GAME_CONSTANTS.worldX) / GAME_CONSTANTS.worldWidth;
-    let pos_y = (this.y - GAME_CONSTANTS.worldY) / GAME_CONSTANTS.worldHeight;
+    let pos_x = (this.x - GAME_CONSTANTS.worldX) / GAME_CONSTANTS.worldWidth - 0.5;
+    let pos_y = (this.y - GAME_CONSTANTS.worldY) / GAME_CONSTANTS.worldHeight - 0.5;
 
     /* Pass these values to neural network and let magic happen */
-    let inputs = [x, y];
+    let inputs = [x, y, pos_x, pos_y];
     let outputs = this.network.forward(inputs);
 
     /* Execute output of neural network */
