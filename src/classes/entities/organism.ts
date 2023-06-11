@@ -206,6 +206,9 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       });
     }
 
+    /* Set alpha of organism to show its energy level */
+    this.setAlpha(Math.max(this.energy / 100, 0.1));
+
     /* Run update function in subclass */
     this.onUpdate(time, delta);
 

@@ -24,26 +24,13 @@ export class NeuralNetworkOrganism extends Organism {
       this.networkChromosome =
         configs.neuralNetChromosome as NeuralNetChromosome;
     } else {
-      // inputs = 6 = isFood, relative x/y, absolute x/y, energy
-      // outputs = 8 = direction to move in
-      let id = (x: any) => {
-        return x;
-      };
-      this.network = new LinearNetwork([4, 4, 2]);
-      this.networkChromosome = new NeuralNetChromosome([4, 4, 2]).fromPhenotype(
+      // inputs = 7 = relative x/y of nearest food, absolute x/y, relative x/y of nearest entity, energy
+      // outputs = 2 = x/y speed
+      this.network = new LinearNetwork([7, 4, 2]);
+      this.networkChromosome = new NeuralNetChromosome([7, 4, 2]).fromPhenotype(
         this.network
       );
     }
-
-    // console.log(this.network.getParams()[0]);
-    // console.log(this.network.forward([0, -1]));
-    // console.log(this.network.forward([1, -1]));
-    // console.log(this.network.forward([1, 0]));
-    // console.log(this.network.forward([1, 1]));
-    // console.log(this.network.forward([0, 1]));
-    // console.log(this.network.forward([-1, 1]));
-    // console.log(this.network.forward([-1, 0]));
-    // console.log(this.network.forward([-1, -1]));
   }
 
   protected clone() {
@@ -71,10 +58,18 @@ export class NeuralNetworkOrganism extends Organism {
 
   protected onUpdate(time: number, delta: number): void {
     let entities = this.getEntitiesWithinVision();
-
     let nearestFood = OrganismUtils.getNearestFood(this, entities);
 
-    /* Find relative x and y to nearest entity */
+    let nearestEntity = this.getNearestEntity();
+
+    let entityX = 0;
+    let entityY = 0;
+    if (nearestEntity) {
+      entityX = nearestEntity.x - this.body.center.x;
+      entityY = nearestEntity.y - this.body.center.y;
+    }
+
+    /* Find relative x and y to nearest food */
     let x = 0,
       y = 0;
     if (nearestFood) {
@@ -87,7 +82,7 @@ export class NeuralNetworkOrganism extends Organism {
     let pos_y = (this.y - GAME_CONSTANTS.worldY) / GAME_CONSTANTS.worldHeight - 0.5;
 
     /* Pass these values to neural network and let magic happen */
-    let inputs = [x, y, pos_x, pos_y];
+    let inputs = [x, y, pos_x, pos_y, entityX, entityY, this.energy / 100];
     let outputs = this.network.forward(inputs);
 
     /* Execute output of neural network */
