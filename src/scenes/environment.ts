@@ -10,7 +10,8 @@ import { RandomOrganism } from '../classes/entities/randomOrganism';
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
   private foods: Phaser.GameObjects.Group;
-  private currentScenario: number;
+  private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
+  private currentScenario: number = 0; // Default, empty canvas
 
   private static readonly foodSpawnDelayInMilliseconds: number = 3000;
 
@@ -19,13 +20,16 @@ export class EnvironmentScene extends Scene {
   }
 
   create(): void {
-    this.currentScenario = 0; // Default, empty canvas
     this.organisms = this.add.group();
     this.foods = this.add.group();
     this.physics.add.collider(this.organisms, this.organisms);
     this.organisms.runChildUpdate = true;
 
     this.physics.world.setFPS(15);
+
+    if (this.input.keyboard) {
+      this.cursorKeys = this.input.keyboard.createCursorKeys();
+    }
 
     this.initCanvas();
     this.initListeners();
@@ -66,7 +70,10 @@ export class EnvironmentScene extends Scene {
     this.time.addEvent({
       delay: EnvironmentScene.foodSpawnDelayInMilliseconds,
       callback: () => {
-        if (this.foods.countActive() <= this.registry.get(REGISTRY_KEYS.foodSpawnLimit)) {
+        if (
+          this.foods.countActive() <=
+          this.registry.get(REGISTRY_KEYS.foodSpawnLimit)
+        ) {
           this.generateNewFood();
         }
       },
@@ -97,22 +104,32 @@ export class EnvironmentScene extends Scene {
     visualBorder
       .setInteractive()
       .on('pointerdown', (_: any, localX: number, localY: number) => {
-        this.addToSpecies(
-          {
-            scene: this,
-            velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
-            size: this.registry.get(REGISTRY_KEYS.organismSize),
-            x: localX + GAME_CONSTANTS.worldX,
-            y: localY + GAME_CONSTANTS.worldY,
-            color: this.registry.get(REGISTRY_KEYS.organismColour),
-            species: this.registry.get(REGISTRY_KEYS.organismSpecies),
-            startingEnergy: this.registry.get(
-              REGISTRY_KEYS.organismStartingEnergy
-            ),
-          },
-          this.registry.get(REGISTRY_KEYS.organismType)
-        );
+        if (this.cursorKeys.shift.isDown) {
+          this.addOrganism(localX, localY);
+          this.addOrganism(localX, localY);
+          this.addOrganism(localX, localY);
+          this.addOrganism(localX, localY);
+          this.addOrganism(localX, localY);
+        } else {
+          this.addOrganism(localX, localY);
+        }
       });
+  }
+
+  private addOrganism(localX: number, localY: number): void {
+    this.addToSpecies(
+      {
+        scene: this,
+        velocity: this.registry.get(REGISTRY_KEYS.organismSpeed),
+        size: this.registry.get(REGISTRY_KEYS.organismSize),
+        x: localX + GAME_CONSTANTS.worldX,
+        y: localY + GAME_CONSTANTS.worldY,
+        color: this.registry.get(REGISTRY_KEYS.organismColour),
+        species: this.registry.get(REGISTRY_KEYS.organismSpecies),
+        startingEnergy: this.registry.get(REGISTRY_KEYS.organismStartingEnergy),
+      },
+      this.registry.get(REGISTRY_KEYS.organismType)
+    );
   }
 
   private addToSpecies(configs: OrganismConfigs, organism: IOrganism): void {
