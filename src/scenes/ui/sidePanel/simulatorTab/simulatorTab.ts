@@ -21,7 +21,7 @@ export class SimulatorTab extends TabComponent {
     this.scenarioControl = new ScenarioControl(scene);
 
     /* Controls global mutation rate */
-    let mutationText = scene.add.text(0, 0, '0.50', smallerTextDark);
+    let mutationText = scene.add.text(0, 0, '0.10', smallerTextDark);
     this.mutationRateSlider = BootstrapFactory.createSlider(
       scene,
       (e: any) => {
@@ -132,5 +132,6 @@ export class SimulatorTab extends TabComponent {
   reset(): void {
     this.scenarioControl.reset();
     (this.energyLossSlider.node.children[0] as any).value = 1;
+    (this.mutationRateSlider.node.children[0] as any).value = 0.1;
   }
 }
