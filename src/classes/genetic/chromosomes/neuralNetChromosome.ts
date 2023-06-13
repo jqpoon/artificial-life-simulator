@@ -53,7 +53,9 @@ export class NeuralNetChromosome extends Chromosome<number> {
       }
 
       // Finally we obtain the bias
-      let bias = genes.splice(0, output);
+      let bias = genes.splice(0, output).map((value: number) => {
+        return value / 10;
+      });
 
       params.push({ weights: weights2D, bias: bias });
     }
@@ -70,7 +72,10 @@ export class NeuralNetChromosome extends Chromosome<number> {
     let nodes = [];
     for (let layerParam of params) {
       let weights: LayerWeights = layerParam.weights;
-      let biases: LayerBias = layerParam.bias;
+      let biases: LayerBias = layerParam.bias.map((value: number) => {
+        return value * 10;
+      });
+
       genes = [...genes, ...weights.flat(), ...biases];
       nodes.push(weights.length);
     }

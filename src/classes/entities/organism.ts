@@ -10,7 +10,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   private static readonly MIN_VELOCITY = 1;
   private static readonly MAX_VELOCITY = 100;
   private static readonly MIN_SIZE = 20;
-  private static readonly MAX_SIZE = 100;
+  private static readonly MAX_SIZE = 60;
   private static readonly MIN_VISION = 10;
   private static readonly MAX_VISION = 200;
 
@@ -188,7 +188,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Apply energy loss to organism */
     let movementEnergyLoss =
-      (Math.abs(body.deltaXFinal()) + Math.abs(body.deltaYFinal())) * 0.1;
+      (Math.abs(body.deltaXFinal()) + Math.abs(body.deltaYFinal())) * 0.01;
     let totalEnergyLoss =
       (this.basalEnergyLossPerUpdate + movementEnergyLoss) *
       this.scene.registry.get(REGISTRY_KEYS.energyLoss);

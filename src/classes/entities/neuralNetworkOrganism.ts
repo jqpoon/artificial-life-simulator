@@ -87,12 +87,12 @@ export class NeuralNetworkOrganism extends Organism {
 
     /* Execute output of neural network */
     let xSpeed = Phaser.Math.Clamp(
-      outputs[0] * this.velocity,
+      outputs[0] * 2 * this.velocity,
       -this.velocity,
       this.velocity
     );
     let ySpeed = Phaser.Math.Clamp(
-      outputs[1] * this.velocity,
+      outputs[1] * 2 * this.velocity,
       -this.velocity,
       this.velocity
     );
