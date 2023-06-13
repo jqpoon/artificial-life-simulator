@@ -187,8 +187,10 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     // this.scene.physics.world.wrap(this, -this.radius); // Enable this to make organisms warp across borders
 
     /* Apply energy loss to organism */
+    let movementEnergyLoss =
+      (Math.abs(body.deltaXFinal()) + Math.abs(body.deltaYFinal())) * 0.1;
     let totalEnergyLoss =
-      (this.basalEnergyLossPerUpdate + body.velocity.length() * 0.01) *
+      (this.basalEnergyLossPerUpdate + movementEnergyLoss) *
       this.scene.registry.get(REGISTRY_KEYS.energyLoss);
     this.addEnergy(-totalEnergyLoss);
 
