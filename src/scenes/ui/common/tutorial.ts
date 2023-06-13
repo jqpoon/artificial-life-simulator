@@ -92,15 +92,15 @@ export class Tutorial {
     this.setInstructions(`Welcome to Jia's life simulator!
       This tutorial will run through the features of this simulator.
 
-      To continue, click on the button below or press space.
+      To continue, click on the button below or press the right arrow key.
       You can also exit the tutorial at any time by pressing escape.`);
 
     /* Register keystrokes */
-    let space = scene.input.keyboard?.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
+    let right = scene.input.keyboard?.addKey(
+      Phaser.Input.Keyboard.KeyCodes.RIGHT
     );
     let esc = scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-    space?.on('down', () => {
+    right?.on('down', () => {
       this.next();
     });
     esc?.on('down', () => {
@@ -206,7 +206,7 @@ export class Tutorial {
     this.nextButton.destroy();
 
     /* Destroy keyboard inputs */
-    this.scene.input.keyboard?.removeKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.scene.input.keyboard?.removeKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.scene.input.keyboard?.removeKey(Phaser.Input.Keyboard.KeyCodes.ESC);
   }
 
