@@ -14,6 +14,7 @@ export class EnvironmentScene extends Scene {
   private currentScenario: number = 0; // Default, empty canvas
 
   private static readonly foodSpawnDelayInMilliseconds: number = 3000;
+  private static readonly foodOffsetFromEdges: number = 200;
 
   constructor() {
     super('environment-scene');
@@ -151,10 +152,19 @@ export class EnvironmentScene extends Scene {
   }
 
   private generateNewFood(): void {
+    let offset = EnvironmentScene.foodOffsetFromEdges; // Avoid spawning food near the edges
+
+    let x =
+      Math.random() * (GAME_CONSTANTS.worldWidth - offset) +
+      (GAME_CONSTANTS.worldX + offset / 2);
+    let y =
+      Math.random() * (GAME_CONSTANTS.worldHeight - offset) +
+      (GAME_CONSTANTS.worldY + offset / 2);
+
     var food = new Food({
       scene: this,
-      x: Math.random() * GAME_CONSTANTS.worldWidth + GAME_CONSTANTS.worldX,
-      y: Math.random() * GAME_CONSTANTS.worldHeight + GAME_CONSTANTS.worldY,
+      x: x,
+      y: y,
     });
     food.addPredator(this.organisms);
     this.foods.add(food);
