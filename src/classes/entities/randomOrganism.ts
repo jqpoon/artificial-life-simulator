@@ -20,7 +20,7 @@ export class RandomOrganism extends Organism {
       this.changeDirectionCounter >= this.CHANGE_DIRECTION_DELAY_MILLISECONDS
     ) {
       this.changeDirection();
-      this.changeDirectionCounter -= 200;
+      this.changeDirectionCounter -= this.CHANGE_DIRECTION_DELAY_MILLISECONDS;
     }
   }
 

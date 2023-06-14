@@ -52,12 +52,18 @@ export class BootstrapFactory {
 
     htmlString += `</select>`;
 
-    return BootstrapFactory.createDOMElement(
+    let element = BootstrapFactory.createDOMElement(
       scene,
       callbackFn,
       context,
       htmlString
     );
+
+    /* Listen so that callback function is called when it is changed, not just when it is clicked */
+    element.addListener('input');
+    element.on('input', callbackFn, context);
+
+    return element;
   }
 
   /**
