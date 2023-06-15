@@ -14,7 +14,7 @@ export class EnvironmentScene extends Scene {
   private currentScenario: number = 0; // Default, empty canvas
 
   private static readonly foodSpawnDelayInMilliseconds: number = 3000;
-  private static readonly foodOffsetFromEdges: number = 200;
+  private static readonly foodOffsetFromEdges: number = 500;
 
   constructor() {
     super('environment-scene');
