@@ -147,7 +147,7 @@ export class OrganismBuilder extends UIComponent {
 
     /* Text at the top of the card */
     let cardText = scene.rexUI.add.label({
-      text: scene.add.text(0, 0, 'Organism Preview', textDefaultsDark),
+      text: scene.add.text(0, 0, 'Organism Builder', textDefaultsDark),
       height: 50,
     });
 
