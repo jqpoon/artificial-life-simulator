@@ -1,7 +1,7 @@
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 import { Scene } from 'phaser';
-import { REGISTRY_KEYS } from '../../consts';
+import { EVENTS_NAME, REGISTRY_KEYS } from '../../consts';
 import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrganism';
 
 import { COLORS } from './common/UIConstants';
@@ -28,6 +28,24 @@ export class UIScene extends Scene {
   create(): void {
     this.sidePanel = new SidePanel(this);
     this.bottomPanel = new BottomPanel(this);
+
+    /* Handle keyboard shortcuts */
+    if (this.input.keyboard) {
+      let rKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+      rKey.on('down', () => {
+        this.resetScene();
+      });
+
+      let deleteKey = this.input.keyboard.addKey(
+        Phaser.Input.Keyboard.KeyCodes.BACKSPACE
+      );
+      deleteKey.on('down', () => {
+        this.game.events.emit(EVENTS_NAME.killSelectedOrganism);
+        this.game.events.emit(EVENTS_NAME.selectOrganism, {
+          name: 'unselect',
+        });
+      });
+    }
 
     this.resetScene();
     this.cameras.main.setBackgroundColor(COLORS.BACKGROUND_COLOR);
