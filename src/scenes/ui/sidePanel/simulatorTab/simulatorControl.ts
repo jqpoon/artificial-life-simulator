@@ -1,7 +1,11 @@
 import { RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
-import { COLORS, smallerTextDark, textDefaultsDark } from '../../common/UIConstants';
+import {
+  COLORS,
+  smallerTextDark,
+  textDefaultsDark,
+} from '../../common/UIConstants';
 import { REGISTRY_KEYS } from '../../../../consts';
 import { BootstrapFactory } from '../../common/bootstrapFactory';
 
@@ -31,7 +35,7 @@ export class SimulatorControl extends UIComponent {
 
     /* Text at the top of the card */
     let cardText = scene.rexUI.add.label({
-      text: scene.add.text(0, 0, "Controls", textDefaultsDark),
+      text: scene.add.text(0, 0, 'Controls', textDefaultsDark),
       height: 80,
     });
 
@@ -131,40 +135,49 @@ export class SimulatorControl extends UIComponent {
     );
 
     this.add(cardText)
-    .add(
-      scene.rexUI.add
-        .sizer({ orientation: 'x', space: { item: 20 } })
-        .add(scene.add.text(0, 0, 'Mutation Rate', smallerTextDark))
-        .add(this.mutationRateSlider)
-        .add(mutationText)
-    )
       .add(
         scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 20 } })
-          .add(scene.add.text(0, 0, 'Energy Loss Rate', smallerTextDark))
-          .add(this.energyLossSlider)
-          .add(energyLossText)
-      )
-      .add(
-        scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 20 } })
-          .add(scene.add.text(0, 0, 'Energy Gain Per Food', smallerTextDark))
-          .add(this.energyPerFoodSlider)
-          .add(energyPerFoodText)
-      )
-      .add(
-        scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 20 } })
-          .add(scene.add.text(0, 0, 'Food Spawn Limit', smallerTextDark))
-          .add(this.foodSpawnLimitSlider)
-          .add(foodSpawnLimitText)
-      )
-      .add(
-        scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 20 } })
-          .add(scene.add.text(0, 0, 'Food Spawn Rate', smallerTextDark))
-          .add(this.foodSpawnRateSlider)
-          .add(foodSpawnRateText)
+          .sizer({ orientation: 'x' })
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 20 } })
+              .add(scene.add.text(0, 0, 'Mutation Rate', smallerTextDark), {
+                align: 'right',
+              })
+              .add(scene.add.text(0, 0, 'Energy Loss Rate', smallerTextDark), {
+                align: 'right',
+              })
+              .add(
+                scene.add.text(0, 0, 'Energy Gain Per Food', smallerTextDark),
+                {
+                  align: 'right',
+                }
+              )
+              .add(scene.add.text(0, 0, 'Food Spawn Limit', smallerTextDark), {
+                align: 'right',
+              })
+              .add(scene.add.text(0, 0, 'Food Spawn Rate', smallerTextDark), {
+                align: 'right',
+              })
+          )
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 25 } })
+              .add(this.mutationRateSlider)
+              .add(this.energyLossSlider)
+              .add(this.energyPerFoodSlider)
+              .add(this.foodSpawnLimitSlider)
+              .add(this.foodSpawnRateSlider)
+          )
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 20 } })
+              .add(mutationText)
+              .add(energyLossText)
+              .add(energyPerFoodText)
+              .add(foodSpawnLimitText)
+              .add(foodSpawnRateText)
+          )
       )
       .addBackground(background)
       .layout()
