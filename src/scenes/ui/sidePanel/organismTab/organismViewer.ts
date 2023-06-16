@@ -18,7 +18,6 @@ export class OrganismViewer extends UIComponent {
   private speedText: GameObjects.Text;
   private sizeText: GameObjects.Text;
   private energyText: GameObjects.Text;
-  private infoText: GameObjects.Text;
   private organismBrain: OrganismBrain;
 
   constructor(scene: UIScene) {
@@ -42,12 +41,6 @@ export class OrganismViewer extends UIComponent {
     this.speedText = scene.add.text(0, 0, '0.0', smallerTextDark);
     this.sizeText = scene.add.text(0, 0, '0.0', smallerTextDark);
     this.energyText = scene.add.text(0, 0, '0.0', smallerTextDark);
-    this.infoText = scene.add.text(
-      0,
-      0,
-      'Click on an organism!',
-      smallerTextDark
-    );
 
     // Unselect organism button
     let unselectButton = BootstrapFactory.createButton(
@@ -143,7 +136,6 @@ export class OrganismViewer extends UIComponent {
     this.speedText.setText('0.0');
     this.sizeText.setText('0.0');
     this.energyText.setText('0.0');
-    this.infoText.setText('Click on an organism!');
     this.organismBrain.reset();
   }
 
@@ -181,8 +173,6 @@ export class OrganismViewer extends UIComponent {
 
     if (info.energy <= 0) {
       this.reset();
-    } else {
-      this.infoText.setText('Tracking organism...');
     }
   }
 }
