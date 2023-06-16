@@ -13,6 +13,7 @@ export class EnvironmentScene extends Scene {
   private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
   private currentScenario: number = 0; // Default, empty canvas
   private foodSpawnCounter: number = 0;
+  private timeCounter: number = 0;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 3000;
   private static readonly foodOffsetFromEdges: number = 500;
@@ -38,11 +39,20 @@ export class EnvironmentScene extends Scene {
   }
 
   update(time: number, delta: number): void {
+    /* Scale update frequency depending on timescale. Larger timescale = more frequent update */
+    this.timeCounter += delta;
+    if (
+      this.timeCounter <=
+      200 / this.registry.get(REGISTRY_KEYS.timeScale)
+    )
+      return;
+    this.timeCounter = 0;
+
     let worldAge: number = this.registry.get(REGISTRY_KEYS.worldAge);
     this.registry.set(REGISTRY_KEYS.worldAge, worldAge + this.time.timeScale);
 
     this.foodSpawnCounter += delta;
-    let threshold = 300 / this.registry.get(REGISTRY_KEYS.foodSpawnRate);
+    let threshold = 100 / this.registry.get(REGISTRY_KEYS.foodSpawnRate);
     if (this.foodSpawnCounter >= threshold) {
       this.foodSpawnCounter -= threshold;
 
