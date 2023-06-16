@@ -12,7 +12,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   private static readonly MIN_SIZE = 20;
   private static readonly MAX_SIZE = 60;
   private static readonly MIN_VISION = 10;
-  private static readonly MAX_VISION = 200;
+  private static readonly MAX_VISION = 500;
+  private static readonly MAX_AGE = 30000;
 
   /* Defaults attribute values */
   private static readonly ORGANISM_DEFAULTS = {
@@ -23,7 +24,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     species: -1,
     startingEnergy: 100,
     velocity: 20,
-    visionDistance: 200,
+    visionDistance: 500,
     x: 300,
     y: 300,
   };
@@ -40,6 +41,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
   /* Generic information of an organism */
   protected generation: number;
+  protected age: number;
 
   /* Meta-information about an organism */
   protected isSelected: boolean;
@@ -96,6 +98,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Set generic information of organism */
     this.generation = mergedConfigs.generation;
+    this.age = 0;
 
     /* Set meta-information of organism */
     this.name = Phaser.Math.RND.uuid();
@@ -205,14 +208,24 @@ export abstract class Organism extends Phaser.GameObjects.Container {
         type: this.getType(),
         color: this.color,
         brainDirectionInfo: this.getBrainDirectionInfo(),
+        age: this.age
       });
+      console.log(this.age);
     }
 
     /* Set alpha of organism to show its energy level */
     this.setAlpha(Math.max(this.energy / 100, 0.1));
 
+    /* Update age of organism */
+    this.age += delta;
+
     /* Run update function in subclass */
     this.onUpdate(time, delta);
+
+    /* Kill organism if they are too old */
+    if (this.age > Organism.MAX_AGE) {
+      this.energy = 0;
+    }
 
     /* Calculate energy effects (either clone or death). This has to be the
      * last call in this function, since it could delete the whole organism.
