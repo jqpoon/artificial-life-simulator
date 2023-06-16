@@ -6,6 +6,7 @@ import { IOrganism, OrganismConfigs } from '../typedefs';
 import { Organism } from '../classes/entities/organism';
 import { COLORS } from './ui/common/UIConstants';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
+import { UIScene } from './ui/mainUI';
 
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
@@ -16,7 +17,7 @@ export class EnvironmentScene extends Scene {
   private timeCounter: number = 0;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 3000;
-  private static readonly foodOffsetFromEdges: number = 500;
+  private static readonly foodOffsetFromEdges: number = 300;
 
   constructor() {
     super('environment-scene');
@@ -32,6 +33,13 @@ export class EnvironmentScene extends Scene {
 
     if (this.input.keyboard) {
       this.cursorKeys = this.input.keyboard.createCursorKeys();
+      let rKey = this.input.keyboard.addKey(
+        Phaser.Input.Keyboard.KeyCodes.R
+      );
+      rKey?.on('down', () => {
+        let uiScene = this.scene.get('ui-scene') as UIScene;
+        uiScene.resetScene();
+      });
     }
 
     this.initCanvas();
