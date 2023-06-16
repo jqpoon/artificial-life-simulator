@@ -48,7 +48,7 @@ export class LinearLayer {
     }
 
     let bias = Array.from(Array(output), () => {
-      return (Math.random() - 0.5) / 10;
+      return 0;
     });
 
     this.weights = weights;
