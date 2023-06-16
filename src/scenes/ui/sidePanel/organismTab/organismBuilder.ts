@@ -208,8 +208,8 @@ export class OrganismBuilder extends UIComponent {
     this.speedSlider.node.children[0].value = 50;
     this.setOrganismSpeed(50);
 
-    this.sizeSlider.node.children[0].value = 30;
-    this.setOrganismSize(30);
+    this.sizeSlider.node.children[0].value = 20;
+    this.setOrganismSize(20);
 
     this.setColour(0xe8000b);
 

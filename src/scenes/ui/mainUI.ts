@@ -50,7 +50,7 @@ export class UIScene extends Scene {
     this.registry.set(REGISTRY_KEYS.mutationRate, 0.05);
     this.registry.set(REGISTRY_KEYS.organismSpecies, 0);
     this.registry.set(REGISTRY_KEYS.organismColour, 0xe8000b);
-    this.registry.set(REGISTRY_KEYS.organismSize, 30);
+    this.registry.set(REGISTRY_KEYS.organismSize, 20);
     this.registry.set(REGISTRY_KEYS.organismSpeed, 50);
     this.registry.set(REGISTRY_KEYS.organismType, NeuralNetworkOrganism);
   }
