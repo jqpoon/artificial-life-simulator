@@ -43,7 +43,7 @@ export class BootstrapFactory {
     context: any,
     options: DropdownOptions
   ) {
-    let htmlString = `<select class="form-select form-select-lg mb-3">
+    let htmlString = `<select class="form-select form-select-lg">
     `;
 
     for (let option of options) {

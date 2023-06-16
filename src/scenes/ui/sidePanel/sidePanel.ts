@@ -87,7 +87,7 @@ export class SidePanel extends UIComponent {
       .add(navigationBar, { proportion: 0.9, align: 'top', expand: true })
       .addBackground(
         scene.rexUI.add
-          .roundRectangle(0, 0, 0, 0, 0, COLORS.OFF_WHITE)
+          .roundRectangle(0, 0, 0, 0, 0, COLORS.CARD_GREY)
           .setStrokeStyle(2, COLORS.BACKGROUND_BORDER)
           .setDepth(-5)
       )
