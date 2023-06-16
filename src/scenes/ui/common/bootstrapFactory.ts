@@ -140,7 +140,7 @@ export class BootstrapFactory {
     x = 0,
     y = 0
   ) {
-    let htmlString = `<button type="button" class="btn btn-primary btn-lg">${buttonText}</button>`;
+    let htmlString = `<button type="button" class="btn btn-primary btn-lg" style="width: 130px">${buttonText}</button>`;
 
     return BootstrapFactory.createDOMElement(
       scene,

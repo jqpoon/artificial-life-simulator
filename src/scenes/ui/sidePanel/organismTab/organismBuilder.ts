@@ -3,6 +3,7 @@ import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
 import { GameObjects } from 'phaser';
 import {
+  COLORS,
   smallerTextDark,
   speciesInfo,
   textDefaultsDark,
@@ -26,19 +27,15 @@ export class OrganismBuilder extends UIComponent {
 
   constructor(scene: UIScene) {
     super(scene, {
-      x: 180,
-      y: 700,
-      width: 300,
+      width: 600,
       height: 400,
       orientation: 'y',
       space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
     });
 
     let background: RoundRectangle = new RoundRectangle(scene, {
-      width: 1,
-      height: 1,
       radius: 10,
-      color: 0xe9e9ed,
+      color: COLORS.CARD_GREY,
       strokeColor: 0x8f8f9c,
     }).setDepth(-1);
     scene.add.existing(background);
@@ -148,46 +145,47 @@ export class OrganismBuilder extends UIComponent {
       ]
     );
 
-    this.add(scene.add.text(0, 0, 'Organism Preview', textDefaultsDark))
-      .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
-      .add(this.builderPreview)
-      .add(scene.add.zone(0, 0, 0, 0), 10, 'center')
+    /* Text at the top of the card */
+    let cardText = scene.rexUI.add.label({
+      text: scene.add.text(0, 0, 'Organism Preview', textDefaultsDark),
+      height: 50,
+    });
+
+    /* Left side should contain the controls */
+    let leftSide = scene.rexUI.add
+      .sizer({ orientation: 'y', width: 250, space: { item: 30 } })
       .add(
-        scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 10 } })
-          .add(
-            scene.rexUI.add
-              .sizer({ orientation: 'y', space: { item: 20 } })
-              .add(scene.add.text(0, 0, 'Size', smallerTextDark), {
-                align: 'right',
-              })
-              .add(scene.add.text(0, 0, 'Speed', smallerTextDark), {
-                align: 'right',
-              })
-              .add(scene.add.text(0, 0, 'Energy', smallerTextDark), {
-                align: 'right',
-              })
-          )
-          .add(
-            scene.rexUI.add
-              .sizer({ orientation: 'y', space: { item: 20 } })
-              .add(this.sizeSlider)
-              .add(this.speedSlider)
-              .add(this.startingEnergySlider)
-          )
-          .add(
-            scene.rexUI.add
-              .sizer({ orientation: 'y', space: { item: 20 } })
-              .add(this.sizeText, { align: 'left' })
-              .add(this.speedText, { align: 'left' })
-              .add(this.startingEnergyText, { align: 'left' })
-          )
-      )
-      .add(
-        scene.rexUI.add
-          .sizer({ orientation: 'x', space: { item: 30 } })
-          .add(scene.add.text(0, 0, 'Colour', smallerTextDark))
-          .add(colorPicker)
+        scene.rexUI.add.sizer().add(
+          scene.rexUI.add
+            .sizer({ orientation: 'x', space: { item: 10 } })
+            .add(
+              scene.rexUI.add
+                .sizer({ orientation: 'y', space: { item: 20 } })
+                .add(scene.add.text(0, 0, 'Size', smallerTextDark), {
+                  align: 'right',
+                })
+                .add(scene.add.text(0, 0, 'Speed', smallerTextDark), {
+                  align: 'right',
+                })
+                .add(scene.add.text(0, 0, 'Energy', smallerTextDark), {
+                  align: 'right',
+                })
+            )
+            .add(
+              scene.rexUI.add
+                .sizer({ orientation: 'y', space: { item: 20 } })
+                .add(this.sizeSlider)
+                .add(this.speedSlider)
+                .add(this.startingEnergySlider)
+            )
+            .add(
+              scene.rexUI.add
+                .sizer({ orientation: 'y', space: { item: 20 } })
+                .add(this.sizeText, { align: 'left' })
+                .add(this.speedText, { align: 'left' })
+                .add(this.startingEnergyText, { align: 'left' })
+            )
+        )
       )
       .add(
         scene.rexUI.add
@@ -195,20 +193,28 @@ export class OrganismBuilder extends UIComponent {
           .add(scene.add.text(0, 0, 'Type', smallerTextDark))
           .add(this.organismTypeChooser)
       )
+      .add(
+        scene.rexUI.add
+          .sizer({ orientation: 'x', space: { item: 30 } })
+          .add(scene.add.text(0, 0, 'Colour', smallerTextDark))
+          .add(colorPicker)
+      );
+
+    /* Right side should contain the preview only */
+    let rightSide = scene.rexUI.add
+      .sizer({ width: 250, space: { left: 150 } })
+      .add(this.builderPreview);
+
+    this.add(cardText)
+      .add(scene.rexUI.add.sizer().add(leftSide).add(rightSide))
       .addBackground(background)
       .layout()
       .setDepth(-1);
   }
 
   reset(): void {
-    // Manually set bootstrap value and the phaser side of things
-    this.startingEnergySlider.node.children[0].value = 100;
     this.setStartingEnergy(100);
-
-    this.speedSlider.node.children[0].value = 50;
     this.setOrganismSpeed(50);
-
-    this.sizeSlider.node.children[0].value = 20;
     this.setOrganismSize(20);
 
     this.setColour(0xe8000b);
@@ -227,6 +233,7 @@ export class OrganismBuilder extends UIComponent {
 
   private setStartingEnergy(value: number): void {
     this.scene.registry.set(REGISTRY_KEYS.organismStartingEnergy, value);
+    this.startingEnergySlider.node.children[0].value = value;
     this.startingEnergyText.setText(
       value.toLocaleString('en-us', {
         maximumFractionDigits: 0,
@@ -236,6 +243,7 @@ export class OrganismBuilder extends UIComponent {
 
   private setOrganismSize(value: number): void {
     this.scene.registry.set(REGISTRY_KEYS.organismSize, value);
+    this.sizeSlider.node.children[0].value = value;
     this.builderPreview.setScale(value * 0.04);
     this.sizeText.setText(
       value.toLocaleString('en-us', {
@@ -246,6 +254,7 @@ export class OrganismBuilder extends UIComponent {
 
   private setOrganismSpeed(value: number): void {
     this.scene.registry.set(REGISTRY_KEYS.organismSpeed, value);
+    this.speedSlider.node.children[0].value = value;
     this.speedText.setText(
       value.toLocaleString('en-us', {
         maximumFractionDigits: 0,

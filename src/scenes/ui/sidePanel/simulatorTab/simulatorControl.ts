@@ -22,8 +22,6 @@ export class SimulatorControl extends UIComponent {
 
   constructor(scene: UIScene) {
     super(scene, {
-      x: 180,
-      y: 700,
       width: 600,
       height: 400,
       orientation: 'y',

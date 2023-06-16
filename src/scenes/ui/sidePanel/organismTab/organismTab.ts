@@ -20,7 +20,7 @@ export class OrganismTab extends TabComponent {
 
     this.add(
       scene.rexUI.add
-        .sizer({ orientation: 'x', space: { item: 20 } })
+        .sizer({ orientation: 'y', space: { item: 20 } })
         .add(this.organismBuilder)
         .add(this.organismViewer)
     )

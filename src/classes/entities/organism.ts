@@ -170,6 +170,14 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       }
     });
 
+    /* Clone this organism if a user wants to */
+    this.scene.game.events.on(EVENTS_NAME.cloneSelectedOrganism, () => {
+      if (this.isSelected) {
+        let child = this.clone();
+        this.scene.game.events.emit(EVENTS_NAME.reproduceOrganism, child);
+      }
+    });
+
     /* Signal that this organism is done initialising */
     this.scene.game.events.emit(EVENTS_NAME.changeCount, 1, this.species);
   }
@@ -208,9 +216,8 @@ export abstract class Organism extends Phaser.GameObjects.Container {
         type: this.getType(),
         color: this.color,
         brainDirectionInfo: this.getBrainDirectionInfo(),
-        age: this.age
+        age: this.age,
       });
-      console.log(this.age);
     }
 
     /* Set alpha of organism to show its energy level */

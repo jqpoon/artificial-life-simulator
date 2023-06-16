@@ -3,7 +3,11 @@ import RoundRectangle from 'phaser3-rex-plugins/plugins/roundrectangle';
 import { EVENTS_NAME } from '../../../../consts';
 import { GameObjects } from 'phaser';
 import { OrganismInformation } from '../../../../typedefs';
-import { smallerTextDark, textDefaultsDark } from '../../common/UIConstants';
+import {
+  COLORS,
+  smallerTextDark,
+  textDefaultsDark,
+} from '../../common/UIConstants';
 import { UIComponent } from '../../common/UIComponent';
 import { UIScene } from '../../mainUI';
 import { BootstrapFactory } from '../../common/bootstrapFactory';
@@ -19,18 +23,16 @@ export class OrganismViewer extends UIComponent {
 
   constructor(scene: UIScene) {
     super(scene, {
-      x: 180,
-      y: 320,
-      width: 300,
+      width: 600,
       height: 400,
       orientation: 'y',
-      space: { left: 10, right: 10, top: 10, bottom: 10, item: 20 },
+      space: { left: 10, right: 10, top: 10, bottom: 20, item: 20 },
     });
 
     // Background of information pane
     let background = new RoundRectangle(scene, {
       radius: 10,
-      color: 0xe9e9ed,
+      color: COLORS.CARD_GREY,
       strokeColor: 0x8f8f9c,
     }).setDepth(-1);
     scene.add.existing(background);
@@ -71,13 +73,22 @@ export class OrganismViewer extends UIComponent {
       this
     );
 
+    let cloneButton = BootstrapFactory.createButton(
+      scene,
+      'Clone',
+      () => {
+        this.scene.game.events.emit(EVENTS_NAME.cloneSelectedOrganism);
+      },
+      this
+    );
+
     // Organism brain, i.e. what it is thinking
     this.organismBrain = new OrganismBrain(scene);
 
     this.add(scene.add.text(0, 0, 'Organism Info', textDefaultsDark))
       .add(
         scene.rexUI.add
-          .sizer({ orientation: 'x' })
+          .sizer({ orientation: 'x', space: { item: 40 } })
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 10 } })
@@ -102,11 +113,15 @@ export class OrganismViewer extends UIComponent {
               .add(this.sizeText)
               .add(this.energyText)
           )
+          .add(this.organismBrain)
       )
-      .add(this.infoText)
-      .add(unselectButton)
-      .add(killButton)
-      .add(this.organismBrain);
+      .add(
+        scene.rexUI.add
+          .sizer({ space: { item: 60 } })
+          .add(unselectButton)
+          .add(killButton)
+          .add(cloneButton)
+      );
 
     this.addBackground(background).layout();
 
@@ -160,7 +175,9 @@ export class OrganismViewer extends UIComponent {
 
     this.organismBrain.setOrganismColor(info.color);
     this.organismBrain.setCenterText(info.type);
-    this.organismBrain.setArrowDirection(info.brainDirectionInfo ?? [0, 0, 0, 0, 0, 0, 0, 0,]);
+    this.organismBrain.setArrowDirection(
+      info.brainDirectionInfo ?? [0, 0, 0, 0, 0, 0, 0, 0]
+    );
 
     if (info.energy <= 0) {
       this.reset();
