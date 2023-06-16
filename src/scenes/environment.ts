@@ -12,6 +12,7 @@ export class EnvironmentScene extends Scene {
   private foods: Phaser.GameObjects.Group;
   private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
   private currentScenario: number = 0; // Default, empty canvas
+  private foodSpawnCounter: number = 0;
 
   private static readonly foodSpawnDelayInMilliseconds: number = 3000;
   private static readonly foodOffsetFromEdges: number = 500;
@@ -34,12 +35,25 @@ export class EnvironmentScene extends Scene {
 
     this.initCanvas();
     this.initListeners();
-    this.initEvents();
   }
 
   update(time: number, delta: number): void {
     let worldAge: number = this.registry.get(REGISTRY_KEYS.worldAge);
     this.registry.set(REGISTRY_KEYS.worldAge, worldAge + this.time.timeScale);
+
+    this.foodSpawnCounter += delta;
+    let threshold = 300 / this.registry.get(REGISTRY_KEYS.foodSpawnRate);
+    if (this.foodSpawnCounter >= threshold) {
+      this.foodSpawnCounter -= threshold;
+
+      /* Only spawn food if we haven't hit the limit */
+      if (
+        this.foods.countActive() <=
+        this.registry.get(REGISTRY_KEYS.foodSpawnLimit)
+      ) {
+        this.generateNewFood();
+      }
+    }
   }
 
   private initListeners(): void {
@@ -64,22 +78,6 @@ export class EnvironmentScene extends Scene {
 
     this.game.events.on(EVENTS_NAME.updateTimeScale, (timeScale: number) => {
       this.updateTimeScale(timeScale);
-    });
-  }
-
-  private initEvents(): void {
-    this.time.addEvent({
-      delay: EnvironmentScene.foodSpawnDelayInMilliseconds,
-      callback: () => {
-        if (
-          this.foods.countActive() <=
-          this.registry.get(REGISTRY_KEYS.foodSpawnLimit)
-        ) {
-          this.generateNewFood();
-        }
-      },
-      callbackScope: this,
-      loop: true,
     });
   }
 
