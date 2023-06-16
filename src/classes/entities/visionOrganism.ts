@@ -47,17 +47,26 @@ export class VisionOrganism extends Organism {
     let newVelocity = this.velocity;
     let newSize = this.size;
     let newVisionDistance = this.visionDistance / 2;
+    let mutateSpeed = this.scene.registry.get(REGISTRY_KEYS.mutateSpeed);
+    let mutateSize = this.scene.registry.get(REGISTRY_KEYS.mutateSize);
+    let mutateColour = this.scene.registry.get(REGISTRY_KEYS.mutateColour);
 
     // Do some mutation
     if (Math.random() < mutationRate) {
-      newVelocity = parseInt(
-        Mutation.inversionMutation(this.velocity.toString(10), 10),
-        10
-      );
-      newSize = parseInt(
-        Mutation.inversionMutation(this.size.toString(10), 10),
-        10
-      );
+      if (mutateSpeed) {
+        newVelocity = parseInt(
+          Mutation.inversionMutation(this.velocity.toString(10), 10),
+          10
+        );
+      }
+
+      if (mutateSize) {
+        newSize = parseInt(
+          Mutation.inversionMutation(this.size.toString(10), 10),
+          10
+        );
+      }
+
       newVisionDistance = parseInt(
         Mutation.inversionMutation(this.visionDistance.toString(10), 10),
         10
@@ -76,7 +85,7 @@ export class VisionOrganism extends Organism {
       species: this.species,
       colorChromosome: this.colorChromosome.mutateWith(
         inversionWithMutationRate,
-        mutationRate
+        mutateColour ? mutationRate : 0
       ),
     });
   }

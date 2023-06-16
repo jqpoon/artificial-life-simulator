@@ -16,5 +16,41 @@ $form-range-track-bg: #adb5bd;
 // Wider tooltips
 $tooltip-max-width: 400px;
 
+// Larger toggles - adapted from https://stackoverflow.com/questions/55593229/increasing-the-size-of-a-bootstrap-checkbox
+@mixin switch($res: 'sm') {
+    $index: 1rem;
+    $mainVal: 1rem;
+
+    @if $res == 'md' {
+        $index: 2rem;
+        $mainVal: 1.5rem;
+    } @else if $res == 'lg' {
+        $index: 3rem;
+        $mainVal: 2rem;
+    }
+
+    .form-check-input {
+        height: $mainVal;
+        width: calc(#{$index} + 0.75rem);
+        border-radius: $mainVal * 2;
+    }
+}
+
+.form-check-input {
+  clear: left;
+}
+
+.form-switch.form-switch-sm {
+    @include switch();
+}
+
+.form-switch.form-switch-md {
+    @include switch('md');
+}
+
+.form-switch.form-switch-lg {
+    @include switch('lg');
+}
+
 // Set changes
 @import "../node_modules/bootstrap";

@@ -48,6 +48,10 @@ export class UIScene extends Scene {
     this.registry.set(REGISTRY_KEYS.foodSpawnRate, 1);
     this.registry.set(REGISTRY_KEYS.foodSpawnLimit, 100);
     this.registry.set(REGISTRY_KEYS.mutationRate, 0.05);
+    this.registry.set(REGISTRY_KEYS.mutateBrain, true);
+    this.registry.set(REGISTRY_KEYS.mutateColour, false);
+    this.registry.set(REGISTRY_KEYS.mutateSize, false);
+    this.registry.set(REGISTRY_KEYS.mutateSpeed, false);
     this.registry.set(REGISTRY_KEYS.organismSpecies, 0);
     this.registry.set(REGISTRY_KEYS.organismColour, 0xe8000b);
     this.registry.set(REGISTRY_KEYS.organismSize, 20);

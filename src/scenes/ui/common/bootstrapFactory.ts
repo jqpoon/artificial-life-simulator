@@ -177,4 +177,24 @@ export class BootstrapFactory {
       htmlString
     );
   }
+
+  public static createSwitch(
+    scene: Phaser.Scene,
+    defaultOn: boolean,
+    callbackFn: (e: any) => void,
+    context: any
+  ) {
+    let checked = defaultOn ? 'checked' : '';
+
+    let htmlString = `<div class="form-check form-switch form-switch-lg">
+      <input class="form-check-input" type="checkbox" ${checked}>
+    </div>`;
+
+    return BootstrapFactory.createDOMElement(
+      scene,
+      callbackFn,
+      context,
+      htmlString
+    );
+  }
 }

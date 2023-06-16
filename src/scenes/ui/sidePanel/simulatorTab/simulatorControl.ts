@@ -15,6 +15,10 @@ export class SimulatorControl extends UIComponent {
   private energyPerFoodSlider: Phaser.GameObjects.DOMElement;
   private foodSpawnLimitSlider: Phaser.GameObjects.DOMElement;
   private foodSpawnRateSlider: Phaser.GameObjects.DOMElement;
+  private mutateSizeSwitch: Phaser.GameObjects.DOMElement;
+  private mutateSpeedSwitch: Phaser.GameObjects.DOMElement;
+  private mutateColourSwitch: Phaser.GameObjects.DOMElement;
+  private mutateBrainSwitch: Phaser.GameObjects.DOMElement;
 
   constructor(scene: UIScene) {
     super(scene, {
@@ -36,7 +40,7 @@ export class SimulatorControl extends UIComponent {
     /* Text at the top of the card */
     let cardText = scene.rexUI.add.label({
       text: scene.add.text(0, 0, 'Controls', textDefaultsDark),
-      height: 80,
+      height: 50,
     });
 
     /* Controls global mutation rate */
@@ -134,6 +138,39 @@ export class SimulatorControl extends UIComponent {
       5.02 // Max
     );
 
+    this.mutateSizeSwitch = BootstrapFactory.createSwitch(
+      scene,
+      false,
+      (e: any) => {
+        scene.registry.set(REGISTRY_KEYS.mutateSize, e.target.checked);
+      },
+      this
+    );
+    this.mutateSpeedSwitch = BootstrapFactory.createSwitch(
+      scene,
+      false,
+      (e: any) => {
+        scene.registry.set(REGISTRY_KEYS.mutateSpeed, e.target.checked);
+      },
+      this
+    );
+    this.mutateColourSwitch = BootstrapFactory.createSwitch(
+      scene,
+      false,
+      (e: any) => {
+        scene.registry.set(REGISTRY_KEYS.mutateColour, e.target.checked);
+      },
+      this
+    );
+    this.mutateBrainSwitch = BootstrapFactory.createSwitch(
+      scene,
+      true,
+      (e: any) => {
+        scene.registry.set(REGISTRY_KEYS.mutateBrain, e.target.checked);
+      },
+      this
+    );
+
     this.add(cardText)
       .add(
         scene.rexUI.add
@@ -179,6 +216,42 @@ export class SimulatorControl extends UIComponent {
               .add(foodSpawnRateText)
           )
       )
+      .add(
+        scene.rexUI.add
+          .sizer({ space: { item: 30 } })
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 20 } })
+              .add(scene.add.text(0, 0, 'Mutate size', smallerTextDark), {
+                align: 'right',
+              })
+              .add(scene.add.text(0, 0, 'Mutate colour', smallerTextDark), {
+                align: 'right',
+              })
+          )
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 20 } })
+              .add(this.mutateSizeSwitch)
+              .add(this.mutateColourSwitch)
+          )
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 20 } })
+              .add(scene.add.text(0, 0, 'Mutate speed', smallerTextDark), {
+                align: 'right',
+              })
+              .add(scene.add.text(0, 0, 'Mutate brain', smallerTextDark), {
+                align: 'right',
+              })
+          )
+          .add(
+            scene.rexUI.add
+              .sizer({ orientation: 'y', space: { item: 20 } })
+              .add(this.mutateSpeedSwitch)
+              .add(this.mutateBrainSwitch)
+          )
+      )
       .addBackground(background)
       .layout()
       .setDepth(-1);
@@ -190,5 +263,10 @@ export class SimulatorControl extends UIComponent {
     (this.energyPerFoodSlider.node.children[0] as any).value = 50;
     (this.foodSpawnLimitSlider.node.children[0] as any).value = 100;
     (this.foodSpawnRateSlider.node.children[0] as any).value = 1;
+
+    (this.mutateSizeSwitch.node.children[0].children[0] as any).checked = false;
+    (this.mutateSpeedSwitch.node.children[0].children[0] as any).checked = false;
+    (this.mutateColourSwitch.node.children[0].children[0] as any).checked = false;
+    (this.mutateBrainSwitch.node.children[0].children[0] as any).checked = true;
   }
 }
