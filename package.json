@@ -21,16 +21,14 @@
   },
   "homepage": "https://github.com/jqpoon/artificial-life-simulator#readme",
   "dependencies": {
-    "assert": "^2.0.0",
     "bootstrap": "^5.2.3",
-    "chart.js": "^4.3.0",
-    "chartjs-plugin-annotation": "^3.0.1",
     "phaser": "^3.55.2",
     "phaser3-rex-plugins": "^1.1.81"
   },
   "devDependencies": {
     "@types/jest": "^29.5.1",
     "@types/uuid": "^9.0.1",
+    "assert": "^2.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
