@@ -11,10 +11,16 @@ import { BootstrapFactory } from '../../common/bootstrapFactory';
 
 export class SimulatorControl extends UIComponent {
   private mutationRateSlider: Phaser.GameObjects.DOMElement;
+  private mutationRateText: Phaser.GameObjects.Text;
   private energyLossSlider: Phaser.GameObjects.DOMElement;
+  private energyLossText: Phaser.GameObjects.Text;
   private energyPerFoodSlider: Phaser.GameObjects.DOMElement;
+  private energyPerFoodText: Phaser.GameObjects.Text;
   private foodSpawnLimitSlider: Phaser.GameObjects.DOMElement;
+  private foodSpawnLimitText: Phaser.GameObjects.Text;
   private foodSpawnRateSlider: Phaser.GameObjects.DOMElement;
+  private foodSpawnRateText: Phaser.GameObjects.Text;
+
   private mutateSizeSwitch: Phaser.GameObjects.DOMElement;
   private mutateSpeedSwitch: Phaser.GameObjects.DOMElement;
   private mutateColourSwitch: Phaser.GameObjects.DOMElement;
@@ -42,13 +48,13 @@ export class SimulatorControl extends UIComponent {
     });
 
     /* Controls global mutation rate */
-    let mutationText = scene.add.text(0, 0, '0.05', smallerTextDark);
+    this.mutationRateText = scene.add.text(0, 0, '0.05', smallerTextDark);
     this.mutationRateSlider = BootstrapFactory.createSlider(
       scene,
       (e: any) => {
         let value = parseFloat(e.target.value);
         scene.registry.set(REGISTRY_KEYS.mutationRate, value);
-        mutationText.setText(
+        this.mutationRateText.setText(
           value.toLocaleString('en-us', {
             maximumFractionDigits: 2,
             minimumFractionDigits: 2,
@@ -61,13 +67,13 @@ export class SimulatorControl extends UIComponent {
     );
 
     /* Controls amount of energy gained per food item */
-    let energyPerFoodText = scene.add.text(0, 0, '50', smallerTextDark);
+    this.energyPerFoodText = scene.add.text(0, 0, '50', smallerTextDark);
     this.energyPerFoodSlider = BootstrapFactory.createSlider(
       scene,
       (e: any) => {
         let value = parseFloat(e.target.value);
         scene.registry.set(REGISTRY_KEYS.energyGainPerFood, value);
-        energyPerFoodText.setText(
+        this.energyPerFoodText.setText(
           value.toLocaleString('en-us', {
             maximumFractionDigits: 0,
             minimumFractionDigits: 0,
@@ -80,13 +86,13 @@ export class SimulatorControl extends UIComponent {
     );
 
     /* Controls the maximum amount of food that can be added to the world */
-    let foodSpawnLimitText = scene.add.text(0, 0, '100', smallerTextDark);
+    this.foodSpawnLimitText = scene.add.text(0, 0, '100', smallerTextDark);
     this.foodSpawnLimitSlider = BootstrapFactory.createSlider(
       scene,
       (e: any) => {
         let value = parseFloat(e.target.value);
         scene.registry.set(REGISTRY_KEYS.foodSpawnLimit, value);
-        foodSpawnLimitText.setText(
+        this.foodSpawnLimitText.setText(
           value.toLocaleString('en-us', {
             maximumFractionDigits: 0,
             minimumFractionDigits: 0,
@@ -99,13 +105,13 @@ export class SimulatorControl extends UIComponent {
     );
 
     /* Controls the maximum amount of food that can be added to the world */
-    let foodSpawnRateText = scene.add.text(0, 0, '1.00', smallerTextDark);
+    this.foodSpawnRateText = scene.add.text(0, 0, '1.00', smallerTextDark);
     this.foodSpawnRateSlider = BootstrapFactory.createSlider(
       scene,
       (e: any) => {
         let value = parseFloat(e.target.value);
         scene.registry.set(REGISTRY_KEYS.foodSpawnRate, value);
-        foodSpawnRateText.setText(
+        this.foodSpawnRateText.setText(
           value.toLocaleString('en-us', {
             maximumFractionDigits: 2,
             minimumFractionDigits: 2,
@@ -118,13 +124,13 @@ export class SimulatorControl extends UIComponent {
     );
 
     /* Controls global energy loss rate */
-    let energyLossText = scene.add.text(0, 0, '1.00', smallerTextDark);
+    this.energyLossText = scene.add.text(0, 0, '1.00', smallerTextDark);
     this.energyLossSlider = BootstrapFactory.createSlider(
       scene,
       (e: any) => {
         let value = parseFloat(e.target.value);
         scene.registry.set(REGISTRY_KEYS.energyLoss, value);
-        energyLossText.setText(
+        this.energyLossText.setText(
           value.toLocaleString('en-us', {
             maximumFractionDigits: 2,
             minimumFractionDigits: 2,
@@ -132,7 +138,7 @@ export class SimulatorControl extends UIComponent {
         );
       },
       this,
-      0.1, // Min
+      0, // Min
       5.02 // Max
     );
 
@@ -207,11 +213,11 @@ export class SimulatorControl extends UIComponent {
           .add(
             scene.rexUI.add
               .sizer({ orientation: 'y', space: { item: 20 } })
-              .add(mutationText)
-              .add(energyLossText)
-              .add(energyPerFoodText)
-              .add(foodSpawnLimitText)
-              .add(foodSpawnRateText)
+              .add(this.mutationRateText)
+              .add(this.energyLossText)
+              .add(this.energyPerFoodText)
+              .add(this.foodSpawnLimitText)
+              .add(this.foodSpawnRateText)
           )
       )
       .add(
@@ -256,15 +262,67 @@ export class SimulatorControl extends UIComponent {
   }
 
   reset(): void {
-    (this.mutationRateSlider.node.children[0] as any).value = 0.05;
-    (this.energyLossSlider.node.children[0] as any).value = 1;
-    (this.energyPerFoodSlider.node.children[0] as any).value = 50;
-    (this.foodSpawnLimitSlider.node.children[0] as any).value = 100;
-    (this.foodSpawnRateSlider.node.children[0] as any).value = 1;
+    this.setMutationRate(0.01);
+    this.setEnergyLoss(1);
+    this.setEnergyPerFood(50);
+    this.setFoodSpawnLimit(100);
+    this.setFoodSpawnRate(1);
 
     (this.mutateSizeSwitch.node.children[0].children[0] as any).checked = false;
-    (this.mutateSpeedSwitch.node.children[0].children[0] as any).checked = false;
-    (this.mutateColourSwitch.node.children[0].children[0] as any).checked = false;
+    (this.mutateSpeedSwitch.node.children[0].children[0] as any).checked =
+      false;
+    (this.mutateColourSwitch.node.children[0].children[0] as any).checked =
+      false;
     (this.mutateBrainSwitch.node.children[0].children[0] as any).checked = true;
+  }
+
+  public setFoodSpawnLimit(foodSpawnLimit: number): void {
+    (this.foodSpawnLimitSlider.node.children[0] as any).value = foodSpawnLimit;
+    this.foodSpawnLimitText.setText(
+      foodSpawnLimit.toLocaleString('en-us', {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      })
+    );
+  }
+
+  public setFoodSpawnRate(foodSpawnRate: number): void {
+    (this.foodSpawnRateSlider.node.children[0] as any).value = foodSpawnRate;
+    this.foodSpawnRateText.setText(
+      foodSpawnRate.toLocaleString('en-us', {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      })
+    );
+  }
+
+  public setEnergyPerFood(energyPerFood: number): void {
+    (this.energyPerFoodSlider.node.children[0] as any).value = energyPerFood;
+    this.energyPerFoodText.setText(
+      energyPerFood.toLocaleString('en-us', {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      })
+    );
+  }
+
+  public setMutationRate(mutationRate: number): void {
+    (this.mutationRateSlider.node.children[0] as any).value = mutationRate;
+    this.mutationRateText.setText(
+      mutationRate.toLocaleString('en-us', {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      })
+    );
+  }
+
+  public setEnergyLoss(energyLoss: number): void {
+    (this.energyLossSlider.node.children[0] as any).value = energyLoss;
+    this.energyLossText.setText(
+      energyLoss.toLocaleString('en-us', {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      })
+    );
   }
 }
