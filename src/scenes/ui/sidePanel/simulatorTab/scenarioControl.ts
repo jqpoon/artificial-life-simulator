@@ -52,6 +52,7 @@ export class ScenarioControl extends UIComponent {
         { displayText: 'No scenario', value: 0 },
         { displayText: 'Big vs Small', value: 1 },
         { displayText: 'Battle of Brains', value: 2 },
+        { displayText: 'Neuro Evolution', value: 3 },
       ]
     );
 

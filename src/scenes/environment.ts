@@ -6,6 +6,7 @@ import { IOrganism, OrganismConfigs } from '../typedefs';
 import { Organism } from '../classes/entities/organism';
 import { COLORS } from './ui/common/UIConstants';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
+import { NeuralNetworkOrganism } from '../classes/entities/neuralNetworkOrganism';
 
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
@@ -14,8 +15,8 @@ export class EnvironmentScene extends Scene {
   private currentScenario: number = 0; // Default, empty canvas
   private foodSpawnCounter: number = 0;
   private timeCounter: number = 0;
+  private scenarioSelectionTime: number;
 
-  private static readonly foodSpawnDelayInMilliseconds: number = 3000;
   private static readonly foodOffsetFromEdges: number = 300;
 
   constructor() {
@@ -41,10 +42,7 @@ export class EnvironmentScene extends Scene {
   update(time: number, delta: number): void {
     /* Scale update frequency depending on timescale. Larger timescale = more frequent update */
     this.timeCounter += delta;
-    if (
-      this.timeCounter <=
-      200 / this.registry.get(REGISTRY_KEYS.timeScale)
-    )
+    if (this.timeCounter <= 200 / this.registry.get(REGISTRY_KEYS.timeScale))
       return;
     this.timeCounter = 0;
 
@@ -73,8 +71,12 @@ export class EnvironmentScene extends Scene {
 
     this.game.events.on(EVENTS_NAME.loadScenario, (scenarioID: number) => {
       // Without this, the scenario is loaded multiple times
-      if (scenarioID == this.currentScenario) return;
+      let isSameScenario = scenarioID == this.currentScenario;
+      let timeBetweenScenarios = Math.abs(this.scenarioSelectionTime - Date.now());
 
+      if (isSameScenario && timeBetweenScenarios < 100) return;
+
+      this.scenarioSelectionTime = Date.now();
       this.currentScenario = scenarioID;
       switch (scenarioID) {
         case 1:
@@ -82,6 +84,9 @@ export class EnvironmentScene extends Scene {
           break;
         case 2:
           this.loadScenario2();
+          break;
+        case 3:
+          this.loadScenario3();
           break;
       }
     });
@@ -228,5 +233,23 @@ export class EnvironmentScene extends Scene {
       },
       RandomOrganism
     );
+  }
+
+  public loadScenario3(): void {
+    /* Add fifty neural network organisms */
+    for (let i = 0; i < 50; i++) {
+      this.addToSpecies(
+        {
+          scene: this,
+          velocity: 50,
+          size: 20,
+          x: GAME_CONSTANTS.worldX + GAME_CONSTANTS.worldWidth / 2,
+          y: GAME_CONSTANTS.worldY + GAME_CONSTANTS.worldHeight / 2,
+          color: 0xe8000b,
+          species: 0,
+        },
+        NeuralNetworkOrganism
+      );
+    }
   }
 }
