@@ -47,7 +47,7 @@ export class EnvironmentScene extends Scene {
     this.timeCounter = 0;
 
     let worldAge: number = this.registry.get(REGISTRY_KEYS.worldAge);
-    this.registry.set(REGISTRY_KEYS.worldAge, worldAge + this.time.timeScale);
+    this.registry.set(REGISTRY_KEYS.worldAge, worldAge + 1);
 
     this.foodSpawnCounter += delta;
     let threshold = 100 / this.registry.get(REGISTRY_KEYS.foodSpawnRate);
