@@ -2,9 +2,7 @@ import { Food } from './food';
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
 import { OrganismUtils } from '../utils/organismUtils';
-import { ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
-import { Mutation, inversionWithMutationRate } from '../genetic/mutation';
-import { ColorChromosome } from '../genetic/chromosomes/colorChromosome';
+import { ORGANISM_TYPES } from '../../consts';
 
 /**
  * Organism that noves around randomly, until it sees a food,
@@ -13,12 +11,9 @@ import { ColorChromosome } from '../genetic/chromosomes/colorChromosome';
 export class VisionOrganism extends Organism {
   private readonly CHANGE_DIRECTION_DELAY_MILLISECONDS: number = 400;
   private changeDirectionCounter: number = 0;
-  private colorChromosome: ColorChromosome;
 
   constructor(configs: OrganismConfigs) {
     super(configs);
-
-    this.colorChromosome = new ColorChromosome().fromPhenotype(this.color);
   }
 
   protected onUpdate(time: number, delta: number): void {
@@ -41,58 +36,15 @@ export class VisionOrganism extends Organism {
     }
   }
 
-  protected clone(): any {
-    let mutationRate = this.scene.registry.get(REGISTRY_KEYS.mutationRate);
-
-    let newVelocity = this.velocity;
-    let newSize = this.size;
-    let newVisionDistance = this.visionDistance / 2;
-    let mutateSpeed = this.scene.registry.get(REGISTRY_KEYS.mutateSpeed);
-    let mutateSize = this.scene.registry.get(REGISTRY_KEYS.mutateSize);
-    let mutateColour = this.scene.registry.get(REGISTRY_KEYS.mutateColour);
-
-    // Do some mutation
-    if (Math.random() < mutationRate) {
-      if (mutateSpeed) {
-        newVelocity = parseInt(
-          Mutation.inversionMutation(this.velocity.toString(10), 10),
-          10
-        );
-      }
-
-      if (mutateSize) {
-        newSize = parseInt(
-          Mutation.inversionMutation(this.size.toString(10), 10),
-          10
-        );
-      }
-
-      newVisionDistance = parseInt(
-        Mutation.inversionMutation(this.visionDistance.toString(10), 10),
-        10
-      );
-    }
-
-    return new VisionOrganism({
-      scene: this.scene,
-      x: this.x,
-      y: this.y,
-      size: newSize,
-      velocity: newVelocity,
-      visionDistance: newVisionDistance,
-      color: this.color,
-      generation: this.generation + 1,
-      species: this.species,
-      colorChromosome: this.colorChromosome.mutateWith(
-        inversionWithMutationRate,
-        mutateColour ? mutationRate : 0
-      ),
-    });
-  }
-
   protected onDestroy() {}
 
-  protected getType(): ORGANISM_TYPES {
+  protected onReproduce(child: any): void {}
+
+  protected getType() {
+    return VisionOrganism;
+  }
+
+  protected getOrganismTypeName(): ORGANISM_TYPES {
     return ORGANISM_TYPES.visionOrganism;
   }
 

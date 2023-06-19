@@ -18,21 +18,13 @@ export class ReinforcementLearningOrganism extends Organism {
     this.network = new LinearNetwork([3, 8]);
   }
 
-  protected clone() {
-    let child = new ReinforcementLearningOrganism({
-      scene: this.scene,
-      x: this.x,
-      y: this.y,
-      generation: this.generation + 1,
-      size: this.size,
-      color: this.color,
-      startingEnergy: this.energy / 2,
-      species: this.species,
-    });
-
+  protected onReproduce(child: any) {
     child.network.setParams(this.network.getParams());
-
     return child;
+  }
+
+  protected getType() {
+    return ReinforcementLearningOrganism;
   }
 
   protected onUpdate(time: number, delta: number): void {
@@ -137,7 +129,7 @@ export class ReinforcementLearningOrganism extends Organism {
 
   protected onDestroy(): void {}
 
-  protected getType(): ORGANISM_TYPES {
+  protected getOrganismTypeName(): ORGANISM_TYPES {
     return ORGANISM_TYPES.reinforcementLearningOrganism;
   }
 

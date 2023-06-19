@@ -3,13 +3,7 @@ import { Chromosome } from './classes/genetic/chromosomes/chromosome';
 import { ORGANISM_TYPES } from './consts';
 
 /**
- * Defines how to construct an organism. Chromosome fields need to be expressed
- * as phenotypes, and take priority over optional fields. If none of these
- * fields are present, defaults are set instead.
- *
- * For example, if both color and colorChromosome are defined, then the
- * colorChromosome will be converted into a phenotype and be used as the
- * organism's color.
+ * Defines how to construct an organism.
  */
 export type OrganismConfigs = {
   /* Required fields */
@@ -27,10 +21,6 @@ export type OrganismConfigs = {
   size?: number;
   x?: number;
   y?: number;
-
-  /* Chromosome fields */
-  colorChromosome?: Chromosome<string>;
-  neuralNetChromosome?: Chromosome<number>;
 };
 
 export type OrganismInformation = {

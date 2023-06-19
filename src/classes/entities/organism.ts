@@ -52,9 +52,11 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   private mainBody: Phaser.GameObjects.Ellipse;
   private vision: Phaser.GameObjects.Ellipse;
 
+  // protected abstract reproduce(mutationRate: number): any;
   /* Abstract methods for different organism types to implement */
-  protected abstract clone(): any;
-  protected abstract getType(): ORGANISM_TYPES;
+  protected abstract onReproduce(child: any, mutationRate: number): void;
+  protected abstract getType(): any; // Actual class of organism
+  protected abstract getOrganismTypeName(): ORGANISM_TYPES;
   protected abstract getBrainDirectionInfo(): number[];
   protected abstract onUpdate(time: number, delta: number): void;
   protected abstract onDestroy(): void;
@@ -64,11 +66,6 @@ export abstract class Organism extends Phaser.GameObjects.Container {
    * @param configs
    */
   constructor(configs: OrganismConfigs) {
-    /* Express chromosomes if they exist */
-    if (configs.colorChromosome) {
-      configs.color = configs.colorChromosome.toPhenotype();
-    }
-
     let mergedConfigs = { ...Organism.ORGANISM_DEFAULTS, ...configs };
     super(mergedConfigs.scene, mergedConfigs.x, mergedConfigs.y);
 
@@ -145,7 +142,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
         velocity: this.velocity,
         size: this.size,
         energy: this.energy,
-        type: this.getType(),
+        type: this.getOrganismTypeName(),
         color: this.color,
         brainDirectionInfo: this.getBrainDirectionInfo(),
       });
@@ -213,7 +210,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
         velocity: this.velocity,
         size: this.size,
         energy: this.energy,
-        type: this.getType(),
+        type: this.getOrganismTypeName(),
         color: this.color,
         brainDirectionInfo: this.getBrainDirectionInfo(),
         age: this.age,
@@ -247,6 +244,64 @@ export abstract class Organism extends Phaser.GameObjects.Container {
    */
   public addEnergy(amount: number): void {
     this.energy += amount;
+  }
+
+  /**
+   * Creates a clone (an exact copy!) of this organism. Use reproduce() to
+   * create an offspring that mutates
+   *
+   * @returns An exact clone of this organism
+   */
+  protected clone(): any {
+    return this.reproduce(0);
+  }
+
+  protected reproduce(mutationRate: number = 0.01) {
+    // do some mutation of physical attributes here
+    //   let newVelocity = this.velocity;
+    //   let newSize = this.size;
+    //   let newVisionDistance = this.visionDistance / 2;
+    //   let mutateSpeed = this.scene.registry.get(REGISTRY_KEYS.mutateSpeed);
+    //   let mutateSize = this.scene.registry.get(REGISTRY_KEYS.mutateSize);
+    //   let mutateColour = this.scene.registry.get(REGISTRY_KEYS.mutateColour);
+
+    //   // Do some mutation
+    //   if (Math.random() < mutationRate) {
+    //     if (mutateSpeed) {
+    //       newVelocity = parseInt(
+    //         Mutation.inversionMutation(this.velocity.toString(10), 10),
+    //         10
+    //       );
+    //     }
+
+    //     if (mutateSize) {
+    //       newSize = parseInt(
+    //         Mutation.inversionMutation(this.size.toString(10), 10),
+    //         10
+    //       );
+    //     }
+
+    //     newVisionDistance = parseInt(
+    //       Mutation.inversionMutation(this.visionDistance.toString(10), 10),
+    //       10
+    //     );
+    //   }
+
+    let child = new (this.getType())({
+      scene: this.scene,
+      x: this.x,
+      y: this.y,
+      size: this.size,
+      velocity: this.velocity,
+      visionDistance: this.visionDistance,
+      color: this.color,
+      generation: this.generation + 1,
+      species: this.species,
+      energy: this.energy / 2,
+    });
+
+    debugger;
+    return this.onReproduce(child, mutationRate);
   }
 
   /**
@@ -338,7 +393,9 @@ export abstract class Organism extends Phaser.GameObjects.Container {
 
     /* Birth. Larger sizes need more energy to reproduce */
     if (this.energy > this.size * 5) {
-      let child = this.clone();
+      let child = this.reproduce(
+        this.scene.registry.get(REGISTRY_KEYS.mutationRate)
+      );
       this.scene.game.events.emit(EVENTS_NAME.reproduceOrganism, child);
       this.energy = this.energy / 2;
     }

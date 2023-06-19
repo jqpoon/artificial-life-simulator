@@ -1,12 +1,7 @@
 import { Network } from '../neuralNetworks/network';
 import { Organism } from './organism';
 import { OrganismConfigs } from '../../typedefs';
-import {
-  EVENTS_NAME,
-  GAME_CONSTANTS,
-  ORGANISM_TYPES,
-  REGISTRY_KEYS,
-} from '../../consts';
+import { GAME_CONSTANTS, ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 import { LinearNetwork } from '../neuralNetworks/linearNetwork';
 import { NeuralNetChromosome } from '../genetic/chromosomes/neuralNetChromosome';
 import { inversionWithMutationRate } from '../genetic/mutation';
@@ -14,45 +9,27 @@ import { OrganismUtils } from '../utils/organismUtils';
 
 export class NeuralNetworkOrganism extends Organism {
   private network: Network;
-  private networkChromosome: NeuralNetChromosome;
 
   constructor(configs: OrganismConfigs) {
     super(configs);
 
-    if (configs.neuralNetChromosome) {
-      this.network = configs.neuralNetChromosome.toPhenotype();
-      this.networkChromosome =
-        configs.neuralNetChromosome as NeuralNetChromosome;
-    } else {
-      // inputs = 7 = relative x/y of nearest food, absolute x/y, relative x/y of nearest entity, energy
-      // outputs = 2 = x/y speed
-      this.network = new LinearNetwork([7, 4, 2]);
-      this.networkChromosome = new NeuralNetChromosome([7, 4, 2]).fromPhenotype(
-        this.network
-      );
-    }
+    // inputs = 7 = relative x/y of nearest food, absolute x/y, relative x/y of nearest entity, energy
+    // outputs = 2 = x/y speed
+    this.network = new LinearNetwork([7, 4, 2]);
   }
 
-  protected clone() {
+  protected onReproduce(child: any, mutationRate: number): void {
     /* Mutate neural network */
-    let mutationRate = this.scene.registry.get(REGISTRY_KEYS.mutationRate);
-    let childNetworkChromosome = this.networkChromosome.mutateWith(
-      inversionWithMutationRate,
-      mutationRate
-    );
+    /* But don't mutate if mutate brain is not enabled */
+    if (!this.scene.registry.get(REGISTRY_KEYS.mutateBrain)) {
+      mutationRate = 0;
+    }
 
-    let child = new NeuralNetworkOrganism({
-      scene: this.scene,
-      x: this.x,
-      y: this.y,
-      generation: this.generation + 1,
-      size: this.size,
-      color: this.color,
-      startingEnergy: this.energy / 2,
-      species: this.species,
-      neuralNetChromosome: childNetworkChromosome,
-    });
+    let childNetworkChromosome = new NeuralNetChromosome([7, 4, 2])
+      .fromPhenotype(this.network)
+      .mutateWith(inversionWithMutationRate, mutationRate);
 
+    child.network = childNetworkChromosome.toPhenotype();
     return child;
   }
 
@@ -78,21 +55,24 @@ export class NeuralNetworkOrganism extends Organism {
     }
 
     /* Get relative position of this organism to the world, scaled to -0.5 to 0.5 */
-    let pos_x = (this.x - GAME_CONSTANTS.worldX) / GAME_CONSTANTS.worldWidth - 0.5;
-    let pos_y = (this.y - GAME_CONSTANTS.worldY) / GAME_CONSTANTS.worldHeight - 0.5;
+    let pos_x =
+      (this.x - GAME_CONSTANTS.worldX) / GAME_CONSTANTS.worldWidth - 0.5;
+    let pos_y =
+      (this.y - GAME_CONSTANTS.worldY) / GAME_CONSTANTS.worldHeight - 0.5;
 
     /* Pass these values to neural network and let magic happen */
+    // let inputs = [x, y, pos_x, pos_y, entityX, entityY, this.energy / 100];
     let inputs = [x, y, pos_x, pos_y, entityX, entityY, this.energy / 100];
     let outputs = this.network.forward(inputs);
 
     /* Execute output of neural network */
     let xSpeed = Phaser.Math.Clamp(
-      outputs[0] * 2 * this.velocity,
+      outputs[0] * this.velocity,
       -this.velocity,
       this.velocity
     );
     let ySpeed = Phaser.Math.Clamp(
-      outputs[1] * 2 * this.velocity,
+      outputs[1] * this.velocity,
       -this.velocity,
       this.velocity
     );
@@ -123,7 +103,11 @@ export class NeuralNetworkOrganism extends Organism {
 
   protected onDestroy(): void {}
 
-  protected getType(): ORGANISM_TYPES {
+  protected getType() {
+    return NeuralNetworkOrganism;
+  }
+
+  protected getOrganismTypeName(): ORGANISM_TYPES {
     return ORGANISM_TYPES.neuralNetworkOrganism;
   }
 }
