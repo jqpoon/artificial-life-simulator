@@ -20,10 +20,12 @@ export class OrganismBuilder extends UIComponent {
   private sizeSlider: any;
   private speedSlider: any;
   private startingEnergySlider: any;
+  private visionRadiusSlider: any;
 
   private sizeText: GameObjects.Text;
   private speedText: GameObjects.Text;
   private startingEnergyText: GameObjects.Text;
+  private visionRadiusText: GameObjects.Text;
 
   constructor(scene: UIScene) {
     super(scene, {
@@ -43,6 +45,7 @@ export class OrganismBuilder extends UIComponent {
     this.sizeText = scene.add.text(0, 0, '50', smallerTextDark);
     this.speedText = scene.add.text(0, 0, '50', smallerTextDark);
     this.startingEnergyText = scene.add.text(0, 0, '100', smallerTextDark);
+    this.visionRadiusText = scene.add.text(0, 0, '500', smallerTextDark);
     this.builderPreview = scene.add.circle(0, 0, 12, 0xe8000b);
 
     // Color picker
@@ -117,6 +120,17 @@ export class OrganismBuilder extends UIComponent {
       200.1 // Maximum
     );
 
+    // Vision radius of organism
+    this.visionRadiusSlider = BootstrapFactory.createSlider(
+      scene,
+      (e: any) => {
+        this.setVisionRadius(parseInt(e.target.value));
+      },
+      this,
+      20, // min
+      500 // max - a bit more over 100 so that our display texts displays '100' (some truncation issues..)
+    );
+
     // Organism type
     this.organismTypeChooser = BootstrapFactory.createDropdown(
       scene,
@@ -148,12 +162,12 @@ export class OrganismBuilder extends UIComponent {
     /* Text at the top of the card */
     let cardText = scene.rexUI.add.label({
       text: scene.add.text(0, 0, 'Organism Builder', textDefaultsDark),
-      height: 50,
+      height: 35,
     });
 
     /* Left side should contain the controls */
     let leftSide = scene.rexUI.add
-      .sizer({ orientation: 'y', width: 250, space: { item: 30 } })
+      .sizer({ orientation: 'y', width: 250, space: { item: 20 } })
       .add(
         scene.rexUI.add.sizer().add(
           scene.rexUI.add
@@ -170,6 +184,9 @@ export class OrganismBuilder extends UIComponent {
                 .add(scene.add.text(0, 0, 'Energy', smallerTextDark), {
                   align: 'right',
                 })
+                .add(scene.add.text(0, 0, 'Vision Radius', smallerTextDark), {
+                  align: 'right',
+                })
             )
             .add(
               scene.rexUI.add
@@ -177,6 +194,7 @@ export class OrganismBuilder extends UIComponent {
                 .add(this.sizeSlider)
                 .add(this.speedSlider)
                 .add(this.startingEnergySlider)
+                .add(this.visionRadiusSlider)
             )
             .add(
               scene.rexUI.add
@@ -184,6 +202,7 @@ export class OrganismBuilder extends UIComponent {
                 .add(this.sizeText, { align: 'left' })
                 .add(this.speedText, { align: 'left' })
                 .add(this.startingEnergyText, { align: 'left' })
+                .add(this.visionRadiusText, { align: 'left' })
             )
         )
       )
@@ -216,6 +235,7 @@ export class OrganismBuilder extends UIComponent {
     this.setStartingEnergy(100);
     this.setOrganismSpeed(50);
     this.setOrganismSize(20);
+    this.setVisionRadius(250);
 
     this.setColour(0xe8000b);
 
@@ -230,6 +250,17 @@ export class OrganismBuilder extends UIComponent {
     this.scene.registry.set(REGISTRY_KEYS.organismColour, color);
     this.builderPreview.fillColor = color;
   }
+
+  private setVisionRadius(value: number): void {
+    this.scene.registry.set(REGISTRY_KEYS.organismVisionRadius, value);
+    this.visionRadiusSlider.node.children[0].value = value;
+    this.visionRadiusText.setText(
+      value.toLocaleString('en-us', {
+        maximumFractionDigits: 0,
+      })
+    );
+  }
+
 
   private setStartingEnergy(value: number): void {
     this.scene.registry.set(REGISTRY_KEYS.organismStartingEnergy, value);

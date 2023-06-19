@@ -141,6 +141,7 @@ export class EnvironmentScene extends Scene {
         color: this.registry.get(REGISTRY_KEYS.organismColour),
         species: this.registry.get(REGISTRY_KEYS.organismSpecies),
         startingEnergy: this.registry.get(REGISTRY_KEYS.organismStartingEnergy),
+        visionDistance: this.registry.get(REGISTRY_KEYS.organismVisionRadius),
       },
       this.registry.get(REGISTRY_KEYS.organismType)
     );

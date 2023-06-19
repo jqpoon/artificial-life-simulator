@@ -27,6 +27,7 @@ export enum REGISTRY_KEYS {
   organismSpecies = 'organism-species',
   organismStartingEnergy = 'organism-starting-energy',
   organismType = 'organism-type',
+  organismVisionRadius = 'organism-vision-radius',
   mutationRate = 'mutation-rate',
   mutateBrain = 'mutation-brain',
   mutateColour = 'mutation-colour',
