@@ -13,7 +13,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   private static readonly MAX_SIZE = 60;
   private static readonly MIN_VISION = 10;
   private static readonly MAX_VISION = 500;
-  private static readonly MAX_AGE = 1000;
+  private static readonly MAX_AGE = 3000;
 
   /* Defaults attribute values */
   private static readonly ORGANISM_DEFAULTS = {
