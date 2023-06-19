@@ -1,5 +1,7 @@
 import { EVENTS_NAME, ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 import { Entity, OrganismConfigs, OrganismInformation } from '../../typedefs';
+import { ColorChromosome } from '../genetic/chromosomes/colorChromosome';
+import { inversionWithMutationRate } from '../genetic/mutation';
 import { OrganismUtils } from '../utils/organismUtils';
 
 /**
@@ -257,51 +259,48 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   }
 
   protected reproduce(mutationRate: number = 0.01) {
-    // do some mutation of physical attributes here
-    //   let newVelocity = this.velocity;
-    //   let newSize = this.size;
-    //   let newVisionDistance = this.visionDistance / 2;
-    //   let mutateSpeed = this.scene.registry.get(REGISTRY_KEYS.mutateSpeed);
-    //   let mutateSize = this.scene.registry.get(REGISTRY_KEYS.mutateSize);
-    //   let mutateColour = this.scene.registry.get(REGISTRY_KEYS.mutateColour);
 
-    //   // Do some mutation
-    //   if (Math.random() < mutationRate) {
-    //     if (mutateSpeed) {
-    //       newVelocity = parseInt(
-    //         Mutation.inversionMutation(this.velocity.toString(10), 10),
-    //         10
-    //       );
-    //     }
+    /* Mutate physical attributes */
+    let newVelocity = this.velocity;
+    let newSize = this.size;
+    let newVisionDistance = this.visionDistance;
+    let newColor = this.color;
 
-    //     if (mutateSize) {
-    //       newSize = parseInt(
-    //         Mutation.inversionMutation(this.size.toString(10), 10),
-    //         10
-    //       );
-    //     }
+    if (this.scene.registry.get(REGISTRY_KEYS.mutateSpeed)) {
+      //       newVelocity = parseInt(
+      //         Mutation.inversionMutation(this.velocity.toString(10), 10),
+      //         10
+      //       );
+    }
 
-    //     newVisionDistance = parseInt(
-    //       Mutation.inversionMutation(this.visionDistance.toString(10), 10),
-    //       10
-    //     );
-    //   }
+    if (this.scene.registry.get(REGISTRY_KEYS.mutateSize)) {
+    }
+
+    if (this.scene.registry.get(REGISTRY_KEYS.mutateColour)) {
+      let colorChromosome = new ColorChromosome().fromPhenotype(this.color);
+      colorChromosome = colorChromosome.mutateWith(
+        inversionWithMutationRate,
+        mutationRate
+      ) as ColorChromosome;
+      newColor = colorChromosome.toPhenotype();
+    }
 
     let child = new (this.getType())({
       scene: this.scene,
       x: this.x,
       y: this.y,
-      size: this.size,
-      velocity: this.velocity,
-      visionDistance: this.visionDistance,
-      color: this.color,
+      size: newSize,
+      velocity: newVelocity,
+      visionDistance: newVisionDistance,
+      color: newColor,
       generation: this.generation + 1,
       species: this.species,
       energy: this.energy / 2,
     });
 
-    debugger;
-    return this.onReproduce(child, mutationRate);
+    this.onReproduce(child, mutationRate);
+
+    return child;
   }
 
   /**

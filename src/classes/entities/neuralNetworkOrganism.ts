@@ -30,7 +30,6 @@ export class NeuralNetworkOrganism extends Organism {
       .mutateWith(inversionWithMutationRate, mutationRate);
 
     child.network = childNetworkChromosome.toPhenotype();
-    return child;
   }
 
   protected onUpdate(time: number, delta: number): void {
