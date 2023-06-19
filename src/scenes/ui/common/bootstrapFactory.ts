@@ -90,16 +90,26 @@ export class BootstrapFactory {
     form-range-track-bg="$gray-500"
     >`;
 
+    // Since the DOM element is larger than the input, any clicks to the DOM
+    // element will trigger the call back function which could lead to NaN values
+    // This ensures that the user is actually clicking on the slider instead of
+    // the DOM element
+    let improvedCallbackFn = (e: any) => {
+      if (e.target.value) {
+        callbackFn(e);
+      }
+    };
+
     let element = BootstrapFactory.createDOMElement(
       scene,
-      callbackFn,
+      improvedCallbackFn,
       context,
       htmlString
     );
 
     /* Add additional listener to update values while slider is being dragged, not just at the end of dragging */
     element.addListener('input');
-    element.on('input', callbackFn, context);
+    element.on('input', improvedCallbackFn, context);
 
     return element;
   }
