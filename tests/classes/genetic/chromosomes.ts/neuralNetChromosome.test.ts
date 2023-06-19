@@ -19,7 +19,7 @@ describe('Neural Network Chromosome', () => {
     nnChromosome = nnChromosome.fromPhenotype(network);
 
     let genes = nnChromosome.getGenes();
-    expect(genes).toStrictEqual([1, 1, 1, 2, 2, 2, 3, 3, 3]);
+    expect(genes).toStrictEqual([1, 1, 1, 2, 2, 2, 30, 30, 30]);
   });
 
   it('can be built from a multi layer network', () => {
@@ -43,7 +43,7 @@ describe('Neural Network Chromosome', () => {
     nnChromosome = nnChromosome.fromPhenotype(network);
 
     let genes = nnChromosome.getGenes();
-    expect(genes).toStrictEqual([1, 1, 2, 2, 4, 5, 6, 7, 8, 9, 0, 0.5, 1]);
+    expect(genes).toStrictEqual([1, 1, 20, 20, 4, 5, 6, 7, 8, 9, 0, 5, 10]);
   });
 
     it('can express itself as phenotype properly', () => {
