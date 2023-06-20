@@ -6,9 +6,14 @@ import { RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components';
 import { COLORS, smallerTextDark, textDefaultsDark } from '../../common/UIConstants';
 
 const scenarioDescriptions = [
-  'A default, blank canvas.',
-  'Scenario 1',
-  'Scenario 2'
+  'A default, blank canvas with default simulator parameters.',
+  `A big but slow random organism (yellow) versus a smaller but
+   faster random organism (purple).`,
+  `25 random organisms (yellow) battle against 25 neural network
+  organisms (red) and a single vision organism (purple)
+  Who will win?`,
+  `50 neural network organisms start in the center. Watch them
+  evolve over time!`
 ];
 
 export class ScenarioControl extends UIComponent {

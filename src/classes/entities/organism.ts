@@ -1,4 +1,5 @@
 import { EVENTS_NAME, ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
+import { speciesInfo } from '../../scenes/ui/common/UIConstants';
 import { Entity, OrganismConfigs, OrganismInformation } from '../../typedefs';
 import { ColorChromosome } from '../genetic/chromosomes/colorChromosome';
 import { inversionWithMutationRate } from '../genetic/mutation';
@@ -20,10 +21,9 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   /* Defaults attribute values */
   private static readonly ORGANISM_DEFAULTS = {
     alpha: 1,
-    color: 0xff0000,
+    color: 0xe8000b,
     generation: 0,
     size: 25,
-    species: -1,
     startingEnergy: 100,
     velocity: 20,
     visionDistance: 500,
@@ -93,7 +93,9 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       mergedConfigs.energyLoss ??
       OrganismUtils.calculateBasalEnergyLoss(this.size, this.visionDistance);
     this.radius = this.size / 2;
-    this.species = mergedConfigs.species;
+    this.species = Object.values(speciesInfo).filter((species) => {
+      return species.color == this.color;
+    })[0].id;
 
     /* Set generic information of organism */
     this.generation = mergedConfigs.generation;
@@ -259,7 +261,6 @@ export abstract class Organism extends Phaser.GameObjects.Container {
   }
 
   protected reproduce(mutationRate: number = 0.01) {
-
     /* Mutate physical attributes */
     let newVelocity = this.velocity;
     let newSize = this.size;

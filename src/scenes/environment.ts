@@ -7,6 +7,7 @@ import { Organism } from '../classes/entities/organism';
 import { COLORS } from './ui/common/UIConstants';
 import { RandomOrganism } from '../classes/entities/randomOrganism';
 import { NeuralNetworkOrganism } from '../classes/entities/neuralNetworkOrganism';
+import { VisionOrganism } from '../classes/entities/visionOrganism';
 
 export class EnvironmentScene extends Scene {
   public organisms: Phaser.GameObjects.Group;
@@ -72,7 +73,9 @@ export class EnvironmentScene extends Scene {
     this.game.events.on(EVENTS_NAME.loadScenario, (scenarioID: number) => {
       // Without this, the scenario is loaded multiple times
       let isSameScenario = scenarioID == this.currentScenario;
-      let timeBetweenScenarios = Math.abs(this.scenarioSelectionTime - Date.now());
+      let timeBetweenScenarios = Math.abs(
+        this.scenarioSelectionTime - Date.now()
+      );
 
       if (isSameScenario && timeBetweenScenarios < 100) return;
 
@@ -189,50 +192,75 @@ export class EnvironmentScene extends Scene {
   }
 
   public loadScenario1(): void {
-    this.registry.set(REGISTRY_KEYS.organismColour, 0x8b2be2);
     this.addToSpecies(
       {
         scene: this,
         velocity: 80,
         size: 30,
-        x: 10,
-        y: 100,
+        x: GAME_CONSTANTS.worldX,
+        y: GAME_CONSTANTS.worldY,
         color: 0x8b2be2,
-        energyLoss: 0.5,
-        species: 6,
       },
       RandomOrganism
     );
 
-    this.registry.set(REGISTRY_KEYS.organismColour, 0xffc400);
     this.addToSpecies(
       {
         scene: this,
-        velocity: 35,
+        velocity: 30,
         size: 80,
-        x: 10,
-        y: 10,
+        x: GAME_CONSTANTS.worldX + GAME_CONSTANTS.worldWidth,
+        y: GAME_CONSTANTS.worldY + GAME_CONSTANTS.worldHeight,
         color: 0xffc400,
-        energyLoss: 0.1,
-        species: 2,
       },
       RandomOrganism
     );
   }
 
+  /* Battle of brains - multiple brain types at once */
   public loadScenario2(): void {
-    this.registry.set(REGISTRY_KEYS.organismColour, 0x8b2be2);
+    /* Random organisms */
+    for (let i = 0; i < 25; i++) {
+      this.addToSpecies(
+        {
+          scene: this,
+          velocity: 30,
+          size: 20,
+          visionDistance: 200,
+          x: GAME_CONSTANTS.worldX,
+          y: GAME_CONSTANTS.worldY + GAME_CONSTANTS.worldHeight,
+          color: 0xffc400,
+        },
+        RandomOrganism
+      );
+
+      /* Neural network organisms */
+      this.addToSpecies(
+        {
+          scene: this,
+          velocity: 30,
+          size: 20,
+          visionDistance: 200,
+          x: GAME_CONSTANTS.worldX + GAME_CONSTANTS.worldWidth / 2,
+          y: GAME_CONSTANTS.worldY + GAME_CONSTANTS.worldHeight / 2,
+          color: 0xe8000b,
+        },
+        NeuralNetworkOrganism
+      );
+    }
+
+    /* Vision organisms */
     this.addToSpecies(
       {
         scene: this,
-        velocity: 50,
+        velocity: 30,
         size: 20,
-        x: 0,
-        y: 400,
+        visionDistance: 200,
+        x: GAME_CONSTANTS.worldX + GAME_CONSTANTS.worldWidth,
+        y: GAME_CONSTANTS.worldY + GAME_CONSTANTS.worldHeight,
         color: 0x8b2be2,
-        species: 0,
       },
-      RandomOrganism
+      VisionOrganism
     );
   }
 
@@ -247,7 +275,6 @@ export class EnvironmentScene extends Scene {
           x: GAME_CONSTANTS.worldX + GAME_CONSTANTS.worldWidth / 2,
           y: GAME_CONSTANTS.worldY + GAME_CONSTANTS.worldHeight / 2,
           color: 0xe8000b,
-          species: 0,
         },
         NeuralNetworkOrganism
       );
