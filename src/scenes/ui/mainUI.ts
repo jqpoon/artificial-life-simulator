@@ -7,6 +7,7 @@ import { NeuralNetworkOrganism } from '../../classes/entities/neuralNetworkOrgan
 import { COLORS } from './common/UIConstants';
 import { SidePanel } from './sidePanel/sidePanel';
 import { BottomPanel } from './bottomPanel/bottomPanel';
+import { Tutorial } from './common/tutorial';
 
 export class UIScene extends Scene {
   public rexUI: RexUIPlugin;
@@ -49,6 +50,8 @@ export class UIScene extends Scene {
 
     this.resetScene();
     this.cameras.main.setBackgroundColor(COLORS.BACKGROUND_COLOR);
+
+    let tut = new Tutorial(this);
   }
 
   update(time: number, delta: number): void {}

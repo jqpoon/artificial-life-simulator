@@ -14,7 +14,8 @@ $nav-tabs-border-width: 2px;
 $form-range-track-bg: #adb5bd;
 
 // Wider tooltips
-$tooltip-max-width: 400px;
+$tooltip-max-width: 500px;
+$tooltip-font-size: 1.25em;
 
 // Larger toggles - adapted from https://stackoverflow.com/questions/55593229/increasing-the-size-of-a-bootstrap-checkbox
 @mixin switch($res: 'sm') {

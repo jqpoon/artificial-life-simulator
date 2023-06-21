@@ -12,7 +12,8 @@ export class BottomPanel extends UIComponent {
       x: 600,
       y: 1000,
       orientation: 'x',
-      space: { left: 20, right: 20, top: 20, bottom: 20, item: 30 },
+      anchor: {left: 'left'},
+      space: { left: 30, right: 20, top: 20, bottom: 20, item: 350 },
     });
 
     this.speedControls = new SpeedControls(scene);
@@ -26,7 +27,7 @@ export class BottomPanel extends UIComponent {
       this
     );
 
-    this.add(this.speedControls).add(tutorialButton).layout();
+    this.add(tutorialButton).add(this.speedControls).layout();
   }
 
   reset(): void {

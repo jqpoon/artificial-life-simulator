@@ -100,9 +100,15 @@ export class Tutorial {
       Phaser.Input.Keyboard.KeyCodes.RIGHT
     );
     let esc = scene.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+    let left = scene.input.keyboard?.addKey(
+      Phaser.Input.Keyboard.KeyCodes.LEFT
+    );
     right?.on('down', () => {
       this.next();
     });
+    // left?.on('down', () => {
+    //   this.prev();
+    // });
     esc?.on('down', () => {
       this.exit();
     });
@@ -129,6 +135,15 @@ export class Tutorial {
         right: 695,
       },
       {
+        helpText: `You can control the simulator speed here by clicking on these buttons.
+                   To pause/unpause, you can also use the spacebar.`,
+        tooltipDirection: 'top',
+        top: 960,
+        bottom: 40,
+        left: 470,
+        right: 1170,
+      },
+      {
         helpText: `This is the controls panel. You can change simulator settings,
           look at organism information and look at population graphs here.`,
         tooltipDirection: 'left',
@@ -148,31 +163,40 @@ export class Tutorial {
       },
       {
         helpText: `This is the organism builder. Remember spawning your own organism earlier?
-          This allows you to customise its size, speed and starting energy.`,
+          This allows you to customise its size, speed, vision radius and starting energy.`,
         tooltipDirection: 'left',
-        top: 115,
-        bottom: 505,
+        top: 110,
+        bottom: 545,
         left: 1285,
-        right: 323,
+        right: 5,
       },
       {
         helpText: `Type refers to the brain type of the organism. Random organisms
           move randomly, vision organisms move towards food when they see it,
           and neural network organisms have a neural network that control their movement.`,
         tooltipDirection: 'left',
-        top: 115,
-        bottom: 505,
+        top: 110,
+        bottom: 545,
         left: 1285,
-        right: 323,
+        right: 5,
+      },
+      {
+        helpText: `The colour of an organism determines its species. Each colour represents
+          a single species and this is reflected on the graph.`,
+        tooltipDirection: 'left',
+        top: 110,
+        bottom: 545,
+        left: 1285,
+        right: 5,
       },
       {
         helpText: `Here you can see information about this organism.
                    Click on an organism to see this information.
                    (Remember, you can spawn organisms by clicking on the main canvas.)`,
         tooltipDirection: 'left',
-        top: 115,
-        bottom: 505,
-        left: 1600,
+        top: 535,
+        bottom: 90,
+        left: 1285,
         right: 5,
       },
       {
@@ -180,19 +204,95 @@ export class Tutorial {
                    can eat food to gain energy. If it gains enough energy, it will
                    reproduce with a slight mutation. `,
         tooltipDirection: 'left',
-        top: 115,
-        bottom: 505,
-        left: 1600,
+        top: 535,
+        bottom: 90,
+        left: 1285,
         right: 5,
       },
+      {
+        helpText: `This represents the 'brain' of an organism. The arrows in each
+          direction show what the organism will do if food is in that direction.
+          For example, the 12'o clock, arrow shows what this organism will do
+          if there is food to its north. `,
+        tooltipDirection: 'left',
+        top: 600,
+        bottom: 165,
+        left: 1550,
+        right: 50,
+      },
+      {
+        helpText: `These buttons allow you to take actions on the organism
+          you have selected.`,
+        tooltipDirection: 'left',
+        top: 910,
+        bottom: 100,
+        left: 1350,
+        right: 50,
+      },
+      {
+        helpText: `Click here to go to the next tab, simulation controls.`,
+        tooltipDirection: 'top',
+        top: 990,
+        bottom: 0,
+        left: 1490,
+        right: 210,
+      },
+      {
+        helpText: `Here, you can control simulation-wide parameters. These affect
+          all organisms.`,
+        tooltipDirection: 'left',
+        top: 110,
+        bottom: 545,
+        left: 1285,
+        right: 5,
+      },
+      {
+        helpText: `These toggles control whether mutation is turned on for certain attributes.`,
+        tooltipDirection: 'left',
+        top: 410,
+        bottom: 560,
+        left: 1305,
+        right: 25,
+      },
+      {
+        helpText: `Scenarios are an easy way to get started! Load a scenario to
+          explore different organisms in the simulator.`,
+        tooltipDirection: 'left',
+        top: 535,
+        bottom: 90,
+        left: 1285,
+        right: 5,
+      },
+      {
+        helpText: `Click here to access the graphs tab.`,
+        tooltipDirection: 'left',
+        top: 990,
+        bottom: 0,
+        left: 1710,
+        right: 0,
+      },
+      {
+        helpText: `Here, you can see how to population of organisms change over time.
+          Each colour is tied to a single species, regardless of how their colour mutates.`,
+        tooltipDirection: 'left',
+        top: 100,
+        bottom: 90,
+        left: 1275,
+        right: 0,
+      },
     ];
+
+    this.start();
   }
 
   /**
    * Starts the tutorial
    */
   public start() {
+    this.currentStep = 0;
     this.showInstructionText();
+    this.hideOverlay();
+    this.deleteAllTooltips();
   }
 
   /**
@@ -212,7 +312,23 @@ export class Tutorial {
 
   /* Progresses the tutorial */
   public next() {
+    this.step(1);
+  }
+
+  /* Goes back in the tutorial */
+  public prev() {
+    this.step(-1);
+  }
+
+  /* Progresses or goes back in the tutorial. numSteps can be negative. */
+  private step(numSteps: number) {
     this.deleteAllTooltips();
+
+    /* Back to start of tutorial*/
+    if (this.currentStep < -1) {
+      this.start();
+      return;
+    }
 
     /* End of tutorial */
     if (this.currentStep > this.steps.length) {
@@ -225,9 +341,10 @@ export class Tutorial {
     if (this.currentStep == this.steps.length) {
       this.hideOverlay();
       this.showInstructionText();
-      this.setInstructions(`Now that you've learned how to use the simulator,
-        enjoy playing around with it!`);
-      this.currentStep += 1;
+      this.setInstructions(`Thanks for going through the tutorial. If you want
+          go through it again, click on the button in the bottom right.
+          Enjoy!`);
+      this.currentStep += numSteps;
       return;
     }
 
@@ -240,7 +357,7 @@ export class Tutorial {
     this.loadStep(step);
     this.getOverlayTooltipBootstrap().show();
 
-    this.currentStep += 1;
+    this.currentStep += numSteps;
   }
 
   private loadStep(step: tutorialStep) {
