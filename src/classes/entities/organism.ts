@@ -2,7 +2,7 @@ import { EVENTS_NAME, ORGANISM_TYPES, REGISTRY_KEYS } from '../../consts';
 import { speciesInfo } from '../../scenes/ui/common/UIConstants';
 import { Entity, OrganismConfigs, OrganismInformation } from '../../typedefs';
 import { ColorChromosome } from '../genetic/chromosomes/colorChromosome';
-import { inversionWithMutationRate } from '../genetic/mutation';
+import { Mutation, inversionWithMutationRate } from '../genetic/mutation';
 import { OrganismUtils } from '../utils/organismUtils';
 
 /**
@@ -29,6 +29,7 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     visionDistance: 500,
     x: 300,
     y: 300,
+    species: -1,
   };
 
   /* Physical attributes of an organism */
@@ -93,9 +94,16 @@ export abstract class Organism extends Phaser.GameObjects.Container {
       mergedConfigs.energyLoss ??
       OrganismUtils.calculateBasalEnergyLoss(this.size, this.visionDistance);
     this.radius = this.size / 2;
-    this.species = Object.values(speciesInfo).filter((species) => {
-      return species.color == this.color;
-    })[0].id;
+
+    /* Try to get species from colour. If it doesn't exist, use the parents' species */
+    let possibleSpecies = Object.values(speciesInfo).filter((species) => {
+        return species.color == this.color;
+      });
+    if (possibleSpecies.length == 0) {
+      this.species = mergedConfigs.species;
+    } else {
+      this.species = possibleSpecies[0].id;
+    }
 
     /* Set generic information of organism */
     this.generation = mergedConfigs.generation;
@@ -268,13 +276,17 @@ export abstract class Organism extends Phaser.GameObjects.Container {
     let newColor = this.color;
 
     if (this.scene.registry.get(REGISTRY_KEYS.mutateSpeed)) {
-      //       newVelocity = parseInt(
-      //         Mutation.inversionMutation(this.velocity.toString(10), 10),
-      //         10
-      //       );
+      newVelocity = parseInt(
+        Mutation.inversionMutation(this.velocity.toString(10), 10),
+        10
+      );
     }
 
     if (this.scene.registry.get(REGISTRY_KEYS.mutateSize)) {
+      newSize = parseInt(
+        Mutation.inversionMutation(this.size.toString(10), 10),
+        10
+      );
     }
 
     if (this.scene.registry.get(REGISTRY_KEYS.mutateColour)) {
